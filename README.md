@@ -5,11 +5,15 @@ CLI (command line) application to generate HTML file containing editable Javascr
 ## Instalation
 
 ### Install globally 
-> npm install -g  tryit
-
-> tryit init
-
-
+```sh
+npm install -g  tryit
+tryit init
+```
+The init action will do several things:
+1. create, if it does not already exist, the following
+   * ./javascripts   _directory_
+   * ./javascript/tryit.js _core tryit helper script_
+   * ./javascript/tryit _ 
 
 
 
