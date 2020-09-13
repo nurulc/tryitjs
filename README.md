@@ -13,7 +13,8 @@ The init action will do several things:
 1. create, if it does not already exist, the following
    * ./javascripts   _directory_
    * ./javascript/tryit.js _core tryit helper script_
-   * ./javascript/tryit _ 
+   * ./stylesheet/tryit.css _core stylesheet_
+   
 
 
 
