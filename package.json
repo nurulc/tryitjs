@@ -1,0 +1,36 @@
+{
+  "name": "tryitjs",
+  "version": "0.0.1",
+  "description": "Generate HTML file with runnable and editable code snippets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "try": "nodemon --ext \"try css js\"   bin/gen-tryit.js index.try"
+  },
+  "bin": {
+    "tryit": "node bin/gen-tryit.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nurulc/tryitjs.git"
+  },
+  "keywords": [
+    "generate",
+    "html",
+    "editable",
+    "javascript"
+  ],
+  "author": "Nurul Choudhury",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nurulc/tryitjs/issues"
+  },
+  "homepage": "https://github.com/nurulc/tryitjs#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "showdown": "^1.9.1"
+  },
+  "dependencies": {
+    "reload": "^3.1.0"
+  }
+}

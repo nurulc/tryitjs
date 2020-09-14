@@ -1,0 +1,35 @@
+.tryit-error {
+  color: red;
+  border-style: dotted;
+  width: 80%;
+  display: none
+}
+
+.tryit-code {
+  border-style: solid;
+  width: 80%;
+  background-color: lightgrey;
+  height: 7rem;
+}
+
+.tryit-display {
+  border-style: solid;
+  width: 80%;
+  min-height: 2rem
+}
+
+body { 
+    padding: 3rem;
+    padding-right: 8rem;
+    overflow-x: hidden;
+    min-width: 320px;
+    background: #fff;
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    line-height: 1.4285em;
+    color: rgba(0,0,0,.87);
+}
+
+textarea.tryit {
+  width: 80%;
+}

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+node gen-tryit.js $*

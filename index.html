@@ -1,0 +1,104 @@
+
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/theme/cobalt.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/button.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/container.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/divider.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dropdown.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/grid.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/header.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/image.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/list.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/menu.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/reset.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/segment.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/site.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/transition.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" />
+<link rel="stylesheet" href="stylesheets/tryit.css" />
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/mode/javascript/javascript.min.js"></script>
+<script src="javascript/prettyprint.js"></script>
+<script src="javascript/tryit.js"></script>
+<title>Test Tryit</title>
+</head>
+<body>
+<h1 id="tryitdemo">Tryit demo</h1>
+<p>Overview of tryit</p>
+<pre><code> let x = 1
+</code></pre>
+
+<a id="_tryit1">&nbsp</a>
+<div class="html ui top attached segment tryit-container " >
+<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
+<div class="ui sizer vertical segment bottom">	<textarea class="tryit ui " id="tryit1">
+var x = 1;
+var obj 
+x
+
+	</textarea></div>
+<a id="_end_tryit1">
+&nbsp;</a>
+	<div id="tryit1-error" class="tryit-error"></div>
+	<div id="tryit1-display" class="tryit-display rendered_html"></div>
+</div><div class="ui top attached label">
+                <button id="tryit1-run" class="ui  green right labeled icon button texec"><i class="caret square right icon"></i>
+                  Run
+                </button>
+             </div>
+             </div></div>
+<h2 id="introduction">Introduction</h2>
+<p>This is a brief introcuction to the tryit </p>
+
+<a id="_tryit2">&nbsp</a>
+<div class="html ui top attached segment tryit-container " >
+<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
+<div class="ui sizer vertical segment bottom">	<textarea class="tryit ui " id="tryit2">
+var y = [2, "hello", 123.45];
+y
+
+	</textarea></div>
+<a id="_end_tryit2">
+&nbsp;</a>
+	<div id="tryit2-error" class="tryit-error"></div>
+	<div id="tryit2-display" class="tryit-display rendered_html"></div>
+</div><div class="ui top attached label">
+                <button id="tryit2-run" class="ui  disabled right labeled icon button texec"><i class="caret square right icon"></i>
+                  Run
+                </button>
+             </div>
+             </div></div>
+<h2 id="customizeyourdisplay">Customize your display</h2>
+<p>For this test me are just going to convert to JSON string</p>
+
+<a id="_tryit3">&nbsp</a>
+<div class="html ui top attached segment tryit-container " >
+<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
+<div class="ui sizer vertical segment bottom">	<textarea class="tryit ui " id="tryit3">
+json(y)
+
+	</textarea></div>
+<a id="_end_tryit3">
+&nbsp;</a>
+	<div id="tryit3-error" class="tryit-error"></div>
+	<div id="tryit3-display" class="tryit-display rendered_html"></div>
+</div><div class="ui top attached label">
+                <button id="tryit3-run" class="ui  disabled right labeled icon button texec"><i class="caret square right icon"></i>
+                  Run
+                </button>
+             </div>
+             </div></div>
+<script>makeEditor();</script>
+</body></html>
+    

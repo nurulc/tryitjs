@@ -1,0 +1,20 @@
+
+
+!md
+## Introduction
+
+
+This is a brief introcuction to the tryit 
+
+!tryit
+
+var y = [2, "hello", 123.45];
+y
+
+!md
+## Customize your display
+
+For this test me are just going to convert to JSON string
+
+!tryit
+json(y)
