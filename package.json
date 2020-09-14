@@ -1,6 +1,6 @@
 {
   "name": "tryitjs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generate HTML file with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "try": "nodemon --ext \"try css js\"   bin/gen-tryit.js index.try"
   },
   "bin": {
-    "tryit": "node bin/gen-tryit.js"
+    "tryit": "bin/gen-tryit"
   },
   "repository": {
     "type": "git",
