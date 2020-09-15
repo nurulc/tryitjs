@@ -3,9 +3,13 @@
 const fs = require('fs');
 const path = require('path');
 const showdown = require('showdown');
-let bodyStart= (
-`	 <div class="ui grid">
-		<div class="two wide column" id=tryit_toc"></div>
+
+let bodyStart= (toc)=> (
+`	<div class="ui grid">
+    <div class="three wide column" id="toc_container"><div class="toc_title">Contents</div>${toc}</div>
+    </div> 
+	<div class="ui grid">
+		<div class="three wide column"></div>
 		<div class="twelve wide column" id="tryit_body">
 `
 );
@@ -13,7 +17,7 @@ let bodyStart= (
 let bodyEnd= (
 `
 		</div>
-		<div class="two wide column"></div>
+		<!--<div class="two wide column"></div> -->
 	</div>
 `
 );
@@ -37,6 +41,7 @@ const {
 const {asHTML} = require('./lib/display-utils');
 const {pipe, PICK, isString, flatten} = require('./lib/func-utils');
 const {sections} = require('./lib/sections');
+const toc = require('./lib/toc');
 
 /**
  * [removeComments description]
@@ -99,7 +104,7 @@ function organize(list) {
     return [...heads, ...rest];
 }
 
-function gen(config) {
+function gen(config,toc) {
     let css = (pipe(PICK('headers'), PICK('css'))(config)||[]).map( s =>
         `<link rel="stylesheet" href="${s}" />`).join('\n');
     let scripts = (pipe(PICK('headers'), PICK('scripts'))(config)||[]).map( s =>
@@ -111,7 +116,7 @@ function gen(config) {
         let [atype, ...rest] = type.trim().split(/\s+/);
         switch(atype) {
             case '!head':
-                return "<head>\n"+([css,scripts].join('\n'))+x+"</head>\n<body>\n"+bodyStart;
+                return "<head>\n"+([css,scripts].join('\n'))+x+"</head>\n<body>\n"+bodyStart(toc);
             case "!md"   : return mdToHtml(x);
             case "!tryit": return "\n"+tryit(x,i++); 
             case "!end" : return (bodyEnd+"\n\t<script>\nmakeEditor();\n"+highlighter+"</script>\n</body></html>");
@@ -151,7 +156,12 @@ function createNecessaryFiles(refDir,target='.') {
 
 function _genHTML(fileName, outFileName, config) {
     var lines = pipe(readLines,getIncludes,removeComments)(fileName);
-    var html = sections(lines).map(gen(config)).join('\n');
+    let sects = sections(lines);
+    console.log(sects);
+    let tocContents = toc(sects);
+    console.log('toc content',tocContents);
+
+    var html = sects.map(gen(config,tocContents)).join('\n');
     writeOut(outFileName, `
 <!doctype html>
 <html>

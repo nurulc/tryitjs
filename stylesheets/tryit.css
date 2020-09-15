@@ -20,8 +20,8 @@
 }
 
 body { 
-    padding: 3rem;
-    padding-right: 8rem;
+    padding: 2.5rem;
+    padding-right: 2.5rem;
     overflow-x: hidden;
     min-width: 320px;
     background: #fff;
@@ -58,3 +58,66 @@ h3:before {
     content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
     counter-increment: h3counter;
 }
+
+/* Table of contents TOC */
+#toc_container {
+    position: fixed;
+    background: #f9f9f9 none repeat scroll 0 0;
+    border: 1px solid #aaa;
+    display: table;
+    font-size: 95%;
+    margin-bottom: 1em;
+    padding: 15px;
+    margin-top: 5rem;
+    width: 120%;
+    z-index: 1000;
+}
+
+.toc_title {
+    font-weight: 700;
+    text-align: center;
+    font-size: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+.toc0 {
+  font-size: 1.2rem;
+  text-align:center;
+  color: #4287f5; 
+  padding-bottom: 1rem;
+}
+
+.toc1 {
+  font-size: 0.75rem;
+  text-align:left;
+  color: #4287f5;
+}
+
+.toc1 {
+  font-size: 0.75rem;
+  text-align:left;
+  color: #4287f5;
+}
+
+.toc2 {
+  font-size: 0.75rem;
+  text-align:left;
+  margin-left: 15px;
+}
+
+.toc3 {
+  font-size: 1rem;
+  text-align:left;
+  margin-left: 25px;
+}
+
+.toc4 {
+  font-size: 0.75rem;
+  text-align:left;
+  margin-left: 35px;
+}
+
+#toc_container li, #toc_container ul, #toc_container ul li{
+    list-style: outside none none !important;
+}
+
