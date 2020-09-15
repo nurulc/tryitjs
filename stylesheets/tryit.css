@@ -1,3 +1,4 @@
+.hljs-comment,.hljs-quote{color:#7d7a68}.hljs-attribute,.hljs-link,.hljs-name,.hljs-regexp,.hljs-selector-class,.hljs-selector-id,.hljs-tag,.hljs-template-variable,.hljs-variable{color:#d73737}.hljs-built_in,.hljs-builtin-name,.hljs-literal,.hljs-meta,.hljs-number,.hljs-params,.hljs-type{color:#b65611}.hljs-bullet,.hljs-string,.hljs-symbol{color:#60ac39}.hljs-section,.hljs-title{color:#6684e1}.hljs-keyword,.hljs-selector-tag{color:#b854d4}.hljs{display:block;overflow-x:auto;background:#fefbec;color:#6e6b5e;padding:.5em}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
 .tryit-error {
   color: red;
   border-style: dotted;
@@ -32,4 +33,28 @@ body {
 
 textarea.tryit {
   width: 80%;
+}
+
+h1 {
+  text-align:center;
+  color: #4287f5;
+  font-size: 3rem;
+}
+
+body {
+  counter-reset: h2counter;
+}
+
+h1 {
+    counter-reset: h2counter;
+}
+h2:before {
+    content: counter(h2counter) ".\0000a0\0000a0";
+    counter-increment: h2counter;
+    counter-reset: h3counter;
+}
+
+h3:before {
+    content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
+    counter-increment: h3counter;
 }

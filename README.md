@@ -6,9 +6,24 @@ CLI (command line) application to generate HTML file containing editable Javascr
 
 ### Install globally 
 ```sh
-npm install -g  tryit
-tryit init
+npm install -g  tryitjs
 ```
+### Create a tyyit file
+
+* test.try
+```
+```
+
+### Simplest usage
+
+The processor takes as input a file with the extension _&lt;filename&gt;.try_ and generates _&lt;filename&gt;.html_ 
+
+further is creates two extra directories:
+
+* stylesheets
+* javascript
+
+
 The init action will do several things:
 1. create, if it does not already exist, the following
    * ./javascripts   _directory_
@@ -18,13 +33,19 @@ The init action will do several things:
 
 
 
-* create tryit.json
+* Optional create .tryit.json
 ```
 {
-     "src": "<some directory>"
+     "src": "<source directory>",
+     "target": ""
 }
 ```
 
 ### Run from command prompt
 
-> node_modules/.bin/tryit
+* locally installed
+> node_modules/.bin/gen-tryit <input-file> {-d target-directory} {-src source-dir}
+
+* Globally installed
+> gen-tryit <input-file> {-d target-directory} {-src source-dir}
+

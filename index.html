@@ -32,73 +32,128 @@
 <script src="javascript/prettyprint.js"></script>
 <script src="javascript/tryit.js"></script>
 <title>Test Tryit</title>
-</head>
+
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
+<script>
+let words = ['sky', 'wood', 'forest', 'falcon', 
+    'pear', 'ocean', 'universe'];
+</script>
+
+ </head>
 <body>
+	 <div class="ui grid">
+		<div class="two wide column" id=tryit_toc"></div>
+		<div class="twelve wide column" id="tryit_body">
+
 <h1 id="tryitdemo">Tryit demo</h1>
-<p>Overview of tryit</p>
-<pre><code> let x = 1
+<h2 id="wearegoingtodemosomelodashfunctions">We are going to demo some lodash functions</h2>
+<p>We are per created an array <strong>words</strong> press <strong>Run</strong> button to execute </p>
+<pre><code> let words = ['sky', 'wood', 'forest', 'falcon', 
+    'pear', 'ocean', 'universe'];
 </code></pre>
 
 <a id="_tryit1">&nbsp</a>
 <div class="html ui top attached segment tryit-container " >
-<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
-<div class="ui sizer vertical segment bottom">	<textarea class="tryit ui " id="tryit1">
-var x = 1;
-var obj 
-x
-
-	</textarea></div>
-<a id="_end_tryit1">
+	<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
+		<div class="ui sizer vertical segment bottom">
+			<textarea class="tryit ui " id="tryit1">
+words // display words (just like python notebooks the last expression result is displayed)
+			</textarea>
+		</div>
+		<a id="_end_tryit1">
 &nbsp;</a>
-	<div id="tryit1-error" class="tryit-error"></div>
-	<div id="tryit1-display" class="tryit-display rendered_html"></div>
-</div><div class="ui top attached label">
-                <button id="tryit1-run" class="ui  green right labeled icon button texec"><i class="caret square right icon"></i>
-                  Run
-                </button>
-             </div>
-             </div></div>
-<h2 id="introduction">Introduction</h2>
-<p>This is a brief introcuction to the tryit </p>
+		<div id="tryit1-error" class="tryit-error"></div>
+		<div id="tryit1-display" class="tryit-display rendered_html"></div>
+	</div>	<div class="ui top attached label">
+		<button id="tryit1-run" class="ui  green right labeled icon button texec"><i class="caret square right icon"></i>Run </button>
+	</div>
+</div>
+<h3 id="usingsomelodashfunctions">Using some lodash functions</h3>
+<ul>
+<li>_.first</li>
+<li>_.last</li>
+</ul>
 
 <a id="_tryit2">&nbsp</a>
 <div class="html ui top attached segment tryit-container " >
-<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
-<div class="ui sizer vertical segment bottom">	<textarea class="tryit ui " id="tryit2">
-var y = [2, "hello", 123.45];
-y
+	<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
+		<div class="ui sizer vertical segment bottom">
+			<textarea class="tryit ui " id="tryit2">
+//This is some javascript code - press run to execute it
+let firstWord =  _.first(words);
+let lastWord = _.last(words);
 
-	</textarea></div>
-<a id="_end_tryit2">
+// Note the last expression is displayed
+({
+   firstWord,
+   lastWord
+})
+
+			</textarea>
+		</div>
+		<a id="_end_tryit2">
 &nbsp;</a>
-	<div id="tryit2-error" class="tryit-error"></div>
-	<div id="tryit2-display" class="tryit-display rendered_html"></div>
-</div><div class="ui top attached label">
-                <button id="tryit2-run" class="ui  disabled right labeled icon button texec"><i class="caret square right icon"></i>
-                  Run
-                </button>
-             </div>
-             </div></div>
-<h2 id="customizeyourdisplay">Customize your display</h2>
-<p>For this test me are just going to convert to JSON string</p>
+		<div id="tryit2-error" class="tryit-error"></div>
+		<div id="tryit2-display" class="tryit-display rendered_html"></div>
+	</div>	<div class="ui top attached label">
+		<button id="tryit2-run" class="ui  disabled right labeled icon button texec"><i class="caret square right icon"></i>Run </button>
+	</div>
+</div>
+<h2 id="introduction">Introduction</h2>
+<p>This is a brief introcuction to the tryit </p>
 
 <a id="_tryit3">&nbsp</a>
 <div class="html ui top attached segment tryit-container " >
-<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
-<div class="ui sizer vertical segment bottom">	<textarea class="tryit ui " id="tryit3">
+	<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
+		<div class="ui sizer vertical segment bottom">
+			<textarea class="tryit ui " id="tryit3">
+var y = [2, "hello", 123.45];
+y
+
+			</textarea>
+		</div>
+		<a id="_end_tryit3">
+&nbsp;</a>
+		<div id="tryit3-error" class="tryit-error"></div>
+		<div id="tryit3-display" class="tryit-display rendered_html"></div>
+	</div>	<div class="ui top attached label">
+		<button id="tryit3-run" class="ui  disabled right labeled icon button texec"><i class="caret square right icon"></i>Run </button>
+	</div>
+</div>
+<h2 id="customizeyourdisplay">Customize your display</h2>
+<p>For this test me are just going to convert to JSON string</p>
+
+<a id="_tryit4">&nbsp</a>
+<div class="html ui top attached segment tryit-container " >
+	<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
+		<div class="ui sizer vertical segment bottom">
+			<textarea class="tryit ui " id="tryit4">
 json(y)
 
-	</textarea></div>
-<a id="_end_tryit3">
+			</textarea>
+		</div>
+		<a id="_end_tryit4">
 &nbsp;</a>
-	<div id="tryit3-error" class="tryit-error"></div>
-	<div id="tryit3-display" class="tryit-display rendered_html"></div>
-</div><div class="ui top attached label">
-                <button id="tryit3-run" class="ui  disabled right labeled icon button texec"><i class="caret square right icon"></i>
-                  Run
-                </button>
-             </div>
-             </div></div>
-<script>makeEditor();</script>
+		<div id="tryit4-error" class="tryit-error"></div>
+		<div id="tryit4-display" class="tryit-display rendered_html"></div>
+	</div>	<div class="ui top attached label">
+		<button id="tryit4-run" class="ui  disabled right labeled icon button texec"><i class="caret square right icon"></i>Run </button>
+	</div>
+</div>
+
+		</div>
+		<div class="two wide column"></div>
+	</div>
+
+	<script>
+makeEditor();
+
+	document.addEventListener('DOMContentLoaded', (event) => {
+  	document.querySelectorAll('pre code').forEach((block) => {
+    		hljs.highlightBlock(block);
+  		});
+	});
+</script>
 </body></html>
     

@@ -4,6 +4,7 @@
   "description": "Generate HTML file with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
+    "start": "node bin/gen-tryit.js index.try",
     "test": "echo \"Error: no test specified\" && exit 1",
     "try": "nodemon --ext \"try css js\"   bin/gen-tryit.js index.try"
   },
