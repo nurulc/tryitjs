@@ -48,8 +48,8 @@ The init action will do several things:
 ### Run from command prompt
 
 * locally installed
-> node_modules/.bin/gen-tryit <input-file> {-d target-directory} {-src source-dir}
+> node_modules/.bin/tryitjs <input-file> {-d target-directory} {-src source-dir}
 
 * Globally installed
-> gen-tryit <input-file> {-d target-directory} {-src source-dir}
+> tryitjs <input-file> {-d target-directory}
 
