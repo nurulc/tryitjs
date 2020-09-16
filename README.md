@@ -79,8 +79,11 @@ Very it is a markdown file with a few simple extensions, .try file have the foll
 ```
 ### Single line markup
 
+Does not end the previously started command section, in these single-line command can be a part oone of the previous command
+
 |  command 	|   Sescription	|
 |---	|---	|
+| @@include &lt;file name&gt; | copy the contents of the file into the current try at this location |
 | **!--**  |  the rest of the line is a comment 	|
 
 ### Run from command prompt
