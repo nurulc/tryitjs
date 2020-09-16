@@ -153,7 +153,7 @@ function createNecessaryFiles(refDir,target='.') {
   ];
 
   return fileList.map( fileName => {
-    var data = fs.readFileSync(path.join(refDir, fileName),'utf8');
+    var data = fs.readFileSync(path.join(refDir,'ref' fileName),'utf8');
     return [path.join(target, fileName), data];
   })
 
