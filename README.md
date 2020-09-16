@@ -43,13 +43,45 @@ The init action will do several things:
 
 #### Example of HTML generated
 
+The following command can be used to generate a __.HTML__ file from a __.try__ file 
 ```bash
- tryit index.try
+ > tryit index.try
 ```
 <a href="index.try">Sample .try file</a>
 
 The command above generates and <a href="index.html">index.html</a>
 ![](ttryitjs-demo.PNG)
+
+### What is a .try file
+
+Very it is a markdown file with a few simple extensions, .try file have the following few commands:
+
+### Multi-line markup
+|  command 	|   Sescription	|
+|---	|---	|
+|**!head**  	|   Items to be added to the _&lt;head&gt;_ add all subsequent lines become part of html/head	until the next command|
+|**!md**  	|   Subsequent lines are treated as markdown	|
+|**!tryit** |  the subsequent lines are editable and executable javascript	|
+|**!html**  |  the subsequent lines are plain html fragments	|
+
+```
+!head
+  <link <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css" />
+  <script src="javascript/tryit.js"></script>
+!md   -- end the !head and starts markdown segment
+# This is a title
+
+...
+
+!tryit -- start some javascript  
+  let arr = [1, 2, 3]; 
+  x
+```
+### Single line markup
+
+|  command 	|   Sescription	|
+|---	|---	|
+| **!--**  |  the rest of the line is a comment 	|
 
 ### Run from command prompt
 
