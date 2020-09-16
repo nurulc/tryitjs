@@ -157,9 +157,9 @@ function createNecessaryFiles(refDir,target='.') {
 function _genHTML(fileName, outFileName, config) {
     var lines = pipe(readLines,getIncludes,removeComments)(fileName);
     let sects = sections(lines);
-    console.log(sects);
+    //console.log(sects);
     let tocContents = toc(sects);
-    console.log('toc content',tocContents);
+    //console.log('toc content',tocContents);
 
     var html = sects.map(gen(config,tocContents)).join('\n');
     writeOut(outFileName, `

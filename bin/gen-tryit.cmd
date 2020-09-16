@@ -1,1 +1,0 @@
-node gen-tryit.js %*
