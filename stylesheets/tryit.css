@@ -168,6 +168,11 @@ h3:before {
     content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
     counter-increment: h3counter;
 }
+#toc_container a:hover {
+  color: #ddffff !important;
+  cursor: pointer;
+  background-color: #8888ff;
+}
 
 /* Table of contents TOC */
 #toc_container {
@@ -181,6 +186,8 @@ h3:before {
     margin-top: 5rem;
     width: 120%;
     z-index: 1000;
+    max-height: 80%;
+    overflow-y: scroll;
 }
 
 .toc_title {
@@ -231,6 +238,36 @@ h3:before {
 
 #toc_container li, #toc_container ul, #toc_container ul li{
     list-style: outside none none !important;
+}
+
+#toc_inner {
+  max-height: 75vh;
+  overflow-y: scroll;
+  /*background-color: #eeffff;*/
+}
+
+/*@media only screen and (max-height: 50rem) {
+  #toc_inner {
+  max-height: 40rem;
+  background-color: #88eeee;
+}*/
+@media only screen and (max-height: 40rem) {
+  #toc_inner {
+  max-height: 70vh;
+  /*background-color: #ffeeee;*/
+}
+
+@media only screen and (max-height: 30rem) {
+  #toc_inner {
+  max-height: 65vh;
+  /*background-color: #ffeeff;*/
+}
+
+
+@media only screen and (max-height: 20rem) {
+  #toc_inner {
+  max-height: 50vh;
+  /*background-color: #ffffee;*/
 }
 
 

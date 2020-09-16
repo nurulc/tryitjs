@@ -6,7 +6,12 @@ const showdown = require('showdown');
 
 let bodyStart= (toc)=> (
 `	<div class="ui grid">
-    <div class="three wide column" id="toc_container"><div class="toc_title">Contents</div>${toc}</div>
+    <div class="three wide column" id="toc_container">
+      <div id="toc_inner">
+        <div class="toc_title">Contents</div>
+        ${toc}
+      </div>  
+    </div>
     </div> 
 	<div class="ui grid">
 		<div class="three wide column"></div>

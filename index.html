@@ -43,11 +43,64 @@ let words = ['sky', 'wood', 'forest', 'falcon',
  </head>
 <body>
 	<div class="ui grid">
-    <div class="three wide column" id="toc_container"><div class="toc_title">Contents</div><div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('tryitdemo')">Tryit demo</a></div>
+    <div class="three wide column" id="toc_container">
+      <div id="toc_inner">
+        <div class="toc_title">Contents</div>
+        <div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('tryitdemo')">Tryit demo</a></div>
 <div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('wearegoingtodemosomelodashfunctions')">We are going to demo some lodash functions</a></div>
 <div class="toc2"> 1.1&nbsp;&nbsp;<a onclick="jumpTag('usingsomelodashfunctions1_')">Using some lodash functions 1 _</a></div>
 <div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('array')">Array</a></div>
-<div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('customizeyourdisplay')">Customize your display</a></div></div>
+<div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('customizeyourdisplay')">Customize your display</a></div>
+<div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('section1')">Section 1</a></div>
+<div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('label1a')">label 1a</a></div>
+<div class="toc1"> 2&nbsp;&nbsp;<a onclick="jumpTag('label1b')">label 1b</a></div>
+<div class="toc1"> 3&nbsp;&nbsp;<a onclick="jumpTag('label1c')">label 1c</a></div>
+<div class="toc1"> 4&nbsp;&nbsp;<a onclick="jumpTag('label1d')">label 1d</a></div>
+<div class="toc1"> 5&nbsp;&nbsp;<a onclick="jumpTag('label1e')">label 1e</a></div>
+<div class="toc1"> 6&nbsp;&nbsp;<a onclick="jumpTag('label1f')">label 1f</a></div>
+<div class="toc1"> 7&nbsp;&nbsp;<a onclick="jumpTag('label1g')">label 1g</a></div>
+<div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('section2')">Section 2</a></div>
+<div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('label2a')">label 2a</a></div>
+<div class="toc1"> 2&nbsp;&nbsp;<a onclick="jumpTag('label2b')">label 2b</a></div>
+<div class="toc1"> 3&nbsp;&nbsp;<a onclick="jumpTag('label2c')">label 2c</a></div>
+<div class="toc1"> 4&nbsp;&nbsp;<a onclick="jumpTag('label2d')">label 2d</a></div>
+<div class="toc1"> 5&nbsp;&nbsp;<a onclick="jumpTag('label2e')">label 2e</a></div>
+<div class="toc1"> 6&nbsp;&nbsp;<a onclick="jumpTag('label2f')">label 2f</a></div>
+<div class="toc1"> 7&nbsp;&nbsp;<a onclick="jumpTag('label2g')">label 2g</a></div>
+<div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('section3')">Section 3</a></div>
+<div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('label3a')">label 3a</a></div>
+<div class="toc1"> 2&nbsp;&nbsp;<a onclick="jumpTag('label3b')">label 3b</a></div>
+<div class="toc1"> 3&nbsp;&nbsp;<a onclick="jumpTag('label3c')">label 3c</a></div>
+<div class="toc1"> 4&nbsp;&nbsp;<a onclick="jumpTag('label3d')">label 3d</a></div>
+<div class="toc1"> 5&nbsp;&nbsp;<a onclick="jumpTag('label3e')">label 3e</a></div>
+<div class="toc1"> 6&nbsp;&nbsp;<a onclick="jumpTag('label3f')">label 3f</a></div>
+<div class="toc1"> 7&nbsp;&nbsp;<a onclick="jumpTag('label3g')">label 3g</a></div>
+<div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('section4')">Section 4</a></div>
+<div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('label4a')">label 4a</a></div>
+<div class="toc1"> 2&nbsp;&nbsp;<a onclick="jumpTag('label4b')">label 4b</a></div>
+<div class="toc1"> 3&nbsp;&nbsp;<a onclick="jumpTag('label4c')">label 4c</a></div>
+<div class="toc1"> 4&nbsp;&nbsp;<a onclick="jumpTag('label4d')">label 4d</a></div>
+<div class="toc1"> 5&nbsp;&nbsp;<a onclick="jumpTag('label4e')">label 4e</a></div>
+<div class="toc1"> 6&nbsp;&nbsp;<a onclick="jumpTag('label4f')">label 4f</a></div>
+<div class="toc1"> 7&nbsp;&nbsp;<a onclick="jumpTag('label4g')">label 4g</a></div>
+<div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('section5')">Section 5</a></div>
+<div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('label5a')">label 5a</a></div>
+<div class="toc1"> 2&nbsp;&nbsp;<a onclick="jumpTag('label5b')">label 5b</a></div>
+<div class="toc1"> 3&nbsp;&nbsp;<a onclick="jumpTag('label5c')">label 5c</a></div>
+<div class="toc1"> 4&nbsp;&nbsp;<a onclick="jumpTag('label5d')">label 5d</a></div>
+<div class="toc1"> 5&nbsp;&nbsp;<a onclick="jumpTag('label5e')">label 5e</a></div>
+<div class="toc1"> 6&nbsp;&nbsp;<a onclick="jumpTag('label5f')">label 5f</a></div>
+<div class="toc1"> 7&nbsp;&nbsp;<a onclick="jumpTag('label5g')">label 5g</a></div>
+<div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('section6')">Section 6</a></div>
+<div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('label6a')">label 6a</a></div>
+<div class="toc1"> 2&nbsp;&nbsp;<a onclick="jumpTag('label6b')">label 6b</a></div>
+<div class="toc1"> 3&nbsp;&nbsp;<a onclick="jumpTag('label6c')">label 6c</a></div>
+<div class="toc1"> 4&nbsp;&nbsp;<a onclick="jumpTag('label6d')">label 6d</a></div>
+<div class="toc1"> 5&nbsp;&nbsp;<a onclick="jumpTag('label6e')">label 6e</a></div>
+<div class="toc1"> 6&nbsp;&nbsp;<a onclick="jumpTag('label6f')">label 6f</a></div>
+<div class="toc1"> 7&nbsp;&nbsp;<a onclick="jumpTag('label6g')">label 6g</a></div>
+      </div>  
+    </div>
     </div> 
 	<div class="ui grid">
 		<div class="three wide column"></div>
@@ -148,6 +201,54 @@ json(y)
 		<button id="tryit4-run" class="ui  disabled right labeled icon button texec"><i class="caret square right icon"></i>Run </button>
 	</div>
 </div>
+<h1 id="section1">Section 1</h1>
+<h2 id="label1a">label 1a</h2>
+<h2 id="label1b">label 1b</h2>
+<h2 id="label1c">label 1c</h2>
+<h2 id="label1d">label 1d</h2>
+<h2 id="label1e">label 1e</h2>
+<h2 id="label1f">label 1f</h2>
+<h2 id="label1g">label 1g</h2>
+<h1 id="section2">Section 2</h1>
+<h2 id="label2a">label 2a</h2>
+<h2 id="label2b">label 2b</h2>
+<h2 id="label2c">label 2c</h2>
+<h2 id="label2d">label 2d</h2>
+<h2 id="label2e">label 2e</h2>
+<h2 id="label2f">label 2f</h2>
+<h2 id="label2g">label 2g</h2>
+<h1 id="section3">Section 3</h1>
+<h2 id="label3a">label 3a</h2>
+<h2 id="label3b">label 3b</h2>
+<h2 id="label3c">label 3c</h2>
+<h2 id="label3d">label 3d</h2>
+<h2 id="label3e">label 3e</h2>
+<h2 id="label3f">label 3f</h2>
+<h2 id="label3g">label 3g</h2>
+<h1 id="section4">Section 4</h1>
+<h2 id="label4a">label 4a</h2>
+<h2 id="label4b">label 4b</h2>
+<h2 id="label4c">label 4c</h2>
+<h2 id="label4d">label 4d</h2>
+<h2 id="label4e">label 4e</h2>
+<h2 id="label4f">label 4f</h2>
+<h2 id="label4g">label 4g</h2>
+<h1 id="section5">Section 5</h1>
+<h2 id="label5a">label 5a</h2>
+<h2 id="label5b">label 5b</h2>
+<h2 id="label5c">label 5c</h2>
+<h2 id="label5d">label 5d</h2>
+<h2 id="label5e">label 5e</h2>
+<h2 id="label5f">label 5f</h2>
+<h2 id="label5g">label 5g</h2>
+<h1 id="section6">Section 6</h1>
+<h2 id="label6a">label 6a</h2>
+<h2 id="label6b">label 6b</h2>
+<h2 id="label6c">label 6c</h2>
+<h2 id="label6d">label 6d</h2>
+<h2 id="label6e">label 6e</h2>
+<h2 id="label6f">label 6f</h2>
+<h2 id="label6g">label 6g</h2>
 
 		</div>
 		<!--<div class="two wide column"></div> -->
