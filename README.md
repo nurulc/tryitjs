@@ -43,7 +43,7 @@ The init action will do several things:
 
 #### Example of HTML
 
-<a href="blob/master/index.try">Sample .try file</a>
+<a href="index.try">Sample .try file</a>
 ![](ttryitjs-demo.PNG)
 
 ### Run from command prompt
