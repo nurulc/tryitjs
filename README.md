@@ -83,7 +83,7 @@ Does not end the previously started command section, in these single-line comman
 
 |  command 	|   Sescription	|
 |---	|---	|
-| @@include &lt;file name&gt; | copy the contents of the file into the current try at this location |
+| @@include &lt;file name&gt; | copy the contents of the file into the current location |
 | **!--**  |  the rest of the line is a comment 	|
 
 ### Run from command prompt
