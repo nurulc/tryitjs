@@ -43,11 +43,11 @@ let words = ['sky', 'wood', 'forest', 'falcon',
  </head>
 <body>
 	<div class="ui grid">
-    <div class="three wide column" id="toc_container"><div class="toc_title">Contents</div><div class="toc0"> &nbsp;&nbsp;<a href="#tryitdemo">Tryit demo</a></div>
-<div class="toc1"> 1&nbsp;&nbsp;<a href="#wearegoingtodemosomelodashfunctions">We are going to demo some lodash functions</a></div>
-<div class="toc2"> 1.1&nbsp;&nbsp;<a href="#usingsomelodashfunctions1_">Using some lodash functions 1 _</a></div>
-<div class="toc1"> 2&nbsp;&nbsp;<a href="#introduction">Introduction</a></div>
-<div class="toc1"> 3&nbsp;&nbsp;<a href="#customizeyourdisplay">Customize your display</a></div></div>
+    <div class="three wide column" id="toc_container"><div class="toc_title">Contents</div><div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('tryitdemo')">Tryit demo</a></div>
+<div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('wearegoingtodemosomelodashfunctions')">We are going to demo some lodash functions</a></div>
+<div class="toc2"> 1.1&nbsp;&nbsp;<a onclick="jumpTag('usingsomelodashfunctions1_')">Using some lodash functions 1 _</a></div>
+<div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('array')">Array</a></div>
+<div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('customizeyourdisplay')">Customize your display</a></div></div>
     </div> 
 	<div class="ui grid">
 		<div class="three wide column"></div>
@@ -107,8 +107,8 @@ let lastWord = _.last(words);
 		<button id="tryit2-run" class="ui  disabled right labeled icon button texec"><i class="caret square right icon"></i>Run </button>
 	</div>
 </div>
-<h2 id="introduction">Introduction</h2>
-<p>This is a brief introcuction to the tryit </p>
+<h1 id="array">Array</h1>
+<p>so </p>
 
 <a id="_tryit3">&nbsp</a>
 <div class="html ui top attached segment tryit-container " >

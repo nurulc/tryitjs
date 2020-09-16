@@ -56,5 +56,5 @@ let lastWord = _.last(words);
 })
 
 !-- include another tryit file
-@@include intro.try
+@@include array.try
 !end

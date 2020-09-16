@@ -233,3 +233,10 @@ h3:before {
     list-style: outside none none !important;
 }
 
+
+/*
+.CodeMirror-panel .info-panel {
+    display: flex;
+    justify-content: space-between;
+    height: 32px;
+}*/
