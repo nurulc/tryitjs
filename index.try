@@ -22,7 +22,7 @@ let words = ['sky', 'wood', 'forest', 'falcon',
 
  
 !md Add some markdown
-# Tryit demo
+#Tryit demo 
 
 ## We are going to demo some lodash functions
 
@@ -39,7 +39,7 @@ words // display words (just like python notebooks the last expression result is
 !--
 !md More markdown
 
-### Using some lodash functions 
+### Using some lodash functions 1 _
 
 * \_.first
 * \_.last
