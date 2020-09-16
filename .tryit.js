@@ -42,7 +42,7 @@ var _default = {
       "prettyprint.js": "javascript/tryit.js"
     },
     css: {
-      "tryit.css": "stylesheet/try.css"
+      "tryit.css": "stylesheets/tryit.css"
     }
   },
 
