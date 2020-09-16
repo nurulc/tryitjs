@@ -41,9 +41,14 @@ The init action will do several things:
 }
 ```
 
-#### Example of HTML
+#### Example of HTML generated
 
+```bash
+ tryit index.try
+```
 <a href="index.try">Sample .try file</a>
+
+The command above generates and <a href="index.html">index.html</a>
 ![](ttryitjs-demo.PNG)
 
 ### Run from command prompt
