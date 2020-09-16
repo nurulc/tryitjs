@@ -20,9 +20,9 @@ let bodyStart= (toc)=> (
 );
 
 let bodyEnd= (
-`
+`<div class="three wide column logo"><img src="tryit-small.png"></div>  
 		</div>
-		<!--<div class="two wide column"></div> -->
+    
 	</div>
 `
 );
@@ -185,6 +185,7 @@ ${html}
 
 module.exports = (refDir, targetDir, inFile, outFile, config) => { 
   createNecessaryFiles(refDir,targetDir).forEach(saveData);
+  fs.copyFileSync(path.join(refDir,'ref','tryit-small.png'), path.join(targetDir,'tryit-small.png'));
   //console.log(createNecessaryFiles('tmp'));
   outFile = path.join(targetDir,outFile);
   _genHTML(inFile,outFile, config);
