@@ -43,7 +43,7 @@ The init action will do several things:
 
 #### Example of HTML
 
-!![](ttryjs-demo.PNG)
+![](ttryitjs-demo.PNG)
 
 ### Run from command prompt
 
