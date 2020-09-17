@@ -167,6 +167,12 @@ h2:before {
 h3:before {
     content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
     counter-increment: h3counter;
+    counter-reset: h4counter;
+}
+
+h4:before {
+    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) ".\0000a0\0000a0";
+    counter-increment: h4counter;
 }
 #toc_container a:hover {
   color: #ddffff !important;
@@ -213,34 +219,33 @@ h3:before {
   padding-top: 0.5rem;
 }
 
-.toc1 {
-  font-size: 0.75rem;
-  text-align:left;
-  color: #4287f5;
-}
+
 
 .toc1 {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-align:left;
   color: #4287f5;
 }
 
 .toc2 {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   text-align:left;
   margin-left: 15px;
+  color: #4287f5;
 }
 
 .toc3 {
-  font-size: 1rem;
+  font-size: 0.6rem;
   text-align:left;
   margin-left: 25px;
+  color: #4287f5;
 }
 
 .toc4 {
-  font-size: 0.75rem;
+  font-size: 0.55rem;
   text-align:left;
   margin-left: 35px;
+  color: #4287f5;
 }
 
 #toc_container li, #toc_container ul, #toc_container ul li{
