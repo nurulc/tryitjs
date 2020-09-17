@@ -157,6 +157,7 @@ function tryIt(divName,editor) {
         var err = $e(divName + "-error");
         err.innerText = e.toString();
         err.style.display = "block";
+        console.log(e.stack);
       }
       
     },200);
