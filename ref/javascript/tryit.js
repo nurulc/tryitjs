@@ -4,6 +4,17 @@ function $e(name) {
   if (!e) return { innerText: "" };
   return e;
 }
+
+class Text {
+    constructor(s) {
+      s = s || '';
+      if(s.length > 20000) s = s.substr(0,20000)+ '...more('+(s.length-20000)+')';
+      this.str = s;
+    }
+    _toHtml() {
+        return '<pre>'+asHTML(this.str)+'</pre>';
+    }
+}
 // ----------------------------------------
 // Render
 // ----------------------------------------
@@ -43,20 +54,42 @@ function makeEditor() {
   list.map( e => e.id).forEach(_makeEditor);
 }
 
+function isPrimitive(v) {
+  switch(typeof v) {
+    case 'boolean':
+    case 'number': return true;
+    case 'string': return v.length < 20;
+  }
+  return false;
+}
+
+function smallArray(a, depth=0, len=40) {
+  if(depth > 1) return false;
+  if(Array.isArray(a) && a.length <= len) {
+    if(a.every(isPrimitive)) return true;
+    return a.every( v => smallArray(v, depth+1, 3));
+  }
+  return false;
+}
+
 function display(d) {
   if(d && d._toHtml ) {
      return d._toHtml();
   }
   else if( typeof d === "string") {
     if( d && d.length > 20000) d = d.substr(0,20000)+"... MORE" 
-    return "<pre>" + d + "</pre>";
+    return "<pre>" + asHTML(d) + "</pre>";
+  }
+  else if(isPrimitive(d)) return d.toString();
+  else if(smallArray(d)) {
+      let v = JSON.stringify(d, null, " ");
+      if( v && v.length > 20000) v = v.substr(0,20000)+"... MORE" 
+      return "<pre>" + (v || (d !== undefined?asHTML(d.toString()):undefined)) + "</pre>";
   }
   else if( d ){
     return prettyPrint(d).outerHTML;
   }
-  let v = JSON.stringify(d, null, "&nbsp;");
-  if( v && v.length > 20000) v = v.substr(0,20000)+"... MORE" 
-  return "<pre>" + (v || (d !== undefined?d.toString():undefined)) + "</pre>";
+
   
 }
 
@@ -207,3 +240,39 @@ function scrollToSmoothly(pos, time){
       }
 }
 
+function asHTML(x) {
+   return x.replace(/&/g, '~AMP~').replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/~AMP~/g,"&amp;")
+}
+// Display utilities
+// 
+var _displayStack = [];
+var NO_DISPLAY = false;
+var dispLen = 0
+function clearDisplay() { _displayStack= []; dispLen = 0;}
+
+function pushDisplay(s, type='h') {
+  if(NO_DISPLAY) return;
+  s = s || ''
+  if( s.length + dispLength < 1000000) _dispStack.push([s,type]);
+}
+
+function show(...list) {
+  list.forEach(v => pushDisplay(v,'d'));
+}
+
+function render() {
+  let s = ''
+  if(!NO_DISPLAY) {
+    s = '<div>'+_displayStack.map(([v,type]) => type==='h': v ? display(v)).join('<br/>') + '</div>'
+  }
+  clearDisplay();
+  return s;
+}
+
+
+var $$ = {
+  HTML: pushDisplay,
+  show: show,
+  clear: clearDisplay,
+  render: render
+};
