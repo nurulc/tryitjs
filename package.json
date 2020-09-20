@@ -1,12 +1,14 @@
 {
   "name": "tryitjs",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "description": "Generate HTML file with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
     "start": "node bin/gen-tryit.js index.try",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "try": "nodemon --ext \"try css js\"   bin/gen-tryit.js index.try"
+    "try": "nodemon --ext \"try css js\"   bin/gen-tryit.js index.try" ,
+    "watch:install": "npm pack && npm install -g .\\tryitjs-0.1.9.tgz",
+    "watch": "nodemon --ext \"js\" --exec \"npm run watch:install\""
   },
   "bin": {
     "tryitjs": "bin/gen-tryit.js"
@@ -32,6 +34,7 @@
     "reload": "^3.1.0"
   },
   "dependencies": {
+    "run-all": "^1.0.1",
     "showdown": "^1.9.1"
   }
 }

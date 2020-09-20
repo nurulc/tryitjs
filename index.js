@@ -69,7 +69,8 @@ function mdToHtml(x) {
 
 
 function tryit(x,i) {
-    return ("<a id=\"_tryit"+(i)+"\">&nbsp</a>\n"+
+    let run_title = i>1?"Script not ready - Execute 'tryit' scripts above first":"Execute script"
+    return (`<a id="_tryit${i}">&nbsp</a>\n`+
             "<div class=\"html ui top attached segment tryit-container \" >\n"+
             
 	            "\t<div class=\"ui sizer vertical segment\" style=\"font-size: 1rem; padding-top: 2rem;\">\n"+
@@ -83,8 +84,17 @@ function tryit(x,i) {
                     "\t\t<div id=\"tryit"+i+"-display\" class=\"tryit-display rendered_html\"></div>\n"+
                 "\t</div>"+
                 "\t<div class=\"ui top attached label\">\n"+
-                    `\t\t<button id="tryit${i}-run" class="ui  ${i>1?'disabled':'green'} right labeled icon button texec"><i class="caret square right icon"></i>`+
-                  "Run </button>\n"+
+                    `\t\t<button id="tryit${i}-run" title="${run_title}" class="ui  ${i>1?'yellow':'green'} right labeled icon button exec">`+
+                    `     <i class="caret square right icon"></i>`+
+                          "Run" + 
+                        "</button>"+
+                  ` &nbsp; <button id="jump_tryit${i+1}" class="circular ui icon yellow button jump_next">`+ 
+                      "<i class=\"icon angle double down\"></i>"+ 
+                    "</button>\n"+
+                  " &nbsp; <button class=\"circular ui icon button green jump_back\">"+"<i class=\"icon angle double up\"></i>" + "</button>\n"+
+                  ` &nbsp; <button id="ra_${i}" title="Execute all scripts above" class="ui right floated button circular icon green run_all">`+
+                  " <i class=\"fast backward icon\"></i>"+
+                  " </button>\n"+
                 "\t</div>\n"+
             "</div>");
 }

@@ -5,21 +5,29 @@ function $e(name) {
   return e;
 }
 
-class Text {
-    constructor(s) {
-      s = s || '';
-      if(s.length > 20000) s = s.substr(0,20000)+ '...more('+(s.length-20000)+')';
-      this.str = s;
-    }
-    _toHtml() {
-        return '<pre>'+asHTML(this.str)+'</pre>';
-    }
+function getIDNumber(aDiv) {
+  let num = aDiv.replace(/[^0-9]*/,'');
+  return num;
 }
+
+// class Text {
+//     constructor(s) {
+//       s = s || '';
+//       if(s.length > 20000) s = s.substr(0,20000)+ '...more('+(s.length-20000)+')';
+//       this.str = s;
+//     }
+//     _toHtml() {
+//         return '<pre>'+asHTML(this.str)+'</pre>';
+//     }
+// }
 // ----------------------------------------
 // Render
 // ----------------------------------------
 
 let __editors = [];
+let editorFor = {
+
+};
 
 function _makeEditor(id) {
   let textarea = document.querySelector(`#${id}`);
@@ -43,15 +51,38 @@ function _makeEditor(id) {
   editor.setSize("inherit", height);
 
   let but = document.querySelector(`#${id}-run`);
+  editorFor[id] = editor; 
 
   but.onclick = execCode;
   function execCode() { return tryIt(id,editor);}
+}
+
+function jumpback() {
+  if(__editors.length) jump(__editors[0])
 }
 
 function makeEditor() {
   var elts = document.querySelectorAll(".tryit");
   let list = Array.prototype.slice.call(elts);
   list.map( e => e.id).forEach(_makeEditor);
+  document.querySelectorAll(".jump_next")
+    .forEach(n => {
+      let id = n.id.substr(5); 
+      n.onclick=(()=>jump(id));
+    }
+  );
+  document.querySelectorAll(".jump_back")
+    .forEach(n => {
+      n.onclick=jumpback;
+    }
+  );
+  document.querySelectorAll(".run_all")
+    .forEach(n => {
+      let id = n.id.substr(3); 
+      n.onclick=() => _runAll(__editors, 'tryit'+id);
+    }
+  );
+  _addRemoveCSSclass('ra_1',"green", "grey");
 }
 
 function isPrimitive(v) {
@@ -77,12 +108,14 @@ function display(d) {
      return d._toHtml();
   }
   else if( typeof d === "string") {
-    if( d && d.length > 20000) d = d.substr(0,20000)+"... MORE" 
+    if( d && d.length > 20000) d = d.substr(0,20000)+"... MORE"
+    if( d.length < 100) return  asHTML(d) + "<br/>"
     return "<pre>" + asHTML(d) + "</pre>";
   }
   else if(isPrimitive(d)) return d.toString();
   else if(smallArray(d)) {
       let v = JSON.stringify(d, null, " ");
+      if(v.length <150) v = JSON.stringify(d);
       if( v && v.length > 20000) v = v.substr(0,20000)+"... MORE" 
       return "<pre>" + (v || (d !== undefined?asHTML(d.toString()):undefined)) + "</pre>";
   }
@@ -111,9 +144,9 @@ function canExecute(tag) {
   return false;
 }
 
-function addRemoveCSSclass(next_button,classToAdd, classToRemove) {
+function _addRemoveCSSclass(next_button,classToAdd, classToRemove) {
   if(next_button) {
-     let b = $e(next_button+'-run');
+     let b = $e(next_button);
      if(b) {
        b.classList.remove(classToRemove);
        b.classList.add(classToAdd);
@@ -121,11 +154,15 @@ function addRemoveCSSclass(next_button,classToAdd, classToRemove) {
   }
 }
 
-function removeTag(tag) {
+function addRemoveCSSclass(next_button,classToAdd, classToRemove) {
+  _addRemoveCSSclass(next_button+'-run', classToAdd, classToRemove)
+}
+
+function replaceCSSClass(tag) {
   let ix = __editors.indexOf(tag);
   if( ix !== 0) return false;
   __editors = __editors.slice(1);
-  addRemoveCSSclass(__editors[0], "green", "disabled");
+  addRemoveCSSclass(__editors[0], "green", "yellow");
   // let next_button = __editors[0];
   // if(next_button) {
   //    let b = $e(next_button+'-run');
@@ -163,7 +200,39 @@ function jumpTag(h,OFFSET) {
     // setTimeout(() => window.scrollBy(0,-70),0)
 }
 
-function tryIt(divName,editor) {
+function updateUI(divName,toJump=true) {
+  //(divName);
+  //addRemoveCSSclass(divName, "blue", "green");
+  replaceCSSClass(divName);
+  _addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey");
+  if(toJump) setTimeout( () => jump(divName),0);
+}
+
+function execute(divName, editor, toUpdateUI, toJump, callback) {
+      try {
+
+        var val = (1,eval)(editor.getValue("\n"));
+        let show = val => {
+          ($e(divName + "-display").innerHTML = val+'   DONE');
+        };
+
+        render(val).then(res => {
+          if(res !== undefined) show(res);
+          if( toUpdateUI ) updateUI(divName );
+          if(callback) callback();
+        });
+
+      } catch (e) {
+        var err = $e(divName + "-error");
+        err.innerText = e.toString()+e.stack.toString();
+        err.style.display = "block";
+        console.log(e.stack);
+        clearDisplay();
+        setTimeout( () => jump(divName),0);
+      }
+}
+
+function tryIt(divName,editor, toDelay=200) {
 
   if(!canExecute(divName)) return;
   var _err = $e(divName + "-error");
@@ -174,26 +243,39 @@ function tryIt(divName,editor) {
   _disp.innerHTML = "";
   _disp.style['max-height'] = "30rem";
   
-  setTimeout( () => {
-      try {
+  setTimeout( () => execute(divName, editor, true, true),toDelay);
+}
 
-        var val = (1,eval)(editor.getValue("\n"));
-        let show = val => ($e(divName + "-display").innerHTML = display(val));
-        if( val instanceof Promise)  val.then(show)
-        else show(val);
-        removeTag(divName);
-        addRemoveCSSclass(divName, "blue", "green");
-        console.log('goto' + ('end_'+divName) );
-        setTimeout( () => jump(divName),0);
+function _runAll(list, item) {
+  let [divName, ...newList] = list;
+  if(item === divName) return;
+  let _code;
 
-      } catch (e) {
-        var err = $e(divName + "-error");
-        err.innerText = e.toString()+e.stack.toString();
-        err.style.display = "block";
-        console.log(e.stack);
-      }
-      
-    },200);
+  try {
+    console.log("run all "+divName);
+    let editor = editorFor[divName];
+    if(!item) {
+      console.log("item "+divName+"not found");
+      return;
+    }
+    _code = editor.getValue("\n");
+    var val = (1,eval)(_code);
+
+    render(val).then(res => {
+        replaceCSSClass(divName, false);
+        _runAll(newList, item)
+    });
+
+  } catch (e) {
+    var err = $e(divName + "-error");
+    err.innerText = e.toString()+e.stack.toString()+"\n\ndiv:"+divName+"\n-------------------------\n"+asHTML(_code);
+    err.style.display = "block";
+    console.log(e.stack);
+    clearDisplay();
+    setTimeout( () => jump(divName),0);
+  }
+  
+
 }
 
 // =======================================================================
@@ -252,27 +334,40 @@ function clearDisplay() { _displayStack= []; dispLen = 0;}
 
 function pushDisplay(s, type='h') {
   if(NO_DISPLAY) return;
-  s = s || ''
-  if( s.length + dispLength < 1000000) _dispStack.push([s,type]);
+  if(!(s instanceof Promise) && s !== undefined) s = Promise.resolve(s)
+   _displayStack.push([s,type]);
 }
 
-function show(...list) {
+function _show(...list) {
   list.forEach(v => pushDisplay(v,'d'));
 }
 
-function render() {
-  let s = ''
-  if(!NO_DISPLAY) {
-    s = '<div>'+_displayStack.map(([v,type]) => type==='h': v ? display(v)).join('<br/>') + '</div>'
-  }
+function render(val) {
+  if(arguments.length > 0 ) _show(val)
+
+  let promises = _displayStack.map( ([p,type]) => p);
+  let types = _displayStack.map( ([p,type]) => type);
+  let resPromise = Promise.all(promises).then(
+    list => {
+      if(!NO_DISPLAY) {
+        let res = list.map((v,i) => [ v,types[i] ])
+        return Promise.resolve(
+            '<div>'+
+              res.map( ([v,type]) => type==='h'? v : display(v) ).join('\n') + 
+            '</div>'
+            );
+      }
+      else return Promise.resolve(undefined);
+    }
+  );
   clearDisplay();
-  return s;
+  return resPromise;
 }
 
 
 var $$ = {
   HTML: pushDisplay,
-  show: show,
+  show: _show,
   clear: clearDisplay,
   render: render
 };
