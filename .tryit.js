@@ -13,7 +13,7 @@ var _default = {
     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/theme/cobalt.min.css", 
     "https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css", 
     "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css",
-    "https://unpkg.com/tryitjs@VERSION/stylesheets/tryit.css"],
+    "https://unpkg.com/tryitjs@VERSION/ref/stylesheets/tryit.css"],
     "scripts": [
     "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js", 
     "https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js", 
