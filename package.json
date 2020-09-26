@@ -1,6 +1,6 @@
 {
   "name": "tryitjs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Generate HTML file with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
