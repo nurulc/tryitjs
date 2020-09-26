@@ -2,3 +2,10 @@ node_modules
 *.tgz
 tmp
 *.bak
+notebook
+nodebook
+try_it
+       
+tryitjs-ws.sublime-workspace
+tryitjs.sublime-project
+tryitjs.sublime-workspace

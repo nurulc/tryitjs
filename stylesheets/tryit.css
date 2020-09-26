@@ -129,6 +129,19 @@
   overflow-y: scroll;
 }
 
+.left-row {
+  position: static !important; 
+  width: auto ; 
+  display: inline-block ;
+}
+
+.right-row {
+  position: static !important;
+  display: inline-block !important; 
+  width: 60%; 
+  top: -75px
+}
+
 body { 
     padding: 2.5rem;
     padding-right: 2.5rem;
@@ -282,6 +295,17 @@ h4:before {
   /*background-color: #ffffee;*/
 }
 
+
+.pastel0 {background: #d8f9fd; text-align: right; font-weight: bold; color: #0e1000; }
+.pastel1 { background: #aae8de; text-align: right; font-weight: bold; }
+.pastel2 { background: #ffffb3; text-align: right; font-weight: bold; }
+.pastel3 { background: #bce0f7; text-align: right; font-weight: bold; color: #020258; }
+.pastel4 { background: #fbdfdf; text-align: right; font-weight: bold; color: #020800;}
+.pastel5 { background: #ded9ea; text-align: right; font-weight: bold; color: #0e0113;}
+.pastel6 { background: #ffd8ac; text-align: right; font-weight: bold; }
+.pastel7 { background: #b3de69; text-align: right; font-weight: bold; color: #170404;}
+.pastel8 { background: #fccde5; text-align: right; font-weight: bold; }
+.pastel9 { background: #d9d9d9; text-align: right; font-weight: bold; }
 
 /*
 .CodeMirror-panel .info-panel {

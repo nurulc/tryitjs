@@ -17,7 +17,10 @@ y
 For this test me are just going to convert to JSON string
 
 !tryit
-json(y)
+$$.json(y); // force JSON output
+
+// the line below will do the same thing
+y  // display the last value
 
 !md
 #Section 1

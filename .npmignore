@@ -3,3 +3,8 @@ tmp
 *.bak
 tryit.png
 tryit1.png
+ttryitjs-demo.PNG
+*.try
+node_modules
+index.html
+notebook
