@@ -15,6 +15,7 @@
 <script src="https://unpkg.com/tryitjs@0.1.11/ref/javascript/prettyprint.js"></script>
 <script src="https://unpkg.com/tryitjs@0.1.11/ref/javascript/tryit.js"></script>
 <title>Test Tryit</title>
+<base href="/try_docs" />
 
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
 
@@ -154,6 +155,8 @@ let lastWord = _.last(words);
 <li>$$.display(value)</li>
 <li>$$.clear()</li>
 <li>$$.D2('eval-string')     <strong>eval-string</strong> is a javascript expression in string from, the eval string and its value is displayed. This is useful for displaying variables name and value.</li>
+<li>$$.HTML(some<em>html</em>string) - render html in the display area</li>
+<li>$$.lastly( some-function ) - this will be executed after all the display rendering is completed</li>
 </ul>
 
 <a id="_tryit3">&nbsp</a>
@@ -161,14 +164,16 @@ let lastWord = _.last(words);
 	<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
 		<div class="ui sizer vertical segment bottom">
 			<textarea class="tryit ui " id="tryit3">
-setTimeout( () =&gt; {
-      $('.ui .card')
-        .popup({
-          hoverable  : true,
-          position   : 'bottom left'
-          });
+    $$.lastly( // code is activated after all data/html display has been performed 
+      () =&gt; {
+          $('.ui .card')
+            .popup({
+              hoverable  : true,
+              position   : 'bottom left'
+              });
 
-}, 1000); // activate popup after we have displayed the HTML below
+    }
+); // activate popup after we have displayed the HTML below
 
 // Display some HTML using $$.HTML(...)
 $$.HTML(
@@ -239,7 +244,10 @@ y
 	<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
 		<div class="ui sizer vertical segment bottom">
 			<textarea class="tryit ui " id="tryit5">
-json(y)
+$$.json(y); // force JSON output
+
+// the line below will do the same thing
+y  // display the last value
 
 			</textarea>
 		</div>

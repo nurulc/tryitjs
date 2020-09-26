@@ -65,16 +65,20 @@ We use the $$.HTML function to do this. The other $$ functions are:
 * $$.display(value)
 * $$.clear()
 * $$.D2('eval-string')     __eval-string__ is a javascript expression in string from, the eval string and its value is displayed. This is useful for displaying variables name and value.
+* $$.HTML(some_html_string) - render html in the display area
+* $$.lastly( some-function ) - this will be executed after all the display rendering is completed
 
 !tryit
-setTimeout( () => {
-      $('.ui .card')
-        .popup({
-          hoverable  : true,
-          position   : 'bottom left'
-          });
+    $$.lastly( // code is activated after all data/html display has been performed 
+      () => {
+          $('.ui .card')
+            .popup({
+              hoverable  : true,
+              position   : 'bottom left'
+              });
 
-}, 1000); // activate popup after we have displayed the HTML below
+    }
+); // activate popup after we have displayed the HTML below
 
 
 // Display some HTML using $$.HTML(...)
