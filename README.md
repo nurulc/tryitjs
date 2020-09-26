@@ -2,6 +2,8 @@
 
 CLI (command line) application to generate HTML file containing editable Javascript code snippets that can be edited and executed in the browser. This is designed to help npm module developers to publish pages to that other developers can try out ther library with the minimum of effort.
 
+<a href="https://unpkg.com/tryitjs@0.2.2/index.html">Demo of a TryITjs</a><br />
+
 ## Instalation
 
 ### Install globally 
@@ -18,34 +20,58 @@ npm install -g  tryitjs
 
 The processor takes as input a file with the extension _&lt;filename&gt;.try_ and generates _&lt;filename&gt;.html_ 
 
-further is creates two extra directories:
+further is creates two extra directories (in --local mode):
 
 * stylesheets
 * javascript
 
 
 The init action will do several things:
-1. create, if it does not already exist, the following
-   * ./javascripts   _directory_
-   * ./javascript/tryit.js _core tryit helper script_
-   * ./stylesheet/tryit.css _core stylesheet_
+1. By default all javascripts and css are pulled from the internat
+1. In --local mode, create, if it does not already exist, the following
+   * &lt;target dir&gt:/javascripts   _directory_
+   * &lt;target dir&gt:/javascript/tryit.js _core tryit helper script_
+   * &lt;target dir&gt:/javaprettyprint
+   * &lt;target dir&gt:/stylesheet/tryit.css _core stylesheet_
    
 
 
 
-* Optional create .tryit.json
+* Optional create .tryit.json 
+	* this is done with the option `tyritjs --init`
 ```
 {
-     "src": "<source directory>",
-     "target": ""
+ headers: {
+    "css": ["https://...", ...],
+    "scripts": ["https://...js",...] 
+  },
+  local: {
+    css: [
+        "/stylesheets/tryit.css"
+    ],
+    scripts: [
+    "/javascript/prettyprint.js", 
+    "/javascript/tryit.js"
+    ]
+  },
+   onend: ` <!-- HTML to ADD at the bottom of the html file, just before </body> -->
+          <script
+          src="https://code.jquery.com/jquery-3.1.1.min.js"
+          integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+          crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+        <script>
+          $('.activating.element').popup({inline: true, });
+        </script>
+  `
 }
-```
+``` 
 
 #### Example of HTML generated
 
 The following command can be used to generate a __.HTML__ file from a __.try__ file 
 ```bash
- > tryit index.try
+ > tryitjs index.try
 ```
 <a href="index.try">Sample .try file</a>
 

@@ -17,6 +17,7 @@ const {pipe, PICK_PATH, isString, flatten,last} = require('./lib/func-utils');
 const {sections} = require('./lib/sections');
 const toc = require('./lib/toc');
 const pathAddPrefix = require('./lib/pathAddPrefix');
+const { isURL } = require('./lib/path-utils');
 
 let bodyStart= (toc)=> (
 `	<div class="ui grid">
@@ -232,10 +233,18 @@ function expandIncludePomise(readLinesPromise,baseDir,inFile) {
                           (baseDir||'.') :                  // absolute path
                           getPath(inFile))  + '/' + aPath;  // relative path
 
-                var list = readLinesPromise(, 'file');   // returns a promise of a list of lines
+                var list = readLinesPromise(aPath, 'file');   // returns a promise of a list of lines
 
-            //if(list) list = getIncludesPromise(readLinesPromise); // recursively process
-            return list || '';
+                if(list && list.length) {
+                    return getIncludesPromise(readLinesPromise,baseDir,aPath)(list);
+                     // return Promise.all(list).then( 
+                     //    innerList => {
+                     //      const proc = expandIncludePomise(readLinesPromise,baseDir,aPath); // recursively process
+                     //      return innerList.map(proc);
+                     //    });
+                }
+              return list || '';
+            }
         } else return lineStr;
       } );
     //=====

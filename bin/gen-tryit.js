@@ -124,6 +124,9 @@ function ARGS(args) {
 
 
     if(inFiles.length === 1 ) {
+      if(outFile) {
+          targetDir = fileInfo(outFile).dir || '.';
+      }
       return Promise.resolve([fileItem( inFiles[0], outFile, srcDir, targetDir)]);
     }
 
