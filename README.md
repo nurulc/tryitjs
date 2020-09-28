@@ -73,7 +73,7 @@ The following command can be used to generate a __.HTML__ file from a __.try__ f
 ```bash
  > tryitjs index.try
 ```
-<a href="blob/master/try_src/index.try">Sample .try file</a>
+<a href=https://github.com/nurulc/tryitjs/blob/master/try_src/index.try">Sample .try file</a>
 
 The command above generates and <a href="index.html">index.html</a>
 ![](ttryitjs-demo.PNG)
