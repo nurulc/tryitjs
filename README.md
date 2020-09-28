@@ -29,10 +29,10 @@ further is creates two extra directories (in --local mode):
 The init action will do several things:
 1. By default all javascripts and css are pulled from the internat
 1. In --local mode, create, if it does not already exist, the following
-   * &lt;target dir&gt:/javascripts   _directory_
-   * &lt;target dir&gt:/javascript/tryit.js _core tryit helper script_
-   * &lt;target dir&gt:/javaprettyprint
-   * &lt;target dir&gt:/stylesheet/tryit.css _core stylesheet_
+   * _&lt;target dir&gt;_:/javascripts   _directory_
+   * _&lt;target dir&gt;_:/javascript/tryit.js _core tryit helper script_
+   * _lt;target dir&gt;_:/javascript/prettyprint.js _display utility_
+   * _&lt;target dir&gt;_:/stylesheet/tryit.css _core stylesheet_
    
 
 
