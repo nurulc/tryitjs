@@ -118,5 +118,10 @@ Does not end the previously started command section, in these single-line comman
 > node_modules/.bin/tryitjs <input-file> {-d target-directory} {-src source-dir}
 
 * Globally installed
-> tryitjs <input-file> {-d target-directory}
+
+> tryitjs <input-file> {--dest target-directory}
+* or more generally 
+	
+> tryitjs --src <src dir for .try files> --dest <target dir for generated .html files> { --local }
+	
 
