@@ -48,14 +48,14 @@ words // display words (just like python notebooks the last expression result is
 
 !tryit
 //This is some javascript code - press run to execute it
-let firstWord =  _.first(words);
-let lastWord = _.last(words);
+var firstWord =  _.first(words);
+var lastWord = _.last(words);
 
 // Note the last expression is displayed
-({
+$$.D2(`({
    firstWord,
    lastWord
-})
+})`);
 
 !md
 ## Let's add some HTML
@@ -83,7 +83,14 @@ We use the $$.HTML function to do this. The other $$ functions are:
 
 // Display some HTML using $$.HTML(...)
 $$.HTML(
-`<div class="ui card" data-html="<div class='header'>User Rating</div><div class='content'><div class='ui star rating'><i class='active icon'></i><i class='active icon'></i><i class='active icon'></i><i class='active icon'></i><i class='active icon'></i></div></div>">
+`<div class="ui card" data-html="<div class='header'>User Rating</div>
+  <div class='content'>
+    <div class='ui star rating'><i class='active icon'>
+      </i><i class='active icon'></i>
+      <i class='active icon'></i><i class='active icon'>
+      </i><i class='active icon'></i>
+    </div>
+  </div>">
   <div class="image">
     <img src="https://semantic-ui.com/images/movies/totoro-horizontal.jpg">
   </div>
@@ -106,6 +113,25 @@ $$.HTML(
 </div>`
 )
 
+!html
+.item.yellow {
+  background-color: yellow;
+}
+!md
+# Cereate UI Element
+
+!tryit
+$$.HTML(`
+<div class="ui menu">
+  <div class="header item yellow exec" id="tryit1-run">
+    Run <i class="caret square right icon"></i>
+  </div>
+  <button id="jump_tryit2" class="item circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+  <button id="jump_tryit2" class="item circular ui icon yellow button jump_back"><i class="icon angle double up"></i></button>
+  <div class="right menu">
+     <button id="ra_1" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+  </div>
+</div>`)
 			
 !-- include another tryit file
 @@include array.try

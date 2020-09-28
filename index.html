@@ -2,18 +2,22 @@
 <html><head>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/theme/cobalt.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/cobalt.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" />
-<link rel="stylesheet" href="https://unpkg.com/tryitjs@0.2.4/ref/stylesheets/tryit.css" />
+<link rel="stylesheet" href="https://unpkg.com/tryitjs@0.3.0/ref/stylesheets/tryit.css" />
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.57.0/mode/javascript/javascript.min.js"></script>
-<script src="https://unpkg.com/tryitjs@0.2.4/ref/javascript/prettyprint.js"></script>
-<script src="https://unpkg.com/tryitjs@0.2.4/ref/javascript/tryit.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/continuecomment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/comment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/keymap/sublime.min.js"></script>
+<script src="https://unpkg.com/tryitjs@0.3.0/ref/javascript/prettyprint.js"></script>
+<script src="https://unpkg.com/tryitjs@0.3.0/ref/javascript/tryit.js"></script>
 <title>Test Tryit</title>
 <base href="/try_docs" />
 
@@ -26,14 +30,14 @@ let words = ['sky', 'wood', 'forest', 'falcon',
 
  </head>
 <body>
-	<div class="ui grid">
-    <div class="three wide column" id="toc_container">
-      <div id="toc_inner">
-        <div class="toc_title">Contents</div>
-        <div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('tryitdemo')">Tryit demo</a></div>
+<div class="ui sidebar inverted vertical menu">
+<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@0.3.0/tryit-small.png"></a></div>  
+<div class="item toc_title">Contents</div>
+<div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('tryitdemo')">Tryit demo</a></div>
 <div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('wearegoingtodemosomelodashfunctions')">We are going to demo some lodash functions</a></div>
 <div class="toc2"> 1.1&nbsp;&nbsp;<a onclick="jumpTag('usingsomelodashfunctions1_')">Using some lodash functions 1 _</a></div>
 <div class="toc1"> 2&nbsp;&nbsp;<a onclick="jumpTag('letsaddsomehtml')">Let's add some HTML</a></div>
+<div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('cereateuielement')">Cereate UI Element</a></div>
 <div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('array')">Array</a></div>
 <div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('customizeyourdisplay')">Customize your display</a></div>
 <div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('section1')">Section 1</a></div>
@@ -84,12 +88,11 @@ let words = ['sky', 'wood', 'forest', 'falcon',
 <div class="toc1"> 5&nbsp;&nbsp;<a onclick="jumpTag('label6e')">label 6e</a></div>
 <div class="toc1"> 6&nbsp;&nbsp;<a onclick="jumpTag('label6f')">label 6f</a></div>
 <div class="toc1"> 7&nbsp;&nbsp;<a onclick="jumpTag('label6g')">label 6g</a></div>
-      </div>  
-    </div>
-    </div> 
-	<div class="ui grid">
-		<div class="three wide column"></div>
-		<div class="twelve wide column" id="tryit_body">
+      </div>
+      <div class="pusher">
+      <div class="ui grid">
+    <div class="two wide column" onclick="toggle()" title="Click to show sidebar"></div>
+    <div class="thirteen wide column" id="tryit_body">
 
 <h1 id="tryitdemo">Tryit demo</h1>
 <h2 id="wearegoingtodemosomelodashfunctions">We are going to demo some lodash functions</h2>
@@ -128,14 +131,14 @@ words // display words (just like python notebooks the last expression result is
 		<div class="ui sizer vertical segment bottom">
 			<textarea class="tryit ui " id="tryit2">
 //This is some javascript code - press run to execute it
-let firstWord =  _.first(words);
-let lastWord = _.last(words);
+var firstWord =  _.first(words);
+var lastWord = _.last(words);
 
 // Note the last expression is displayed
-({
+$$.D2(`({
    firstWord,
    lastWord
-})
+})`);
 
 			</textarea>
 		</div>
@@ -177,7 +180,14 @@ let lastWord = _.last(words);
 
 // Display some HTML using $$.HTML(...)
 $$.HTML(
-`&lt;div class="ui card" data-html="&lt;div class='header'&gt;User Rating&lt;/div&gt;&lt;div class='content'&gt;&lt;div class='ui star rating'&gt;&lt;i class='active icon'&gt;&lt;/i&gt;&lt;i class='active icon'&gt;&lt;/i&gt;&lt;i class='active icon'&gt;&lt;/i&gt;&lt;i class='active icon'&gt;&lt;/i&gt;&lt;i class='active icon'&gt;&lt;/i&gt;&lt;/div&gt;&lt;/div&gt;"&gt;
+`&lt;div class="ui card" data-html="&lt;div class='header'&gt;User Rating&lt;/div&gt;
+  &lt;div class='content'&gt;
+    &lt;div class='ui star rating'&gt;&lt;i class='active icon'&gt;
+      &lt;/i&gt;&lt;i class='active icon'&gt;&lt;/i&gt;
+      &lt;i class='active icon'&gt;&lt;/i&gt;&lt;i class='active icon'&gt;
+      &lt;/i&gt;&lt;i class='active icon'&gt;&lt;/i&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;"&gt;
   &lt;div class="image"&gt;
     &lt;img src="https://semantic-ui.com/images/movies/totoro-horizontal.jpg"&gt;
   &lt;/div&gt;
@@ -200,7 +210,6 @@ $$.HTML(
 &lt;/div&gt;`
 )
 
-			
 			</textarea>
 		</div>
 		<a id="_end_tryit3">
@@ -213,17 +222,28 @@ $$.HTML(
  &nbsp; <button id="ra_3" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
 	</div>
 </div>
-<h1 id="array">Array</h1>
-<p>so </p>
+.item.yellow {
+  background-color: yellow;
+}
+<h1 id="cereateuielement">Cereate UI Element</h1>
 
 <a id="_tryit4">&nbsp</a>
 <div class="html ui top attached segment tryit-container " >
 	<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
 		<div class="ui sizer vertical segment bottom">
 			<textarea class="tryit ui " id="tryit4">
-var y = [2, "hello", 123.45];
-y
-
+$$.HTML(`
+&lt;div class="ui menu"&gt;
+  &lt;div class="header item yellow exec" id="tryit1-run"&gt;
+    Run &lt;i class="caret square right icon"&gt;&lt;/i&gt;
+  &lt;/div&gt;
+  &lt;button id="jump_tryit2" class="item circular ui icon yellow button jump_next"&gt;&lt;i class="icon angle double down"&gt;&lt;/i&gt;&lt;/button&gt;
+  &lt;button id="jump_tryit2" class="item circular ui icon yellow button jump_back"&gt;&lt;i class="icon angle double up"&gt;&lt;/i&gt;&lt;/button&gt;
+  &lt;div class="right menu"&gt;
+     &lt;button id="ra_1" title="Execute all scripts above" class="ui right floated button circular icon green run_all"&gt; &lt;i class="fast backward icon"&gt;&lt;/i&gt; &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;`)
+			
 			</textarea>
 		</div>
 		<a id="_end_tryit4">
@@ -236,18 +256,16 @@ y
  &nbsp; <button id="ra_4" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
 	</div>
 </div>
-<h2 id="customizeyourdisplay">Customize your display</h2>
-<p>For this test me are just going to convert to JSON string</p>
+<h1 id="array">Array</h1>
+<p>so </p>
 
 <a id="_tryit5">&nbsp</a>
 <div class="html ui top attached segment tryit-container " >
 	<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
 		<div class="ui sizer vertical segment bottom">
 			<textarea class="tryit ui " id="tryit5">
-$$.json(y); // force JSON output
-
-// the line below will do the same thing
-y  // display the last value
+var y = [2, "hello", 123.45];
+y
 
 			</textarea>
 		</div>
@@ -259,6 +277,32 @@ y  // display the last value
 		<button id="tryit5-run" title="Script not ready - Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit6" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
  &nbsp; <button class="circular ui icon button green jump_back"><i class="icon angle double up"></i></button>
  &nbsp; <button id="ra_5" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+	</div>
+</div>
+<h2 id="customizeyourdisplay">Customize your display</h2>
+<p>For this test me are just going to convert to JSON string</p>
+
+<a id="_tryit6">&nbsp</a>
+<div class="html ui top attached segment tryit-container " >
+	<div class="ui sizer vertical segment" style="font-size: 1rem; padding-top: 2rem;">
+		<div class="ui sizer vertical segment bottom">
+			<textarea class="tryit ui " id="tryit6">
+$$.json(y); // force JSON output
+
+// the line below will do the same thing
+
+y  // display the last value
+
+			</textarea>
+		</div>
+		<a id="_end_tryit6">
+&nbsp;</a>
+		<div id="tryit6-error" class="tryit-error"></div>
+		<div id="tryit6-display" class="tryit-display rendered_html"></div>
+	</div>	<div class="ui top attached label">
+		<button id="tryit6-run" title="Script not ready - Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit7" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+ &nbsp; <button class="circular ui icon button green jump_back"><i class="icon angle double up"></i></button>
+ &nbsp; <button id="ra_6" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
 	</div>
 </div>
 <h1 id="section1">Section 1</h1>
@@ -317,11 +361,16 @@ y  // display the last value
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
         <script>
           $('.activating.element').popup({inline: true, });
+          $('.ui.accordion').accordion();
+          function toggle() {
+            console.log('toggle');
+            $('.ui.sidebar').sidebar('toggle');
+
+          }
         </script>
-     <div class="three wide column logo">
-      <img src="https://unpkg.com/tryitjs@0.2.4/tryit-small.png"></div>  
-		</div>
-    
-	</div>
+   
+       </div>
+     </div>
+  </div>
 
 </body></html>

@@ -1,0 +1,35 @@
+/* ************************ */
+
+body {
+	padding-left: 3rem;
+	background-color: #fdfdff ;
+/*	font-family: Arial, Helvetica, sans-serifs;
+	font-size: 0.9rem;
+	font-weight: normal;*/
+	font: normal 0.8rem Arial, Helvetica sans-serifs;
+	line-height: 1.3em;
+}
+
+h1  {
+	color: 555555;
+	text-align: center;
+}
+
+h2 ~ p {
+	color: blue;
+}
+
+h3 ~ p {
+	color: blue;
+	font-size: 0.75rem;
+
+}
+
+div.tryit-container[data-state= "display"] button.exec {
+	background-color: blue;
+	color: white;
+}
+
+/*.tall {
+	background-color: #0000ff !important;
+}*/

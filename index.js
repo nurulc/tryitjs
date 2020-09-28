@@ -19,29 +19,49 @@ const toc = require('./lib/toc');
 const pathAddPrefix = require('./lib/pathAddPrefix');
 const { isURL } = require('./lib/path-utils');
 
-let bodyStart= (toc)=> (
-`	<div class="ui grid">
-    <div class="three wide column" id="toc_container">
-      <div id="toc_inner">
-        <div class="toc_title">Contents</div>
-        ${toc}
-      </div>  
-    </div>
-    </div> 
-	<div class="ui grid">
-		<div class="three wide column"></div>
-		<div class="twelve wide column" id="tryit_body">
+// let bodyStart= (toc)=> (
+// `	<div class="ui grid">
+//     <div class="three wide column" id="toc_container">
+//       <div id="toc_inner">
+//         <div class="toc_title">Contents</div>
+//         ${toc}
+//       </div>  
+//     </div>
+//     </div> 
+// 	<div class="ui grid">
+// 		<div class="three wide column"></div>
+// 		<div class="twelve wide column" id="tryit_body">
+// `
+// );
+
+const bodyStart = (toc) =>(
+`<div class="ui sidebar inverted vertical menu">
+<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@${version}/tryit-small.png"></a></div>  
+<div class="item toc_title">Contents</div>
+${toc}
+      </div>
+      <div class="pusher">
+      <div class="ui grid">
+    <div class="two wide column" onclick="toggle()" title="Click to show sidebar"></div>
+    <div class="thirteen wide column" id="tryit_body">
+`
+  )
+let bodyEnd= version => (
+` 
+       </div>
+     </div>
+  </div>
 `
 );
 
-let bodyEnd= version => (
-`   <div class="three wide column logo">
-      <img src="https://unpkg.com/tryitjs@${version}/tryit-small.png"></div>  
-		</div>
+// let bodyEnd= version => (
+// `   <div class="three wide column logo">
+//       <img src="https://unpkg.com/tryitjs@${version}/tryit-small.png"></div>  
+// 		</div>
     
-	</div>
-`
-);
+// 	</div>
+// `
+// );
 const highlighter = (`
 	document.addEventListener('DOMContentLoaded', (event) => {
   	document.querySelectorAll('pre code').forEach((block) => {

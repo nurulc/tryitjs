@@ -1,11 +1,11 @@
 {
   "name": "tryitjs",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Generate HTML file with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
     "tryit": "node bin/gen-tryit.js try_src/index.try -o index.html",
-    "startx": "node bin/gen-tryit.js --dest try_it --src try_src --local",
+    "local": "node bin/gen-tryit.js try_src/index.try -o index.html --local",
     "test": "echo \"Error: no test specified\" && exit 1",
     "try": "nodemon --ext \"try css js\"   bin/gen-tryit.js --dest try_it --local",
     "build": "npm pack && npm install -g .\\tryitjs-0.2.4.tgz && npm run tryit",

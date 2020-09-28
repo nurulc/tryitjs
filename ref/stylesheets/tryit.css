@@ -108,13 +108,13 @@
 .tryit-error {
   color: red;
   border-style: dotted;
-  width: 80%;
+  width: 90%;
   display: none
 }
 
 .tryit-code {
   border-style: solid;
-  width: 80%;
+  width: 100%;
   background-color: lightgrey;
   height: 7rem;
 }
@@ -155,7 +155,7 @@ body {
 }
 
 textarea.tryit {
-  width: 80%;
+  width: 100%;
 }
 
 h1 {
@@ -192,13 +192,27 @@ h4:before {
   cursor: pointer;
   background-color: #8888ff;
 }
-
 .logo {
-  position: fixed;
-  z-index: 1000;
   text-align: center;
-  left: 20px;
-  top: 8px;
+  background-color: white;
+  padding-left: -2rem;
+}
+
+.expression {
+
+}
+
+div.D2:nth-child(even)  {
+  display: inline-block;
+  background-color: #ddffdd;
+  width: 20%;
+  font-weight: 800;
+  font-size: 95%;
+}
+
+div.D2:nth-child(odd)  {
+  display: inline-block;
+  width: 70%;
 }
 /* Table of contents TOC */
 #toc_container {

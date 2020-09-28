@@ -45,13 +45,19 @@
       let lines = textarea.value.split('\n').length;
       let editor = CodeMirror.fromTextArea(textarea, {
         lineNumbers: true,
-        mode: "javascript",
+//        mode: "javascript",
         theme: "cobalt",
+        matchBrackets: true,
+        continueComments: "Enter",
         extraKeys: {
                 "Ctrl-Enter": execCode,
-                "Cmd-Enter": execCode
+                "Cmd-Enter": execCode,
+                "Ctrl-/": "toggleComment"
         },
-        tabSize: 2
+        tabSize: 2,
+        matchBrackets: true,
+        continueComments: "Enter",
+        keyMap: "sublime"
       });
       __editorsPending.push(id);
       __editors.push(id);
@@ -71,6 +77,16 @@
 
     function jumpback() {
       if(__editorsPending.length) jump(__editorsPending[0])
+    }
+
+    function jumpBack() {
+      jumpback();
+      toggle();
+    }
+
+    function _jumpTag(aTag) {
+      jumpTag(aTag);
+      toggle();
     }
 
     function makeEditor() {
@@ -106,35 +122,7 @@
       return false;
     }
 
-    function smallArray(a, depth=0, len=40) {
-      if(depth > 1) return false;
-      if(Array.isArray(a) && a.length <= len) {
-        if(a.every(isPrimitive)) return true;
-        return a.every( v => smallArray(v, depth+1, 3));
-      }
-      return false;
-    }
 
-    function display(d) {
-      if(d && d._toHtml ) {
-         return d._toHtml();
-      }
-      else if( typeof d === "string") {
-        if( d && d.length > 20000) d = d.substr(0,20000)+"... MORE"
-        if( d.length < 100) return  asHTML(d) + "<br/>"
-        return "<pre>" + asHTML(d) + "</pre>";
-      }
-      else if(isPrimitive(d)) return d.toString();
-      else if(smallArray(d)) {
-          let v = JSON.stringify(d, null, " ");
-          if(v.length <150) v = JSON.stringify(d);
-          if( v && v.length > 20000) v = v.substr(0,20000)+"... MORE" 
-          return "<pre>" + (v || (d !== undefined?asHTML(d.toString()):undefined)) + "</pre>";
-      }
-      else if( d ){
-        return prettyPrint(d).outerHTML;
-      }
-    }
 
     function objInfo(c) {
       const instanceMethods = Object.getOwnPropertyNames(c.prototype)
@@ -304,9 +292,7 @@
       //alertify.notify('sample', 'success', 5, function(){  console.log('dismissed'); });
     }
 
-    function json(x) {
-      return JSON.stringify(x,null,' ');
-    }
+
 
     function scrollToSmoothly(pos, time){
     /*Time is only applicable for scrolling upwards*/
@@ -341,9 +327,88 @@
           }
     }
 
+/*******************************************************************************/
+/*                                                                             */
+/*                         DISPLAY                                             */
+/*                                                                             */
+/*******************************************************************************/
+
+    function json(x) {
+      return JSON.stringify(x,null,' ');
+    }
+
     function asHTML(x) {
        return x.replace(/&/g, '~AMP~').replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/~AMP~/g,"&amp;")
     }
+
+    function smallArray(a, depth=0, len=40) {
+      if(depth > 1) return false;
+      if(Array.isArray(a) && a.length <= len) {
+        if(a.every(isPrimitive)) return true;
+        return a.every( v => smallArray(v, depth+1, 3));
+      }
+      return false;
+    }
+
+    function display(d) {
+      if(d && d._toHtml ) {
+         return d._toHtml();
+      }
+      else if( typeof d === "string") {
+        if( d && d.length > 20000) d = d.substr(0,20000)+"... MORE"
+        if( d.length < 100) return  asHTML(d) + "<br/>"
+        return "<pre>" + asHTML(d) + "</pre>";
+      }
+      else if(isPrimitive(d)) return d.toString();
+      else if(smallArray(d)) {
+          let v = JSON.stringify(d, null, " ");
+          if(v.length <150) v = JSON.stringify(d);
+          if( v && v.length > 20000) v = v.substr(0,20000)+"... MORE" 
+          return "<pre>" + (v || (d !== undefined?asHTML(d.toString()):undefined)) + "</pre>";
+      }
+      else if( d ){
+        return prettyPrint(d).outerHTML;
+      }
+    }
+
+    function __2ToDisplay(title, val) {
+      return (`
+        <div class="container"><div class="D2">
+          <div title="Expression">${title}</div>
+          <div >${display(val)}</div></div>
+        </div>`);
+      // return (
+      //   `<div class="ui segment">
+      //     <div class="ui left close rail left-row" style="position: static; width: auto; display: inline-block">
+      //       <div class="ui segment">${title}</div>
+      //     </div>
+      //     <div class="ui segment right-row" style="display: inline-block; width: 60%; top: -75px" >
+      //        <p>${val}</p>
+      //        <p></p>
+      //      </div>
+      //   </div>
+      //   ` );
+    }
+
+    function _displayEval(string) {
+      if(typeof string === 'string') {
+        let title = asHTML(string);
+        let val;
+        try {
+          val = (1,eval)(string);
+          if( !(val instanceof Promise) ) pushDisplay(__2ToDisplay(title, val))
+          else val.then(val => {
+            pushDisplay(__2ToDisplay(title, val))
+          });
+
+        } catch(err) {
+          pushDisplay("<span class=\"red\">Expression error</span>");
+        } // end try
+      }
+      else _show(string)
+    }
+
+
     // Display utilities
     // 
     let _displayStack = [];
@@ -382,38 +447,6 @@
       );
       clearDisplay();
       return resPromise;
-    }
-
-    function __2ToDisplay(title, val) {
-      return (
-        `<div class="ui segment">
-          <div class="ui left close rail left-row" style="position: static; width: auto; display: inline-block">
-            <div class="ui segment">${title}</div>
-          </div>
-          <div class="ui segment right-row" style="display: inline-block; width: 60%; top: -75px" >
-             <p>${val}</p>
-             <p></p>
-           </div>
-        </div>
-        ` );
-    }
-
-    function _displayEval(string) {
-      if(typeof string === 'string') {
-        let title = asHTML(string);
-        let val;
-        try {
-          val = (1,eval)(string);
-          if( !(val instanceof Promise) ) pushDisplay(__2ToDisplay(title, val))
-          else val.then(val => {
-            pushDisplay(__2ToDisplay(title, val))
-          });
-
-        } catch(err) {
-          pushDisplay("<span class=\"red\">Expression error</span>");
-        } // end try
-      }
-      else _show(string)
     }
 
     function _lastly(fn) {
@@ -455,14 +488,16 @@
         makeEditor: makeEditor,
         $$:         $$,              // display interface
         getEditors$:getEditors,
-        
+        jumpTag: _jumpTag,
+        jumpBack: jumpBack,
+        _display: display
 
     });
   }
 )();
 
 //==== 
-var $$ = $tryit.$$; 
+var {$$, jumpTag, jumpBack, _display} = $tryit;
 var objInfo = $$.objInfo; 
 document.addEventListener('DOMContentLoaded', (event) => {
     if(hljs) { 
