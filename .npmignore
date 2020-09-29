@@ -10,4 +10,6 @@ nodebook
 try_src
 css-tutorial.css
 css-tutorial.html
+*.sublime-workspace
+*.sublime-project
 
