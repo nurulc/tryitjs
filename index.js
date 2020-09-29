@@ -36,7 +36,8 @@ const { isURL } = require('./lib/path-utils');
 
 const bodyStart = (toc) =>(
 `<div class="ui sidebar inverted vertical menu">
-<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@${version}/tryit-small.png"></a></div>  
+<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@${version}/tryit-small.png"></a></div> 
+<div class="save_all item toc_title ">Save All</div>
 <div class="item toc_title">Contents</div>
 ${toc}
       </div>
@@ -120,6 +121,9 @@ function tryit(x,i) {
                   " &nbsp; <button class=\"circular ui icon button green jump_back\">"+"<i class=\"icon angle double up\"></i>" + "</button>\n"+
                   ` &nbsp; <button id="ra_${i}" title="Execute all scripts above" class="ui right floated button circular icon green run_all">`+
                   " <i class=\"fast backward icon\"></i>"+
+                  " </button>\n"+
+                  ` &nbsp; <button id="save_${i}" title="Execute all scripts above" class="ui right floated button circular icon green save_data">`+
+                  " <i class=\"save icon\"></i>"+
                   " </button>\n"+
                 "\t</div>\n"+
             "</div>");

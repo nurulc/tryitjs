@@ -7,13 +7,14 @@ const {
   saveData,
   writeOut,
   tryFilesPromise,
+  writeJson,
   log
  } = require('../lib/fileio');
 
  const {normalize} = require('../lib/path-utils');
 
 let baseConfig = require('../.tryit').default;
-let userConfig = {...baseConfig}, outFile,inFile, srcDir, targetDir, debug, isLocal = false;
+let userConfig = {...baseConfig}, outFile,inFile, srcDir, targetDir, debug, userConfigFile, isLocal = false;
 const SCRIPT_DIR = __dirname;
 
 function createNecessaryFiles(refDir,target='.') {
@@ -30,9 +31,41 @@ function createNecessaryFiles(refDir,target='.') {
 
 }
 
+function fileExists(aFile) {
+   try {
+        if (fs.existsSync(aFile)) {
+            return true;
+        }
+        return false;
+    } catch(err) {
+      return flase;
+    }
+
+}
+
 function processLocal(refDir, targetDir) {
   if( isLocal ) {
-    createNecessaryFiles(refDir,targetDir).forEach(saveData);
+    let pathName = path.join(targetDir, '.tryitjs.json');
+    let customUserConfig;
+    //if( !userConfigFile ) userConfigFile = pathName;
+    if( fileExists(userConfigFile|| pathName)) {
+      customUserConfig = readJson(userConfigFile||pathName); 
+    }
+
+    if(!customUserConfig) {
+      try {
+          if(fileExists('.tryitjs.json')) customUserConfig = readJson('.tryitjs.json');         
+          if(!customUserConfig) {
+            writeJson((userConfigFile||'.tryitjs'), userConfig);
+          }
+      } catch(err) {
+        console.log("Local config ", (userConfigFile||'.tyrit.json'), "could not be created");
+        console.log('using standard config');
+      }
+    }
+    userConfig = customUserConfig || userConfig;
+
+    createNecessaryFiles(refDir,targetDir, ).forEach(saveData);
     fs.copyFileSync(path.join(refDir,'ref','tryit-small.png'), path.join(targetDir,'tryit-small.png'));
     userConfig = {...baseConfig, isLocal: true}
     isLocal = false;
@@ -107,7 +140,7 @@ function ARGS(args) {
         argSkip = 2;
         switch(args[0]) {
             case '-c': 
-            case '--config': userConfig = args[1]; break;
+            case '--config': userConfigFile = args[1]; break;
             case '--outfile': 
             case '-o': outFile = args[1]; break;
             case '--dest':

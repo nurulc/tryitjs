@@ -187,6 +187,15 @@ h4:before {
     content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) ".\0000a0\0000a0";
     counter-increment: h4counter;
 }
+
+div[data-visible="true"] {
+  display: block;
+}
+
+div[data-visible!="true"] {
+  display: none;
+}
+
 #toc_container a:hover {
   color: #ddffff !important;
   cursor: pointer;
@@ -213,6 +222,10 @@ div.D2:nth-child(even)  {
 div.D2:nth-child(odd)  {
   display: inline-block;
   width: 70%;
+}
+
+.save_all:hover {
+    color: #eeeeff !important;
 }
 /* Table of contents TOC */
 #toc_container {
@@ -320,6 +333,14 @@ div.D2:nth-child(odd)  {
 .pastel7 { background: #b3de69; text-align: right; font-weight: bold; color: #170404;}
 .pastel8 { background: #fccde5; text-align: right; font-weight: bold; }
 .pastel9 { background: #d9d9d9; text-align: right; font-weight: bold; }
+
+.CodeMirror { 
+    height: auto;
+}
+
+.CodeMirror-scroll {
+  max-height: 50rem;
+}
 
 /*
 .CodeMirror-panel .info-panel {

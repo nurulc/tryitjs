@@ -32,8 +32,43 @@
 
     };
 
+    let editorData = ( () => {
+      let data = window.localStorage[window.location];
+      if(data) {
+        try {
+          let obj = JSON.parse(data);
+          return obj;
+        } catch(e) {
+          return ({})
+        }
+      }
+      return ({});
+    })();
+
+    /**
+     * Save data from all the editors
+     * @return {undefined} no return vales
+     */
+    function saveAll() {
+      Object.keys(editorFor).forEach( k => {
+        editorData[k] = editorFor[k].getValue("\n"); 
+      });
+      window.localStorage[window.location] = JSON.stringify(editorData);
+      alert('Save All');
+    }
+
+    /**
+     * Save content of editor named
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    function save(id) {
+        editorData[id] = editorFor[id].getValue("\n"); 
+        window.localStorage[window.location] = JSON.stringify(editorData);
+    }
+
     function getEditors() {
-      return __editors.slice();
+      return __editors.jumpback();slice();
     }
 
     function getPendingEditors() {
@@ -42,8 +77,15 @@
 
     function _makeEditor(id) {
       let textarea = document.querySelector(`#${id}`);
-      let lines = textarea.value.split('\n').length;
-      let editor = CodeMirror.fromTextArea(textarea, {
+      let content = textarea.value;
+      if(editorData[id]) {
+        content = editorData[id];
+        textarea.value = content;
+      } else {
+        editorData[id] = content;
+      }
+      const lines = content.split('\n').length;
+      const editor = CodeMirror.fromTextArea(textarea, {
         lineNumbers: true,
 //        mode: "javascript",
         theme: "cobalt",
@@ -61,38 +103,28 @@
       });
       __editorsPending.push(id);
       __editors.push(id);
-      let height = '';
-      if(lines < 5 ) height = "5rem";
-      else if( lines > 20 ) height = "35rem";
-      else height = (lines*1.5)+'rem';
+      setEditorHeight(editor,lines);
+      editorFor[id] = editor;
 
-      editor.setSize("inherit", height);
-
-      let but = document.querySelector(`#${id}-run`);
-      editorFor[id] = editor; 
-
-      but.onclick = execCode;
+      document.querySelector(`#${id}-run`).onclick = execCode;
       function execCode() { return tryIt(id,editor);}
     }
 
-    function jumpback() {
-      if(__editorsPending.length) jump(__editorsPending[0])
-    }
-
-    function jumpBack() {
-      jumpback();
-      toggle();
-    }
-
-    function _jumpTag(aTag) {
-      jumpTag(aTag);
-      toggle();
+    function setEditorHeight(editor,lines) {
+      let height = '';
+      if(lines < 5 ) height = "5rem";
+      else if( lines > 20 ) height = "40rem";
+      else height = (lines*1.8)+'rem';
+      editor.setSize("inherit", height);
+      return editor;
     }
 
     function makeEditor() {
       var elts = document.querySelectorAll(".tryit");
       let list = Array.prototype.slice.call(elts);
       list.map( e => e.id).forEach(_makeEditor);
+      
+      (document.querySelector('.save_all')||{}).onclick = saveAll;
       document.querySelectorAll(".jump_next")
         .forEach(n => {
           let id = n.id.substr(5); 
@@ -110,7 +142,14 @@
           n.onclick=() => _runAll(__editorsPending, 'tryit'+id);
         }
       );
-      _addRemoveCSSclass('ra_1',"green", "grey");
+      document.querySelectorAll(".save_data")
+        .forEach(n => {
+          let id = n.id.substr(5); 
+          n.onclick=() => save('tryit'+id);
+          n.title = "Save this script";
+        }
+      );
+      _addRemoveCSSclass('ra_1',"green", "grey").style ="display: none";
     }
 
     function isPrimitive(v) {
@@ -154,20 +193,21 @@
 
            asArray(classToRemove).forEach(cls => b.classList.remove(cls));
            asArray(classToAdd).forEach(cls => b.classList.add(cls));
-           //b.classList.add(classToAdd);
+           return b;
          }
       }
+      return ({});
     }
 
     function addRemoveCSSclass(next_button,classToAdd, classToRemove) {
-      _addRemoveCSSclass(next_button+'-run', classToAdd, classToRemove)
+      return _addRemoveCSSclass(next_button+'-run', classToAdd, classToRemove)
     }
 
     function replaceCSSClass(tag) {
       let ix = __editorsPending.indexOf(tag);
       if( ix !== 0) return false;
       __editorsPending = __editorsPending.slice(1);
-      addRemoveCSSclass(__editorsPending[0], "yellow", "green");
+      addRemoveCSSclass(__editorsPending[0], "yellow", "green").title = "Script ready to execute";
       // let next_button = __editorsPending[0];
       // if(next_button) {
       //    let b = $e(next_button+'-run');
@@ -191,26 +231,61 @@
         return offset;
     }
 
+    function findSegment(elem) {
+       if(elem === undefined) {
+         let segment =document.querySelector('div[data-visible="true"]'); 
+        return (segment||{});
+       }
+
+       let segment = elem.closest('div[data-visible]');
+       return (segment || {});
+
+    }
+
+    function makeSegmentVisible(elem, timeout=2000) {
+
+      let [curSeg, segment] = [undefined, elem].map(findSegment); // find
+      if(curSeg !== segment) {
+        segment.dataset.visible = 'true';
+        if(curSeg.dataset && timeout>=0)
+            setTimeout(() => {curSeg.dataset.visible = 'false'});
+       }
+       else return curSeg;
+    }
+
     function jump(h) {
-        
-        jumpTag('_'+h,70)
-        // document.location.hash = "_"+h;
-        // setTimeout(() => window.scrollBy(0,-70),0)
+        jumpTag('_'+h,70);
     }
 
     function jumpTag(h,OFFSET) {
-        OFFSET = +(OFFSET||0)
+        OFFSET = +(OFFSET||0);
+        let elem = $e(h);
+        makeSegmentVisible(elem);
         scrollToSmoothly($e(h).offsetTop-OFFSET, 10)
-        // document.location.hash = "_"+h;
-        // setTimeout(() => window.scrollBy(0,-70),0)
     }
+
+    function jumpback() {
+      if(__editorsPending.length) jump(__editorsPending[0])
+    }
+
+    function jumpBack() {
+      jumpback();
+      toggle();
+    }
+
+    function _jumpTag(aTag) {
+      jumpTag(aTag);
+      toggle();
+    }
+
+
 
     function updateUI(divName,toJump=true) {
       //(divName);
       //addRemoveCSSclass(divName, "blue", "green");
       replaceCSSClass(divName);
-      _addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey");
-      _addRemoveCSSclass(divName+"-run",["green", "yellow"], "blue");
+      _addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").title = "Previous scripts executed";
+      _addRemoveCSSclass(divName+"-run",["green", "yellow"], "blue").title = "Script executed and displayed";
       if(toJump) setTimeout( () => jump(divName),0);
     }
 
