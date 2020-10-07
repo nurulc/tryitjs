@@ -56,7 +56,7 @@ function processLocal(refDir, targetDir) {
       try {
           if(fileExists('.tryitjs.json')) customUserConfig = readJson('.tryitjs.json');         
           if(!customUserConfig) {
-            writeJson((userConfigFile||'.tryitjs'), userConfig);
+            writeJson((userConfigFile||'.tryitjs.json'), userConfig);
           }
       } catch(err) {
         console.log("Local config ", (userConfigFile||'.tyrit.json'), "could not be created");

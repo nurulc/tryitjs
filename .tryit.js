@@ -7,14 +7,14 @@ Object.defineProperty(exports, "__esModule", {
 var _default = {
   headers: {
     "css": [
+      "https://unpkg.com/tryitjs@VERSION/ref/stylesheets/tryit.css",
       "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css", 
       "https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css", 
       "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css", 
       "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css",
       "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/cobalt.min.css", 
       "https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css", 
-      "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css",
-      "https://unpkg.com/tryitjs@VERSION/ref/stylesheets/tryit.css"
+      "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css"
       ],
     "scripts": [
       "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js", 

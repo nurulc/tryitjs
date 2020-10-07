@@ -1,5 +1,30 @@
  
+ 
+
  var $tryit = (function (props) {
+
+     function Identity(x) { return x; }
+
+    function asArray(arrayLike) {
+      if(arrayLike === undefined || arrayLike === null) return [];
+      if(Array.isArray(arrayLike)) return arrayLike;
+
+      if( arrayLike instanceof NodeList  || 
+          typeof arrayLike.forEach === 'function') {
+        let res = [];
+        arrayLike.forEach(n => res.push(n));
+        return res;
+      }
+
+      if(!arrayLike || arrayLike.length === undefined ) {
+        return [arrayLike];
+      }
+
+      let res = [];
+      for(let i=0; i< arrayLike.length; i++) res.push(arrayLike[i]);
+      return res;
+    }
+
     function $e(name) {
       var e = document.getElementById(name);
       if (!e) return { innerText: "" };
@@ -182,10 +207,10 @@
     }
 
 
-    function asArray(val) {
-      if(Array.isArray(val)) return val;
-      return val?[val]:[];
-    }
+    // function asArray(val) {
+    //   if(Array.isArray(val)) return val;
+    //   return val?[val]:[];
+    // }
     function _addRemoveCSSclass(next_button,classToRemove,classToAdd) {
       if(next_button) {
          let b = $e(next_button);
@@ -219,49 +244,113 @@
       return true;
 
     }
-    class A {};
 
 
-    function totalOffsetTop (e)
-    {
-        var offset = 0;
-        do 
-            offset += e.offsetTop;
-        while (e = e.offsetParent);
-        return offset;
-    }
+
+    // function totalOffsetTop (e)
+    // {
+    //     var offset = 0;
+    //     do 
+    //         offset += e.offsetTop;
+    //     while (e = e.offsetParent);
+    //     return offset;
+    // }
 
     function findSegment(elem) {
        if(elem === undefined) {
-         let segment =document.querySelector('div[data-visible="true"]'); 
+         let segment =document.querySelector('div[data-pagevisible="true"]'); 
         return (segment||{});
        }
+       
+       if( dataset(elem).pagevisible ) return elem;
 
-       let segment = elem.closest('div[data-visible]');
+       let segment = elem.closest('div[data-pagevisible]');
        return (segment || {});
 
     }
+
+    /**
+     * very basic is empty test
+     * @param  {[type]}  obj [description]
+     * @return {Boolean}     [description]
+     */
+    function isEmpty(obj) {
+      if(obj === undefined) return true;
+      if(Array.isArray(obj) && obj.length === 0) return true;
+      if(typeof obj === 'string') return !!obj;
+      if(typeof obj === 'object') return Object.keys(obj).length === 0;
+      return false;  
+    }
+
+
+    function dataset(elem) {
+      if(!elem || !elem.dataset) return ({});
+      return elem.dataset;
+    }
+
 
     function makeSegmentVisible(elem, timeout=2000) {
 
       let [curSeg, segment] = [undefined, elem].map(findSegment); // find
       if(curSeg !== segment) {
-        segment.dataset.visible = 'true';
-        if(curSeg.dataset && timeout>=0)
-            setTimeout(() => {curSeg.dataset.visible = 'false'});
+        dataset(segment).pagevisible = 'true';
+        // if(dataset(curSeg) && timeout>=0)
+        //     setTimeout(() => {curSeg.dataset.pagevisible = 'false'},timeout);
+        // }
        }
-       else return curSeg;
+       return [segment, curSeg];
     }
+
+
+    function pagePrevNextOld(elem,forward) {
+      let curPage = findSegment(elem);
+      if(!dataset(curPage).pagevisible ) return;
+      let targetPage = forward?
+                      curPage.nextElementSibling:
+                      curPage.previousElementSibling; 
+      if(!dataset(targetPage).pagevisible ) 
+          dataset(targetPage).pagevisible = 'true';
+      jumpTag(targetPage,60, () => {
+        dataset(curPage).pagevisible = 'false';
+      });
+      return [targetPage, curPage];
+    }
+
+    function pagePrevNext(elem,forward) {
+      let curPage = findSegment(elem);
+      let targetPage = forward?
+                      curPage.nextElementSibling:
+                      curPage.previousElementSibling; 
+      jumpTag(targetPage,60);
+      return [targetPage, curPage];
+    }
+
+    function pagePrev() { pagePrevNext(this, false); }
+    function pageNext() { pagePrevNext(this, true); }
 
     function jump(h) {
         jumpTag('_'+h,70);
     }
 
-    function jumpTag(h,OFFSET) {
-        OFFSET = +(OFFSET||0);
-        let elem = $e(h);
-        makeSegmentVisible(elem);
-        scrollToSmoothly($e(h).offsetTop-OFFSET, 10)
+    function toHeader(elem) {
+      if(dataset(elem).pageVisible) {
+        return elem.querySelector('h1');
+      }
+      return elem;
+    }
+
+    function jumpTag(h,OFFSET,callback) {
+        OFFSET = +(OFFSET||30);
+        callback = callback || Identity;
+        let elem = typeof h === 'string' ? $e(h) : h;
+        let [targetSeg, curSeg] = makeSegmentVisible(elem);
+        if(targetSeg !== curSeg) curSeg.dataset.pagevisible = 'false';
+        setTimeout(() => {
+            //const lastsScoll = () => elem.scrollIntoView({behavior: "smooth", block: "start"});
+            const lastsScoll = () => scrollToSmoothly(toHeader(elem).offsetTop-OFFSET, 10);
+            scrollToSmoothly(elem.offsetTop-OFFSET, 10,() => {callback(); lastsScoll(); });
+          }, 10)
+            
     }
 
     function jumpback() {
@@ -368,8 +457,17 @@
     }
 
 
+    function easeIn(start, pos, end) {
+        const abs = Math.abs;
+        if(abs(start-pos) < 100 || abs(end-pos) < 100 ) return 2;
+        const diff =  abs(start-end);
+        if(diff > 5000 ) return 100;
+        if(diff > 1000 ) return 30;
+        if(diff > 500)   return 10;
+        return 5;
+    }
 
-    function scrollToSmoothly(pos, time){
+    function scrollToSmoothly(pos, time,callback){
     /*Time is only applicable for scrolling upwards*/
     /*Code written by hev1*/
     /*pos is the y-position to scroll to (in pixels)*/
@@ -377,26 +475,34 @@
           throw "Position must be a number";
          }
          if(pos<0){
-         throw "Position can not be negative";
+         //throw "Position can not be negative";
+           pos = 0;
          }
-        var currentPos = window.scrollY||window.screenTop;
+        var currentPos = start = window.scrollY||window.screenTop;
         if(currentPos<pos){
-        var t = 10;
-           for(let i = currentPos; i <= pos; i+=10){
-           t+=10;
+           var t = 10;
+           for(let i = currentPos; i <= pos+15; i+=10){
+            t+=10;
+            let v = i;
             setTimeout(function(){
-            window.scrollTo(0, i);
+              window.scrollTo(0, v);
             }, t/2);
           }
+          if(callback) {
+             setTimeout(function(){
+              callback();
+            }, t/2 + 50);
+          }
         } else {
-        time = time || 2;
+           time = time || 2;
            var i = currentPos;
            var x;
           x = setInterval(function(){
              window.scrollTo(0, i);
-             i -= 10;
+             i -= easeIn(start,i,pos);
              if(i<=pos){
               clearInterval(x);
+              if(callback) callback();
              }
          }, time);
           }
@@ -449,8 +555,8 @@
     function __2ToDisplay(title, val) {
       return (`
         <div class="container"><div class="D2">
-          <div title="Expression">${title}</div>
-          <div >${display(val)}</div></div>
+          <div class="expression" title="Expression">${title}</div>
+          <div class="expression-value">${display(val)}</div></div>
         </div>`);
       // return (
       //   `<div class="ui segment">
@@ -565,21 +671,45 @@
         getEditors$:getEditors,
         jumpTag: _jumpTag,
         jumpBack: jumpBack,
-        _display: display
+        _display: display,
+        getPendingEditors: getPendingEditors,
+        pagePrev:pagePrev,
+        pageNext: pageNext,
+        asArray:asArray
 
     });
   }
 )();
 
-//==== 
+//====================================================
+//
+//  
 var {$$, jumpTag, jumpBack, _display} = $tryit;
 var objInfo = $$.objInfo; 
 document.addEventListener('DOMContentLoaded', (event) => {
+    const $q = (...args) => $tryit.asArray(document.querySelectorAll(...args));
     if(hljs) { 
-      document.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightBlock(block);
-        });
+       document.querySelectorAll('pre code')
+        .forEach(block => hljs.highlightBlock(block));
+        // (block) => {
+        //     hljs.highlightBlock(block);
+        // });
     }
     $tryit.makeEditor();
+    let allPages =$q('div[data-pagevisible]')
+    allPages.forEach(
+      (elem,i) => 
+        i!==0?
+          (elem.dataset.pagevisible = "false"):
+          ''
+    );
+    // for(let i=1; i<allPages.length; i++) {
+    //   let elem = allPages[i];
+    //   elem.dataset.pagevisible = "false";
+    // }
+
+    $q('.page_prev').forEach(e => e.onclick = $tryit.pagePrev);
+    $q('.page_next').forEach(e => e.onclick = $tryit.pageNext);
+
 });
 

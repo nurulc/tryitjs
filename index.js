@@ -91,7 +91,21 @@ function removeComments(list) {
  */
 function mdToHtml(x) {
     var converter = new showdown.Converter();
-    return html = converter.makeHtml(x);;
+    let html = converter.makeHtml(x);
+    return html.split('\n')
+        .map(fixPageMarker)
+        .join('\n');
+}
+
+function fixPageMarker(line) {
+  if( findStr(line, 'class="try-page"') || findStr(line, ' @@END_PAGE@@ ') ) {
+    return line.replace(/<p>/g,"").replace(/<\/p>/g,"");
+  }
+  else return line;
+}
+
+function findStr(line, strToFind) {
+  return line.indexOf(strToFind) !== -1;
 }
 
 
@@ -122,7 +136,7 @@ function tryit(x,i) {
                   ` &nbsp; <button id="ra_${i}" title="Execute all scripts above" class="ui right floated button circular icon green run_all">`+
                   " <i class=\"fast backward icon\"></i>"+
                   " </button>\n"+
-                  ` &nbsp; <button id="save_${i}" title="Execute all scripts above" class="ui right floated button circular icon green save_data">`+
+                  ` &nbsp; <button id="save_${i}" title="Save all user modifications" class="ui right floated button circular icon green save_data">`+
                   " <i class=\"save icon\"></i>"+
                   " </button>\n"+
                 "\t</div>\n"+
@@ -177,12 +191,20 @@ function tryit_new(x,ix) {
                         title: "Execute all scripts above"
                       },
                       i( {class: "fast backward icon"}) 
-                    )
+                    ),
+                    button( 
+                      {
+                        id:   `save_${ix}`, 
+                        class: "ui right floated button circular icon green save_data",
+                        title: "Save your changes"
+                      },
+                      i( {class: "save icon"}) 
+                    ),
                   
                 )
               ) 
             )
-    );
+    ); 
 }
 
 // /**
@@ -328,16 +350,6 @@ function gen(config, tocContents, addPrefix) {
 }
 
 
-
-
-
-function readConfig(args) {
-    //TODO: check if there is an args  defines a config
-    // get the config file in param -c <config file>, or ~/.tryit.js or ~/.tryit.json or ~/.tryit.yaml
-    // if no config file load default config
-    // if 
-    return {};
-}
 
 
 
