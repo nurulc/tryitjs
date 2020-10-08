@@ -123,7 +123,7 @@
   border-style: solid;
   border-color: lightgrey;
   border-width: 1px;
-  width: 80%;
+  /*width: 80%;*/
   min-height: 1rem;
   overflow-x: scroll ;
   overflow-y: scroll;
@@ -250,84 +250,25 @@ div.D2:nth-child(odd)  {
   width: 70%;
 }
 
+/* Table of contents TOC */
+
 .save_all:hover {
     color: #00eeff !important;
 }
 
-/* Table of contents TOC */
-/*#toc_container {
-    position: fixed;
-    background: #f9f9f9 none repeat scroll 0 0;
-    border: 1px solid #aaa;
-    display: table;
-    font-size: 95%;
-    margin-bottom: 1em;
-    padding: 15px;
-    margin-top: 5rem;
-    width: 120%;
-    z-index: 1000;
-    max-height: 80%;
-    overflow-y: scroll;
-}
-
-.toc_title {
-    font-weight: 700;
-    text-align: center;
-    font-size: 2rem;
-    padding-bottom: 2rem;
+.click_me {
+   position: fixed;
+   padding-top: 50rem;
+   margin-left: -35rem;
+   margin-top:  20rem;
+   font-size: 4rem;
+   transform: rotate(-90deg);
+   opacity: 0.1;
 }
 
 
-.toc0 {
-    font-size: 1.2rem;
-    padding-bottom: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #333;
-    margin-top: 0.75rem;
-}
 
-.toc_title + .toc0 {
-    border-top: none;
-    margin-top: 0.75rem;
-    padding-top: 0rem;
-}
 
-.toc0 a {
-   color: white !important; 
-}
-
-.toc1 {
-  font-size: 1.15rem;
-  text-align:left;
-  color: #84a1d0;
-}
-
-.toc2 {
-  font-size: 1.05rem;
-  text-align:left;
-  margin-left: 15px;
-  color: #84a1d0;
-}
-
-.toc3 {
-  font-size: 0.9rem;
-  text-align:left;
-  margin-left: 25px;
-  color: #84a1d0;
-}
-
-.toc4 {
-  font-size: 0.85rem;
-  text-align:left;
-  margin-left: 35px;
-  color: #84a1d0;
-}
-
-.toc1 a, .toc2 a, .toc3 a, .toc4 a {
-  color: #84a1d0;
-}
-
-*/
 
 .toc_title {
     font-weight: 700;
@@ -408,34 +349,7 @@ div.D2:nth-child(odd)  {
   /*background-color: #eeffff;*/
 }
 
-/*@media only screen and (max-height: 50rem) {
-  #toc_inner {
-  max-height: 40rem;
-  background-color: #88eeee
-  }
-}
-@media only screen and (max-height: 40rem) {
-  #toc_inner {
-    max-height: 70vh;
-    /*background-color: #ffeeee;
-  }
-}
-
-@media only screen and (max-height: 30rem) {
-  #toc_inner {
-    max-height: 65vh;
-    /*background-color: #ffeeff;
-  }
-}
-
-
-@media only screen and (max-height: 20rem) {
-  #toc_inner {
-    max-height: 50vh;
-    /*background-color: #ffffee;
-  }
-}
-*/
+/** END TOC */
 
 .pastel0 {background: #d8f9fd; text-align: right; font-weight: bold; color: #0e1000; }
 .pastel1 { background: #aae8de; text-align: right; font-weight: bold; }

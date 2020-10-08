@@ -43,7 +43,9 @@ ${toc}
       </div>
       <div class="pusher">
       <div class="ui grid">
-    <div class="two wide column" onclick="toggle()" title="Click to show sidebar"></div>
+    <div class="two wide column" onclick="toggle()" title="Click to show sidebar">
+      <p class="click_me" onclick="toggle()">Click to show TOC</p>
+    </div>
     <div class="thirteen wide column" id="tryit_body">
 `
   )

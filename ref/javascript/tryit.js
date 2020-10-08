@@ -390,6 +390,7 @@
               if(res !== undefined) show(res);
               if( toUpdateUI ) updateUI(divName );
               if(callback) callback();
+              $('.ui.accordion').accordion() ;
             });
 
           } catch (e) {
@@ -531,6 +532,10 @@
       return false;
     }
 
+    function H(s) {
+      return ({_toHtml: () => '<br/><p><b>' + asHTML(s) + '</b></p>'});
+    }
+
     function display(d) {
       if(d && d._toHtml ) {
          return d._toHtml();
@@ -554,9 +559,9 @@
 
     function __2ToDisplay(title, val) {
       return (`
-        <div class="container"><div class="D2">
-          <div class="expression" title="Expression">${title}</div>
-          <div class="expression-value">${display(val)}</div></div>
+        <div class="ui container grid">
+          <div class="three wide column expression" title="Expression">${title}</div>
+          <div class="thirteen wide column expression-value">${display(val)}</div>
         </div>`);
       // return (
       //   `<div class="ui segment">
@@ -618,9 +623,11 @@
           if(!NO_DISPLAY) {
             let res = list.map((v,i) => [ v,types[i] ])
             return Promise.resolve(
-                '<div>'+
+                '<div class="ui accordion">'+
+                  '<div class="active title"><i class="dropdown icon"></i>Results</div>'+
+                  '<div class="active content">'+
                   res.map( ([v,type]) => type==='h'? v : display(v) ).join('\n') + 
-                '</div>'
+                '</div></div>'
                 );
           }
           else return Promise.resolve(undefined);
@@ -660,6 +667,7 @@
       clear:  clearDisplay,
       render: render,
       objInfo:objInfo,
+      H:H,
       lastly: _lastly, // pass a function after all items have been displayed, this call be called several
                       // times, the actions are performed in the order they are posted
       json: (...v) => _show(...v.map(json))

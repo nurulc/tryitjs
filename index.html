@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<link rel="stylesheet" href="https://unpkg.com/tryitjs@0.4.0/ref/stylesheets/tryit.css" />
+<link rel="stylesheet" href="https://unpkg.com/tryitjs@0.4.2/ref/stylesheets/tryit.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" />
@@ -16,8 +16,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/continuecomment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/comment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/keymap/sublime.min.js"></script>
-<script src="https://unpkg.com/tryitjs@0.4.0/ref/javascript/prettyprint.js"></script>
-<script src="https://unpkg.com/tryitjs@0.4.0/ref/javascript/tryit.js"></script>
+<script src="https://unpkg.com/tryitjs@0.4.2/ref/javascript/prettyprint.js"></script>
+<script src="https://unpkg.com/tryitjs@0.4.2/ref/javascript/tryit.js"></script>
 <title>Test Tryit</title>
 <base href="/try_docs" />
 
@@ -31,7 +31,7 @@ let words = ['sky', 'wood', 'forest', 'falcon',
  </head>
 <body>
 <div class="ui sidebar inverted vertical menu">
-<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@0.4.0/tryit-small.png"></a></div> 
+<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@0.4.2/tryit-small.png"></a></div> 
 <div class="save_all item toc_title ">Save All</div>
 <div class="item toc_title">Contents</div>
 <div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('tryitdemo')">Tryit demo</a></div>
@@ -92,7 +92,9 @@ let words = ['sky', 'wood', 'forest', 'falcon',
       </div>
       <div class="pusher">
       <div class="ui grid">
-    <div class="two wide column" onclick="toggle()" title="Click to show sidebar"></div>
+    <div class="two wide column" onclick="toggle()" title="Click to show sidebar">
+      <p class="click_me" onclick="toggle()">Click to show TOC</p>
+    </div>
     <div class="thirteen wide column" id="tryit_body">
 
 <div id="page-1" class="try-page" data-pagevisible="true">
