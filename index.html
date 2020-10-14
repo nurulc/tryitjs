@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<link rel="stylesheet" href="https://unpkg.com/tryitjs@0.4.2/ref/stylesheets/tryit.css" />
+<link rel="stylesheet" href="https://unpkg.com/tryitjs@0.4.4/ref/stylesheets/tryit.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" />
@@ -16,8 +16,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/continuecomment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/comment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/keymap/sublime.min.js"></script>
-<script src="https://unpkg.com/tryitjs@0.4.2/ref/javascript/prettyprint.js"></script>
-<script src="https://unpkg.com/tryitjs@0.4.2/ref/javascript/tryit.js"></script>
+<script src="https://unpkg.com/tryitjs@0.4.4/ref/javascript/prettyprint.js"></script>
+<script src="https://unpkg.com/tryitjs@0.4.4/ref/javascript/tryit.js"></script>
 <title>Test Tryit</title>
 <base href="/try_docs" />
 
@@ -31,7 +31,7 @@ let words = ['sky', 'wood', 'forest', 'falcon',
  </head>
 <body>
 <div class="ui sidebar inverted vertical menu">
-<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@0.4.2/tryit-small.png"></a></div> 
+<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@0.4.4/tryit-small.png"></a></div> 
 <div class="save_all item toc_title ">Save All</div>
 <div class="item toc_title">Contents</div>
 <div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('tryitdemo')">Tryit demo</a></div>
@@ -118,10 +118,10 @@ words // display words (just like python notebooks the last expression result is
 		<div id="tryit1-error" class="tryit-error"></div>
 		<div id="tryit1-display" class="tryit-display rendered_html"></div>
 	</div>	<div class="ui top attached label">
-		<button id="tryit1-run" title="Execute script" class="ui  green right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit2" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+		<button id="tryit1-run" data-tooltip="Execute script" class="ui  green right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit2" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
  &nbsp; <button class="circular ui icon button green jump_back"><i class="icon angle double up"></i></button>
- &nbsp; <button id="ra_1" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
- &nbsp; <button id="save_1" title="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
+ &nbsp; <button id="ra_1" data-tooltip="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+ &nbsp; <button id="save_1" data-tooltip="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
 	</div>
 </div>
 <h3 id="usingsomelodashfunctions1_">Using some lodash functions 1 _</h3>
@@ -152,10 +152,11 @@ $$.D2(`({
 		<div id="tryit2-error" class="tryit-error"></div>
 		<div id="tryit2-display" class="tryit-display rendered_html"></div>
 	</div>	<div class="ui top attached label">
-		<button id="tryit2-run" title="Script not ready - Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit3" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+		<button id="tryit2-run" data-tooltip="Script not ready - 
+	Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit3" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
  &nbsp; <button class="circular ui icon button green jump_back"><i class="icon angle double up"></i></button>
- &nbsp; <button id="ra_2" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
- &nbsp; <button id="save_2" title="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
+ &nbsp; <button id="ra_2" data-tooltip="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+ &nbsp; <button id="save_2" data-tooltip="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
 	</div>
 </div>
 <h2 id="letsaddsomehtml">Let's add some HTML</h2>
@@ -223,16 +224,17 @@ $$.HTML(
 		<div id="tryit3-error" class="tryit-error"></div>
 		<div id="tryit3-display" class="tryit-display rendered_html"></div>
 	</div>	<div class="ui top attached label">
-		<button id="tryit3-run" title="Script not ready - Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit4" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+		<button id="tryit3-run" data-tooltip="Script not ready - 
+	Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit4" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
  &nbsp; <button class="circular ui icon button green jump_back"><i class="icon angle double up"></i></button>
- &nbsp; <button id="ra_3" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
- &nbsp; <button id="save_3" title="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
+ &nbsp; <button id="ra_3" data-tooltip="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+ &nbsp; <button id="save_3" data-tooltip="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
 	</div>
 </div>
 .item.yellow {
   background-color: yellow;
 }
-<button class="ui button page_next" data-page="1">Next</button></div> <!--- Tryit demo  @@END_PAGE@@ --> <div id="page0" class="try-page" data-pagevisible="true">
+<button class="ui button page_next" data-page="1">Next</button><br/><br/></div> <!--- Tryit demo  @@END_PAGE@@ --> <div id="page0" class="try-page" data-pagevisible="true">
 <h1 id="cereateuielement">Cereate UI Element</h1>
 
 <a id="_tryit4">&nbsp</a>
@@ -259,13 +261,14 @@ $$.HTML(`
 		<div id="tryit4-error" class="tryit-error"></div>
 		<div id="tryit4-display" class="tryit-display rendered_html"></div>
 	</div>	<div class="ui top attached label">
-		<button id="tryit4-run" title="Script not ready - Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit5" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+		<button id="tryit4-run" data-tooltip="Script not ready - 
+	Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit5" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
  &nbsp; <button class="circular ui icon button green jump_back"><i class="icon angle double up"></i></button>
- &nbsp; <button id="ra_4" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
- &nbsp; <button id="save_4" title="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
+ &nbsp; <button id="ra_4" data-tooltip="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+ &nbsp; <button id="save_4" data-tooltip="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
 	</div>
 </div>
-<button class="ui button page_prev" data-page="0">Prev</button><button class="ui button page_next" data-page="2">Next</button></div> <!---  Cereate UI Element  @@END_PAGE@@ --> <div id="page1" class="try-page" data-pagevisible="true">
+<button class="ui button page_prev" data-page="0">Prev</button><button class="ui button page_next" data-page="2">Next</button><br/><br/></div> <!---  Cereate UI Element  @@END_PAGE@@ --> <div id="page1" class="try-page" data-pagevisible="true">
 <h1 id="array">Array</h1>
 <p>so </p>
 
@@ -284,10 +287,11 @@ y
 		<div id="tryit5-error" class="tryit-error"></div>
 		<div id="tryit5-display" class="tryit-display rendered_html"></div>
 	</div>	<div class="ui top attached label">
-		<button id="tryit5-run" title="Script not ready - Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit6" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+		<button id="tryit5-run" data-tooltip="Script not ready - 
+	Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit6" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
  &nbsp; <button class="circular ui icon button green jump_back"><i class="icon angle double up"></i></button>
- &nbsp; <button id="ra_5" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
- &nbsp; <button id="save_5" title="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
+ &nbsp; <button id="ra_5" data-tooltip="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+ &nbsp; <button id="save_5" data-tooltip="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
 	</div>
 </div>
 <h2 id="customizeyourdisplay">Customize your display</h2>
@@ -311,13 +315,14 @@ y  // display the last value
 		<div id="tryit6-error" class="tryit-error"></div>
 		<div id="tryit6-display" class="tryit-display rendered_html"></div>
 	</div>	<div class="ui top attached label">
-		<button id="tryit6-run" title="Script not ready - Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit7" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+		<button id="tryit6-run" data-tooltip="Script not ready - 
+	Execute 'tryit' scripts above first" class="ui  yellow right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit7" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
  &nbsp; <button class="circular ui icon button green jump_back"><i class="icon angle double up"></i></button>
- &nbsp; <button id="ra_6" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
- &nbsp; <button id="save_6" title="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
+ &nbsp; <button id="ra_6" data-tooltip="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+ &nbsp; <button id="save_6" data-tooltip="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
 	</div>
 </div>
-<button class="ui button page_prev" data-page="1">Prev</button><button class="ui button page_next" data-page="3">Next</button></div> <!---  Array  @@END_PAGE@@ --> <div id="page2" class="try-page" data-pagevisible="true">
+<button class="ui button page_prev" data-page="1">Prev</button><button class="ui button page_next" data-page="3">Next</button><br/><br/></div> <!---  Array  @@END_PAGE@@ --> <div id="page2" class="try-page" data-pagevisible="true">
 <h1 id="section1">Section 1</h1>
 <h2 id="label1a">label 1a</h2>
 <h2 id="label1b">label 1b</h2>
@@ -326,7 +331,7 @@ y  // display the last value
 <h2 id="label1e">label 1e</h2>
 <h2 id="label1f">label 1f</h2>
 <h2 id="label1g">label 1g</h2>
-<button class="ui button page_prev" data-page="2">Prev</button><button class="ui button page_next" data-page="4">Next</button></div> <!---  Section 1  @@END_PAGE@@ --> <div id="page3" class="try-page" data-pagevisible="true">
+<button class="ui button page_prev" data-page="2">Prev</button><button class="ui button page_next" data-page="4">Next</button><br/><br/></div> <!---  Section 1  @@END_PAGE@@ --> <div id="page3" class="try-page" data-pagevisible="true">
 <h1 id="section2">Section 2</h1>
 <h2 id="label2a">label 2a</h2>
 <h2 id="label2b">label 2b</h2>
@@ -335,7 +340,7 @@ y  // display the last value
 <h2 id="label2e">label 2e</h2>
 <h2 id="label2f">label 2f</h2>
 <h2 id="label2g">label 2g</h2>
-<button class="ui button page_prev" data-page="3">Prev</button><button class="ui button page_next" data-page="5">Next</button></div> <!--- Section 2  @@END_PAGE@@ --> <div id="page4" class="try-page" data-pagevisible="true">
+<button class="ui button page_prev" data-page="3">Prev</button><button class="ui button page_next" data-page="5">Next</button><br/><br/></div> <!--- Section 2  @@END_PAGE@@ --> <div id="page4" class="try-page" data-pagevisible="true">
 <h1 id="section3">Section 3</h1>
 <h2 id="label3a">label 3a</h2>
 <h2 id="label3b">label 3b</h2>
@@ -344,7 +349,7 @@ y  // display the last value
 <h2 id="label3e">label 3e</h2>
 <h2 id="label3f">label 3f</h2>
 <h2 id="label3g">label 3g</h2>
-<button class="ui button page_prev" data-page="4">Prev</button><button class="ui button page_next" data-page="6">Next</button></div> <!--- Section 3  @@END_PAGE@@ --> <div id="page5" class="try-page" data-pagevisible="true">
+<button class="ui button page_prev" data-page="4">Prev</button><button class="ui button page_next" data-page="6">Next</button><br/><br/></div> <!--- Section 3  @@END_PAGE@@ --> <div id="page5" class="try-page" data-pagevisible="true">
 <h1 id="section4">Section 4</h1>
 <h2 id="label4a">label 4a</h2>
 <h2 id="label4b">label 4b</h2>
@@ -353,7 +358,7 @@ y  // display the last value
 <h2 id="label4e">label 4e</h2>
 <h2 id="label4f">label 4f</h2>
 <h2 id="label4g">label 4g</h2>
-<button class="ui button page_prev" data-page="5">Prev</button><button class="ui button page_next" data-page="7">Next</button></div> <!--- Section 4  @@END_PAGE@@ --> <div id="page6" class="try-page" data-pagevisible="true">
+<button class="ui button page_prev" data-page="5">Prev</button><button class="ui button page_next" data-page="7">Next</button><br/><br/></div> <!--- Section 4  @@END_PAGE@@ --> <div id="page6" class="try-page" data-pagevisible="true">
 <h1 id="section5">Section 5</h1>
 <h2 id="label5a">label 5a</h2>
 <h2 id="label5b">label 5b</h2>
@@ -362,7 +367,7 @@ y  // display the last value
 <h2 id="label5e">label 5e</h2>
 <h2 id="label5f">label 5f</h2>
 <h2 id="label5g">label 5g</h2>
-<button class="ui button page_prev" data-page="6">Prev</button><button class="ui button page_next" data-page="8">Next</button></div> <!--- Section 5  @@END_PAGE@@ --> <div id="page7" class="try-page" data-pagevisible="true">
+<button class="ui button page_prev" data-page="6">Prev</button><button class="ui button page_next" data-page="8">Next</button><br/><br/></div> <!--- Section 5  @@END_PAGE@@ --> <div id="page7" class="try-page" data-pagevisible="true">
 <h1 id="section6">Section 6</h1>
 <h2 id="label6a">label 6a</h2>
 <h2 id="label6b">label 6b</h2>
@@ -372,7 +377,7 @@ y  // display the last value
 <h2 id="label6f">label 6f</h2>
 <h2 id="label6g">label 6g</h2>
 
-<button class="ui button page_prev" data-page="7">Prev</button></div> <!--- Section 6  @@END_PAGE@@ -->
+<button class="ui button page_prev" data-page="7">Prev</button><br/><br/></div> <!--- Section 6  @@END_PAGE@@ -->
 
           <script
           src="https://code.jquery.com/jquery-3.1.1.min.js"

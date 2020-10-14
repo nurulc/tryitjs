@@ -171,6 +171,8 @@ body {
 
 h1 {
     counter-reset: h2counter;
+    padding-bottom: 1.5rem;
+
 }
 
 h2 {
@@ -199,6 +201,32 @@ h4:before {
     counter-increment: h4counter;
 }
 
+h1, h2, h3, h4, h5, p, ul, li {
+  /*font-family: 'Dosis', sans-serif;*/
+  font-family: 'Titillium Web', sans-serif;
+}
+
+p {
+  font-size: 1.4em;
+}
+
+ul, li {
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+ul ul {
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+ul ul ul {
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* Page support */
+
 div[data-visible="true"] {
   display: block;
 }
@@ -207,16 +235,7 @@ div[data-visible!="true"] {
   display: none;
 }
 
-#toc_container a:hover {
-  color: #ddffff !important;
-  cursor: pointer;
-  background-color: #8888ff;
-}
-.logo {
-  text-align: center;
-  background-color: white;
-  padding-left: -2rem;
-}
+
 
 .expression {
     display: inline;
@@ -252,6 +271,18 @@ div.D2:nth-child(odd)  {
 
 /* Table of contents TOC */
 
+
+#toc_container a:hover {
+  color: #ddffff !important;
+  cursor: pointer;
+  background-color: #8888ff;
+}
+
+.logo {
+  text-align: center;
+  background-color: white;
+  padding-left: -2rem;
+}
 .save_all:hover {
     color: #00eeff !important;
 }

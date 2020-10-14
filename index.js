@@ -19,20 +19,7 @@ const toc = require('./lib/toc');
 const pathAddPrefix = require('./lib/pathAddPrefix');
 const { isURL } = require('./lib/path-utils');
 
-// let bodyStart= (toc)=> (
-// `	<div class="ui grid">
-//     <div class="three wide column" id="toc_container">
-//       <div id="toc_inner">
-//         <div class="toc_title">Contents</div>
-//         ${toc}
-//       </div>  
-//     </div>
-//     </div> 
-// 	<div class="ui grid">
-// 		<div class="three wide column"></div>
-// 		<div class="twelve wide column" id="tryit_body">
-// `
-// );
+
 
 const bodyStart = (toc) =>(
 `<div class="ui sidebar inverted vertical menu">
@@ -57,14 +44,7 @@ let bodyEnd= version => (
 `
 );
 
-// let bodyEnd= version => (
-// `   <div class="three wide column logo">
-//       <img src="https://unpkg.com/tryitjs@${version}/tryit-small.png"></div>  
-// 		</div>
-    
-// 	</div>
-// `
-// );
+
 const highlighter = (`
 	document.addEventListener('DOMContentLoaded', (event) => {
   	document.querySelectorAll('pre code').forEach((block) => {
@@ -112,7 +92,7 @@ function findStr(line, strToFind) {
 
 
 function tryit(x,i) {
-    let run_title = i>1?"Script not ready - Execute 'tryit' scripts above first":"Execute script"
+    let run_title = i>1?"Script not ready - \n\tExecute 'tryit' scripts above first":"Execute script"
     return (`<a id="_tryit${i}">&nbsp</a>\n`+
             "<div class=\"html ui top attached segment tryit-container \" >\n"+
             
@@ -127,7 +107,7 @@ function tryit(x,i) {
                     "\t\t<div id=\"tryit"+i+"-display\" class=\"tryit-display rendered_html\"></div>\n"+
                 "\t</div>"+
                 "\t<div class=\"ui top attached label\">\n"+
-                    `\t\t<button id="tryit${i}-run" title="${run_title}" class="ui  ${i>1?'yellow':'green'} right labeled icon button exec">`+
+                    `\t\t<button id="tryit${i}-run" data-tooltip="${run_title}" class="ui  ${i>1?'yellow':'green'} right labeled icon button exec">`+
                     `     <i class="caret square right icon"></i>`+
                           "Run" + 
                         "</button>"+
@@ -135,10 +115,10 @@ function tryit(x,i) {
                       "<i class=\"icon angle double down\"></i>"+ 
                     "</button>\n"+
                   " &nbsp; <button class=\"circular ui icon button green jump_back\">"+"<i class=\"icon angle double up\"></i>" + "</button>\n"+
-                  ` &nbsp; <button id="ra_${i}" title="Execute all scripts above" class="ui right floated button circular icon green run_all">`+
+                  ` &nbsp; <button id="ra_${i}" data-tooltip="Execute all scripts above" class="ui right floated button circular icon green run_all">`+
                   " <i class=\"fast backward icon\"></i>"+
                   " </button>\n"+
-                  ` &nbsp; <button id="save_${i}" title="Save all user modifications" class="ui right floated button circular icon green save_data">`+
+                  ` &nbsp; <button id="save_${i}" data-tooltip="Save all user modifications" class="ui right floated button circular icon green save_data">`+
                   " <i class=\"save icon\"></i>"+
                   " </button>\n"+
                 "\t</div>\n"+
@@ -153,7 +133,7 @@ function tryit_new(x,ix) {
             div( {class: "html ui top attached segment tryit-container"},
               div( {class: "ui sizer vertical segment", style: "font-size: 1rem; padding-top: 2rem;"},
                 div( {class: "ui sizer vertical segment bottom"},
-                   textarea( {class: "tryit ui", id: "tryit"+ix}, asHTML(x) ),
+                   textarea( {class: "tryit ui", id: "tryit"+ix}, asHTML(x) )
                 ),
 
                 a( {id: "_end_tryit"+ix}, "&nbsp;" ),
@@ -165,7 +145,7 @@ function tryit_new(x,ix) {
                 div( {class: "ui top attached label"},
                     button( 
                       { id: "tryit" +ix+ "-run", 
-                        title: run_title, 
+                        "data-tooltip": run_title, 
                         class:"ui "+ (ix>1?'yellow':'green')+ " right labeled icon button exec"
                       },
                       i( {class: "caret square right icon"}),
@@ -190,7 +170,7 @@ function tryit_new(x,ix) {
                       {
                         id:   "ra_" + (ix+1), 
                         class: "ui right floated button circular icon green run_all",
-                        title: "Execute all scripts above"
+                        "data-tooltip": "Execute all scripts above"
                       },
                       i( {class: "fast backward icon"}) 
                     ),
@@ -198,7 +178,7 @@ function tryit_new(x,ix) {
                       {
                         id:   `save_${ix}`, 
                         class: "ui right floated button circular icon green save_data",
-                        title: "Save your changes"
+                        "data-tooltip": "Save your changes"
                       },
                       i( {class: "save icon"}) 
                     ),
