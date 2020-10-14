@@ -242,26 +242,26 @@ var $tryit = function () {
       var b = $e(next_button);
 
       if (b) {
-        var _a9 = asArray(classToRemove);
-
-        var _f9 = function (cls) {
-          return b.classList.remove(cls);
-        };
-
-        for (var _i9 = 0; _i9 < _a9.length; _i9++) {
-          _f9(_a9[_i9], _i9, _a9);
-        }
-
-        undefined;
-
-        var _a10 = asArray(classToAdd);
+        var _a10 = asArray(classToRemove);
 
         var _f10 = function (cls) {
-          return b.classList.add(cls);
+          return b.classList.remove(cls);
         };
 
         for (var _i10 = 0; _i10 < _a10.length; _i10++) {
           _f10(_a10[_i10], _i10, _a10);
+        }
+
+        undefined;
+
+        var _a11 = asArray(classToAdd);
+
+        var _f11 = function (cls) {
+          return b.classList.add(cls);
+        };
+
+        for (var _i11 = 0; _i11 < _a11.length; _i11++) {
+          _f11(_a11[_i11], _i11, _a11);
         }
 
         undefined;
@@ -335,20 +335,20 @@ var $tryit = function () {
 
   function makeSegmentVisible(elem) {
     arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2000;
-    var _a11 = [undefined, elem];
-    var _r11 = [];
+    var _a12 = [undefined, elem];
+    var _r12 = [];
 
-    for (var _i11 = 0; _i11 < _a11.length; _i11++) {
-      _r11.push(findSegment(_a11[_i11], _i11, _a11));
+    for (var _i12 = 0; _i12 < _a12.length; _i12++) {
+      _r12.push(findSegment(_a12[_i12], _i12, _a12));
     }
 
-    var _map2 = _slicedToArray(_r11, 2),
+    var _map2 = _slicedToArray(_r12, 2),
         curSeg = _map2[0],
         segment = _map2[1]; // find
 
 
     if (curSeg !== segment) {
-      dataset(segment).pagevisible = 'true'; // if(dataset(curSeg) && timeout>=0)
+      setDisplay(segment, 'true'); // if(dataset(curSeg) && timeout>=0)
       //     setTimeout(() => {curSeg.dataset.pagevisible = 'false'},timeout);
       // }
     }
@@ -386,7 +386,7 @@ var $tryit = function () {
         curSeg = _makeSegmentVisible2[1];
 
     if (targetSeg !== curSeg) {
-      curSeg.dataset.pagevisible = 'false';
+      setDisplay(curSeg, 'false');
     }
 
     setTimeout(function () {
@@ -571,20 +571,21 @@ var $tryit = function () {
       pos = 0;
     }
 
-    var currentPos = start = window.scrollY || window.screenTop;
+    var start = window.scrollY || window.screenTop;
+    var currentPos = start;
 
     if (currentPos < pos) {
       var t = 10;
 
-      var _loop = function (_i12) {
+      var _loop = function (_i13) {
         t += 10;
         setTimeout(function () {
-          window.scrollTo(0, _i12);
+          window.scrollTo(0, _i13);
         }, t / 2);
       };
 
-      for (var _i12 = currentPos; _i12 <= pos + 15; _i12 += 10) {
-        _loop(_i12);
+      for (var _i13 = currentPos; _i13 <= pos + 15; _i13 += 10) {
+        _loop(_i13);
       }
 
       if (callback) {
@@ -719,14 +720,14 @@ var $tryit = function () {
       list[_key] = arguments[_key];
     }
 
-    var _a12 = list;
+    var _a13 = list;
 
-    var _f12 = function (v) {
+    var _f13 = function (v) {
       return pushDisplay(v, 'd');
     };
 
-    for (var _i13 = 0; _i13 < _a12.length; _i13++) {
-      _f12(_a12[_i13], _i13, _a12);
+    for (var _i14 = 0; _i14 < _a13.length; _i14++) {
+      _f13(_a13[_i14], _i14, _a13);
     }
 
     undefined;
@@ -737,30 +738,14 @@ var $tryit = function () {
       _show(val);
     }
 
-    var _a13 = _displayStack;
+    var _a14 = _displayStack;
 
-    var _f13 = function (_ref3) {
+    var _f14 = function (_ref3) {
       var _ref4 = _slicedToArray(_ref3, 2),
           p = _ref4[0],
           type = _ref4[1];
 
       return p;
-    };
-
-    var _r13 = [];
-
-    for (var _i14 = 0; _i14 < _a13.length; _i14++) {
-      _r13.push(_f13(_a13[_i14], _i14, _a13));
-    }
-
-    var _a14 = _displayStack;
-
-    var _f14 = function (_ref5) {
-      var _ref6 = _slicedToArray(_ref5, 2),
-          p = _ref6[0],
-          type = _ref6[1];
-
-      return type;
     };
 
     var _r14 = [];
@@ -769,19 +754,35 @@ var $tryit = function () {
       _r14.push(_f14(_a14[_i15], _i15, _a14));
     }
 
-    var resPromise = Promise.all(_r13).then(function (list) {
-      {
-        var _a15 = list;
+    var _a15 = _displayStack;
 
-        var _f15 = function (v, i) {
-          return [v, _r14[i]];
+    var _f15 = function (_ref5) {
+      var _ref6 = _slicedToArray(_ref5, 2),
+          p = _ref6[0],
+          type = _ref6[1];
+
+      return type;
+    };
+
+    var _r15 = [];
+
+    for (var _i16 = 0; _i16 < _a15.length; _i16++) {
+      _r15.push(_f15(_a15[_i16], _i16, _a15));
+    }
+
+    var resPromise = Promise.all(_r14).then(function (list) {
+      {
+        var _a16 = list;
+
+        var _f16 = function (v, i) {
+          return [v, _r15[i]];
         };
 
-        for (var _i16 = 0; _i16 < _a15.length; _i16++) {
-          [].push(_f15(_a15[_i16], _i16, _a15));
+        for (var _i17 = 0; _i17 < _a16.length; _i17++) {
+          [].push(_f16(_a16[_i17], _i17, _a16));
         }
 
-        var _f16 = function (_ref) {
+        var _f17 = function (_ref) {
           var _ref2 = _slicedToArray(_ref, 2),
               v = _ref2[0],
               type = _ref2[1];
@@ -789,8 +790,8 @@ var $tryit = function () {
           return type === 'h' ? v : display(v);
         };
 
-        for (var _i17 = 0; _i17 < [].length; _i17++) {
-          [].push(_f16([][_i17], _i17, []));
+        for (var _i18 = 0; _i18 < [].length; _i18++) {
+          [].push(_f17([][_i18], _i18, []));
         }
 
         return Promise.resolve("<div class=\"ui accordion\"><div class=\"active title\"><i class=\"dropdown icon\"></i>Results</div><div class=\"active content\">" + [].join('\n') + '</div></div>');
@@ -816,14 +817,14 @@ var $tryit = function () {
     var list = _lastlyStack.slice();
 
     _lastlyStack = [];
-    var _a17 = list;
-    var _r17 = [];
+    var _a18 = list;
+    var _r18 = [];
 
-    for (var _i18 = 0; _i18 < _a17.length; _i18++) {
-      _r17.push(valOrFunc(_a17[_i18], _i18, _a17));
+    for (var _i19 = 0; _i19 < _a18.length; _i19++) {
+      _r18.push(valOrFunc(_a18[_i19], _i19, _a18));
     }
 
-    return Promise.all(_r17).then(valOrFunc).catch(function () {
+    return Promise.all(_r18).then(valOrFunc).catch(function () {
       return alert("Error in lastly");
     });
   }
@@ -836,35 +837,30 @@ var $tryit = function () {
     makeEditor: function () {
       var elts = document.querySelectorAll(".tryit");
       var list = Array.prototype.slice.call(elts);
-      var _a8 = list;
+      var _a9 = list;
 
-      var _f8 = function (e) {
+      var _f9 = function (e) {
         return e.id;
       };
 
-      var _r8 = [];
+      var _r9 = [];
 
-      for (var _i8 = 0; _i8 < _a8.length; _i8++) {
-        _r8.push(_f8(_a8[_i8], _i8, _a8));
+      for (var _i9 = 0; _i9 < _a9.length; _i9++) {
+        _r9.push(_f9(_a9[_i9], _i9, _a9));
       }
 
-      var _a3 = _r8;
+      var _a3 = _r9;
 
       for (var _i3 = 0; _i3 < _a3.length; _i3++) {
         _makeEditor(_a3[_i3], _i3, _a3);
       }
 
       undefined;
-      (document.querySelector('.save_all') || {}).onclick = saveAll;
 
-      var _a4 = document.querySelectorAll(".jump_next");
+      var _a4 = document.querySelectorAll('div[data-pagevisible="true"]');
 
-      var _f4 = function (n) {
-        var id = n.id.substr(5);
-
-        n.onclick = function () {
-          return jump(id);
-        };
+      var _f4 = function (e) {
+        return e.style.display = 'none';
       };
 
       for (var _i4 = 0; _i4 < _a4.length; _i4++) {
@@ -872,11 +868,17 @@ var $tryit = function () {
       }
 
       undefined;
+      setDisplay(document.querySelector('div[data-pagevisible]'), 'true');
+      (document.querySelector('.save_all') || {}).onclick = saveAll;
 
-      var _a5 = document.querySelectorAll(".jump_back");
+      var _a5 = document.querySelectorAll(".jump_next");
 
       var _f5 = function (n) {
-        n.onclick = jumpback;
+        var id = n.id.substr(5);
+
+        n.onclick = function () {
+          return jump(id);
+        };
       };
 
       for (var _i5 = 0; _i5 < _a5.length; _i5++) {
@@ -885,14 +887,10 @@ var $tryit = function () {
 
       undefined;
 
-      var _a6 = document.querySelectorAll(".run_all");
+      var _a6 = document.querySelectorAll(".jump_back");
 
       var _f6 = function (n) {
-        var id = n.id.substr(3);
-
-        n.onclick = function () {
-          return _runAll(__editorsPending, 'tryit' + id);
-        };
+        n.onclick = jumpback;
       };
 
       for (var _i6 = 0; _i6 < _a6.length; _i6++) {
@@ -901,9 +899,25 @@ var $tryit = function () {
 
       undefined;
 
-      var _a7 = document.querySelectorAll(".save_data");
+      var _a7 = document.querySelectorAll(".run_all");
 
       var _f7 = function (n) {
+        var id = n.id.substr(3);
+
+        n.onclick = function () {
+          return _runAll(__editorsPending, 'tryit' + id);
+        };
+      };
+
+      for (var _i7 = 0; _i7 < _a7.length; _i7++) {
+        _f7(_a7[_i7], _i7, _a7);
+      }
+
+      undefined;
+
+      var _a8 = document.querySelectorAll(".save_data");
+
+      var _f8 = function (n) {
         var id = n.id.substr(5);
 
         n.onclick = function () {
@@ -913,8 +927,8 @@ var $tryit = function () {
         n.title = "Save this script";
       };
 
-      for (var _i7 = 0; _i7 < _a7.length; _i7++) {
-        _f7(_a7[_i7], _i7, _a7);
+      for (var _i8 = 0; _i8 < _a8.length; _i8++) {
+        _f8(_a8[_i8], _i8, _a8);
       }
 
       undefined;
@@ -974,14 +988,14 @@ var $tryit = function () {
           v[_key2] = arguments[_key2];
         }
 
-        var _a18 = v;
-        var _r18 = [];
+        var _a19 = v;
+        var _r19 = [];
 
-        for (var _i19 = 0; _i19 < _a18.length; _i19++) {
-          _r18.push(_json(_a18[_i19], _i19, _a18));
+        for (var _i20 = 0; _i20 < _a19.length; _i20++) {
+          _r19.push(_json(_a19[_i20], _i20, _a19));
         }
 
-        return _show.apply(void 0, _toConsumableArray(_r18));
+        return _show.apply(void 0, _toConsumableArray(_r19));
       }
     },
     // display interface
@@ -1011,6 +1025,11 @@ var $tryit = function () {
 //  
 
 
+function setDisplay(elem, type) {
+  elem.dataset.pagevisible = type;
+  elem.style.display = type === 'false' ? 'none' : 'block';
+}
+
 var $$ = $tryit.$$,
     jumpTag = $tryit.jumpTag,
     jumpBack = $tryit.jumpBack,
@@ -1024,14 +1043,14 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   if (hljs) {
-    var _a19 = document.querySelectorAll('pre code');
+    var _a20 = document.querySelectorAll('pre code');
 
-    var _f19 = function (block) {
+    var _f20 = function (block) {
       return hljs.highlightBlock(block);
     };
 
-    for (var _i20 = 0; _i20 < _a19.length; _i20++) {
-      _f19(_a19[_i20], _i20, _a19);
+    for (var _i21 = 0; _i21 < _a20.length; _i21++) {
+      _f20(_a20[_i21], _i21, _a20);
     }
 
     undefined; // (block) => {
@@ -1041,14 +1060,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   $tryit.makeEditor();
   var allPages = $q('div[data-pagevisible]');
-  var _a20 = allPages;
+  var _a21 = allPages;
 
-  var _f20 = function (elem, i) {
-    return i !== 0 ? elem.dataset.pagevisible = "false" : '';
+  var _f21 = function (elem, i) {
+    return i !== 0 ? setDisplay(elem, "false") : '';
   };
 
-  for (var _i21 = 0; _i21 < _a20.length; _i21++) {
-    _f20(_a20[_i21], _i21, _a20);
+  for (var _i22 = 0; _i22 < _a21.length; _i22++) {
+    _f21(_a21[_i22], _i22, _a21);
   }
 
   undefined; // for(let i=1; i<allPages.length; i++) {
@@ -1056,26 +1075,26 @@ document.addEventListener('DOMContentLoaded', function () {
   //   elem.dataset.pagevisible = "false";
   // }
 
-  var _a21 = $q('.page_prev');
-
-  var _f21 = function (e) {
-    return e.onclick = $tryit.pagePrev;
-  };
-
-  for (var _i22 = 0; _i22 < _a21.length; _i22++) {
-    _f21(_a21[_i22], _i22, _a21);
-  }
-
-  undefined;
-
-  var _a22 = $q('.page_next');
+  var _a22 = $q('.page_prev');
 
   var _f22 = function (e) {
-    return e.onclick = $tryit.pageNext;
+    return e.onclick = $tryit.pagePrev;
   };
 
   for (var _i23 = 0; _i23 < _a22.length; _i23++) {
     _f22(_a22[_i23], _i23, _a22);
+  }
+
+  undefined;
+
+  var _a23 = $q('.page_next');
+
+  var _f23 = function (e) {
+    return e.onclick = $tryit.pageNext;
+  };
+
+  for (var _i24 = 0; _i24 < _a23.length; _i24++) {
+    _f23(_a23[_i24], _i24, _a23);
   }
 
   undefined;

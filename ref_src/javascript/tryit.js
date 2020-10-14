@@ -153,6 +153,9 @@
       var elts = document.querySelectorAll(".tryit");
       let list = Array.prototype.slice.call(elts);
       list.map( e => e.id).forEach(_makeEditor);
+      document.querySelectorAll('div[data-pagevisible="true"]')
+        .forEach(e => e.style.display = 'none');
+      setDisplay(document.querySelector('div[data-pagevisible]'),'true');
       
       (document.querySelector('.save_all')||{}).onclick = saveAll;
       document.querySelectorAll(".jump_next")
@@ -298,7 +301,7 @@
 
       let [curSeg, segment] = [undefined, elem].map(findSegment); // find
       if(curSeg !== segment) {
-        dataset(segment).pagevisible = 'true';
+        setDisplay(segment, 'true');
         // if(dataset(curSeg) && timeout>=0)
         //     setTimeout(() => {curSeg.dataset.pagevisible = 'false'},timeout);
         // }
@@ -314,9 +317,9 @@
                       curPage.nextElementSibling:
                       curPage.previousElementSibling; 
       if(!dataset(targetPage).pagevisible ) 
-          dataset(targetPage).pagevisible = 'true';
+        setDisplay(targetPage, 'true');
       jumpTag(targetPage,60, () => {
-        dataset(curPage).pagevisible = 'false';
+        setDisplay(curPage, 'false');
       });
       return [targetPage, curPage];
     }
@@ -349,7 +352,7 @@
         callback = callback || Identity;
         let elem = typeof h === 'string' ? $e(h) : h;
         let [targetSeg, curSeg] = makeSegmentVisible(elem);
-        if(targetSeg !== curSeg) curSeg.dataset.pagevisible = 'false';
+        if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
         setTimeout(() => {
             //const lastsScoll = () => elem.scrollIntoView({behavior: "smooth", block: "start"});
             const lastsScoll = () => scrollToSmoothly(toHeader(elem).offsetTop-OFFSET, 10);
@@ -491,7 +494,8 @@
          //throw "Position can not be negative";
            pos = 0;
          }
-        var currentPos = start = window.scrollY||window.screenTop;
+        var start = (window.scrollY||window.screenTop);
+        var currentPos = start;
         if(currentPos<pos){
            var t = 10;
            for(let i = currentPos; i <= pos+15; i+=10){
@@ -704,6 +708,11 @@
 //====================================================
 //
 //  
+function setDisplay(elem, type) {
+   elem.dataset.pagevisible = type;
+   elem.style.display = (type==='false')?'none':'block';
+}
+
 var {$$, jumpTag, jumpBack, _display} = $tryit;
 var objInfo = $$.objInfo; 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -720,7 +729,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     allPages.forEach(
       (elem,i) => 
         i!==0?
-          (elem.dataset.pagevisible = "false"):
+          setDisplay(elem,"false"):
           ''
     );
     // for(let i=1; i<allPages.length; i++) {
