@@ -25,6 +25,7 @@ var _default = {
       "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/continuecomment.min.js",
       "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/comment.min.js",
       "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/keymap/sublime.min.js", 
+      "https://unpkg.com/js-sha1/src/sha1.js",
       "https://unpkg.com/tryitjs@VERSION/ref/javascript/prettyprint.js", 
       "https://unpkg.com/tryitjs@VERSION/ref/javascript/tryit.js"
     ]
@@ -56,10 +57,9 @@ var _default = {
         <script>
           $('.activating.element').popup({inline: true, });
           $('.ui.accordion').accordion();
+          $('.ui.dropdown.item').dropdown({on: 'hover'});
           function toggle() {
-            console.log('toggle');
             $('.ui.sidebar').sidebar('toggle');
-
           }
         </script>
   `

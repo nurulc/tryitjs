@@ -8,6 +8,7 @@ const {
   writeOut,
   tryFilesPromise,
   writeJson,
+  readJson,
   log
  } = require('../lib/fileio');
 

@@ -9,8 +9,6 @@
   	]
   ],
   "plugins": [
-  			  "minify-dead-code-elimination",
-  			  "loop-optimizer",
-          "minify-constant-folding"
+  			  "minify-dead-code-elimination"
   			],
 }

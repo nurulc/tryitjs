@@ -19,12 +19,22 @@ const toc = require('./lib/toc');
 const pathAddPrefix = require('./lib/pathAddPrefix');
 const { isURL } = require('./lib/path-utils');
 
-
+const mainMenu = `
+<div class="ui right dropdown item">
+    Options
+    <i class="dropdown icon"></i>
+    <div class="menu">
+      <div class="item save_all">Save All Changes</div>
+      <div class="item revert_changes">Revert changes</div>
+      <div class="item clear_storage">Delete All Changes</div>
+    </div> 
+  </div>
+`
 
 const bodyStart = (toc) =>(
 `<div class="ui sidebar inverted vertical menu">
 <div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@${version}/tryit-small.png"></a></div> 
-<div class="save_all item toc_title ">Save All</div>
+<div class="item">${mainMenu}</div>
 <div class="item toc_title">Contents</div>
 ${toc}
       </div>
@@ -234,7 +244,6 @@ function tryit_new(x,ix) {
 // }
 
 function getIncludesPromise(readLines,baseDir,inFile) {
-    //return ( list => flatten(list.map( str => getInclude(str, readLines))));
     return ( 
       list => 
         Promise.all(
@@ -255,13 +264,14 @@ function expandIncludePomise(readLinesPromise,baseDir,inFile) {
     return ( (lineStr) =>{
         //console.log(lineStr);
         if( lineStr.trim().startsWith(INCLUDE)) {
-            aPath = lineStr.substr(INCLUDE.length).trim(); // get text after @@include
-            if(!isURL(aPath)) {
-                aPath = ((aPath[0] === '/') ?
-                          (baseDir||'.') :                  // absolute path
-                          getPath(inFile))  + '/' + aPath;  // relative path
+            let _aPath = lineStr.substr(INCLUDE.length).trim(); // get text after @@include
+            if(!isURL(_aPath)) {
+                let aPath = 
+                  ((_aPath[0] === '/') ? (baseDir||'.') :                  // absolute path
+                                          getPath(inFile))  +               // relative path
+                  '/' + _aPath;  
 
-                var list = readLinesPromise(aPath, 'file');   // returns a promise of a list of lines
+                var list = [ '<!-- @@[ '+aPath+' -->\n',...readLinesPromise(aPath, 'file'), '<!-- @@] '+aPath+' -->\n'];   // returns a promise of a list of lines
 
                 if(list && list.length) {
                     return getIncludesPromise(readLinesPromise,baseDir,aPath)(list);
@@ -320,7 +330,7 @@ function gen(config, tocContents, addPrefix) {
         switch(atype) {
             case '!head':
                 //console.log("generate head",{css,scripts})
-                return "<head>\n"+([css,scripts].join('\n'))+x+"</head>\n<body>\n"+bodyStart(tocContents);
+                return "<head>\n"+([css,scripts].join('\n'))+(x)+"</head>\n<body>\n"+bodyStart(tocContents);
             case "!md"   : return mdToHtml(x);
             case "!tryit": return "\n"+tryit(x,i++); 
             //case "!end" : return (bodyEnd(version)+"\n\t<script>\nmakeEditor();\n"+highlighter+"</script>\n</body></html>");
@@ -330,8 +340,30 @@ function gen(config, tocContents, addPrefix) {
         }
     };
 }
+/*
+function stripMarkers(strLines) {
+  return strLines;
+  if(!strLines) return strLines;
+  let lines = strLines.split('\n');
+  return lines.filter(s => !s.startsWith('//-- @')).join('\n');
+}
 
+function addMarkers(strLines) {
+   return strLines;
+  if(!strLines) return strLines;
+  let lines = strLines.split('\n');
+  return lines.filter(toMarker).join('\n');
 
+  function toMarker(line) {
+    if(!line.startsWith('//-- @')) return line;
+    let name = line.substr(9);
+    if(!line.startsWith('//-- @>>')) {
+        return `<div class="include-enter">${name}</div>`;
+    }
+    else return `<div class="include-exit">${name}</div>`; 
+  }
+}
+*/
 
 
 

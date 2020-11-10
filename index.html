@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<link rel="stylesheet" href="https://unpkg.com/tryitjs@0.4.5/ref/stylesheets/tryit.css" />
+<link rel="stylesheet" href="./stylesheets/tryit.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" />
@@ -16,8 +16,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/continuecomment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/comment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/keymap/sublime.min.js"></script>
-<script src="https://unpkg.com/tryitjs@0.4.5/ref/javascript/prettyprint.js"></script>
-<script src="https://unpkg.com/tryitjs@0.4.5/ref/javascript/tryit.js"></script>
+<script src="https://unpkg.com/js-sha1/src/sha1.js"></script>
+<script src="./javascript/prettyprint.js"></script>
+<script src="./javascript/tryit.js"></script>
 <title>Test Tryit</title>
 <base href="/try_docs" />
 
@@ -31,8 +32,18 @@ let words = ['sky', 'wood', 'forest', 'falcon',
  </head>
 <body>
 <div class="ui sidebar inverted vertical menu">
-<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@0.4.5/tryit-small.png"></a></div> 
-<div class="save_all item toc_title ">Save All</div>
+<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs@0.4.7/tryit-small.png"></a></div> 
+<div class="item">
+<div class="ui right dropdown item">
+    Options
+    <i class="dropdown icon"></i>
+    <div class="menu">
+      <div class="item save_all">Save All Changes</div>
+      <div class="item revert_changes">Revert changes</div>
+      <div class="item clear_storage">Delete All Changes</div>
+    </div> 
+  </div>
+</div>
 <div class="item toc_title">Contents</div>
 <div class="toc0"> &nbsp;&nbsp;<a onclick="jumpTag('tryitdemo')">Tryit demo</a></div>
 <div class="toc1"> 1&nbsp;&nbsp;<a onclick="jumpTag('wearegoingtodemosomelodashfunctions')">We are going to demo some lodash functions</a></div>
@@ -387,10 +398,9 @@ y  // display the last value
         <script>
           $('.activating.element').popup({inline: true, });
           $('.ui.accordion').accordion();
+          $('.ui.dropdown.item').dropdown({on: 'hover'});
           function toggle() {
-            console.log('toggle');
             $('.ui.sidebar').sidebar('toggle');
-
           }
         </script>
    

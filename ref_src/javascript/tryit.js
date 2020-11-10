@@ -2,8 +2,10 @@
  
 
  var $tryit = (function (props) {
-
+    let CHANGED = false;
      function Identity(x) { return x; }
+
+     var WINDOW_LOCATION = window.location.pathname;
 
     function asArray(arrayLike) {
       if(arrayLike === undefined || arrayLike === null) return [];
@@ -11,9 +13,9 @@
 
       if( arrayLike instanceof NodeList  || 
           typeof arrayLike.forEach === 'function') {
-        let res = [];
-        arrayLike.forEach(n => res.push(n));
-        return res;
+            let res = [];
+            arrayLike.forEach(n => res.push(n));
+            return res;
       }
 
       if(!arrayLike || arrayLike.length === undefined ) {
@@ -58,10 +60,17 @@
     };
 
     let editorData = ( () => {
-      let data = window.localStorage[window.location];
+      let data = window.localStorage[WINDOW_LOCATION];
       if(data) {
         try {
           let obj = JSON.parse(data);
+          let keys = Object.keys(obj);
+          keys.forEach(k =>{
+            let v = obj[k];
+            if(typeof v === 'string') {
+              obj[k] = { key: k, hash: sha1(v), content: v}
+            }
+          })
           return obj;
         } catch(e) {
           return ({})
@@ -75,11 +84,51 @@
      * @return {undefined} no return vales
      */
     function saveAll() {
-      Object.keys(editorFor).forEach( k => {
-        editorData[k] = editorFor[k].getValue("\n"); 
+      editorData = {};  // clear out 
+      Object.keys(editorFor).forEach( id => {
+        setEditorValue(id)
       });
-      window.localStorage[window.location] = JSON.stringify(editorData);
+      window.localStorage[WINDOW_LOCATION] = JSON.stringify(editorData);
       alert('Save All');
+    }
+
+    function setEditorValue(id) {
+      let v = editorFor[id].getValue("\n");
+      let originalContents = $e(id).value;
+      if( v !== originalContents) 
+        editorData[id] = { key: id, hash: sha1(originalContents), content: v};
+      return editorData;      
+    }
+
+    function clearStorage() {
+      if (confirm('Are you sure you want to clear saved edits')) {
+        delete window.localStorage[WINDOW_LOCATION];
+        revertChanges();
+        console.log('All saved edits removed');
+      } 
+    }
+
+    function getSavedContent(id) {
+      let saved = editorData[id];
+      let originalContents = $e(id).value;
+      let hash = sha1(originalContents);
+      if(saved && saved.key === id && saved.hash === hash ) {
+        return saved.content;
+      }
+      else {
+        let res = Object.keys(editorData)
+            .map( k => editorData[k])
+            .find(saved => saved.hash === hash);
+        return res? res.content :
+               originalContents;
+      }
+    }
+
+    function revertChanges() {
+      Object.keys(editorFor).forEach( id => {
+        let originalText = $e(id).value;
+        editorFor[id].setValue(originalText);
+      });
     }
 
     /**
@@ -88,8 +137,7 @@
      * @return {[type]}    [description]
      */
     function save(id) {
-        editorData[id] = editorFor[id].getValue("\n"); 
-        window.localStorage[window.location] = JSON.stringify(editorData);
+        window.localStorage[WINDOW_LOCATION] = JSON.stringify(setEditorValue(id));
     }
 
     function getEditors() {
@@ -102,15 +150,17 @@
 
     function _makeEditor(id) {
       try {
+        // let originalContents = textarea.value;
+        // let contents = originalContents;
+        // if(editorData[id]) {
+        //   contents = editorData[id].content;
+        // } else {
+        //   editorData[id] = contents;
+        // }
         let textarea = document.querySelector(`#${id}`);
-        let content = textarea.value;
-        if(editorData[id]) {
-          content = editorData[id];
-          textarea.value = content;
-        } else {
-          editorData[id] = content;
-        }
-        const lines = content.split('\n').length;
+
+        let contents = getSavedContent(id);
+        const lines = contents.split('\n').length;
         const editor = CodeMirror.fromTextArea(textarea, {
           lineNumbers: true,
   //        mode: "javascript",
@@ -127,7 +177,9 @@
           continueComments: "Enter",
           keyMap: "sublime"
         });
+        if(textarea.value !== contents) editor.setValue(contents);
         __editorsPending.push(id);
+
         __editors.push(id);
         setEditorHeight(editor,lines);
         editorFor[id] = editor;
@@ -154,10 +206,13 @@
       let list = Array.prototype.slice.call(elts);
       list.map( e => e.id).forEach(_makeEditor);
       document.querySelectorAll('div[data-pagevisible="true"]')
-        .forEach(e => e.style.display = 'none');
+        .forEach(e => setDisplay(e, 'false'));
       setDisplay(document.querySelector('div[data-pagevisible]'),'true');
       
       (document.querySelector('.save_all')||{}).onclick = saveAll;
+      (document.querySelector('.clear_storage')||{}).onclick = clearStorage;
+      (document.querySelector('.revert_changes')||{}).onclick = revertChanges;
+
       document.querySelectorAll(".jump_next")
         .forEach(n => {
           let id = n.id.substr(5); 
@@ -209,7 +264,8 @@
     function canExecute(tag) {
       let ix = __editorsPending.indexOf(tag);
       if( ix <= 0) return true;
-      showPopup(1,() => jump(__editorsPending[0]));
+      showPopup(3,() => false);
+      //showPopup(3,() => jump(__editorsPending[0]));
       //jump(__editorsPending[0]);
       return false;
     }
@@ -341,22 +397,35 @@
     }
 
     function toHeader(elem) {
-      if(dataset(elem).pageVisible) {
+      if(dataset(elem).pagevisible) {
         return elem.querySelector('h1');
       }
       return elem;
     }
 
-    function jumpTag(h,OFFSET,callback) {
+    let LAST_TARGET;
+    function jumpTag(h,OFFSET,callback, noPush) {
         OFFSET = +(OFFSET||30);
         callback = callback || Identity;
         let elem = typeof h === 'string' ? $e(h) : h;
+        if(LAST_TARGET === elem.id) return;
         let [targetSeg, curSeg] = makeSegmentVisible(elem);
         if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
         setTimeout(() => {
             //const lastsScoll = () => elem.scrollIntoView({behavior: "smooth", block: "start"});
             const lastsScoll = () => scrollToSmoothly(toHeader(elem).offsetTop-OFFSET, 10);
-            scrollToSmoothly(elem.offsetTop-OFFSET, 10,() => {callback(); lastsScoll(); });
+            scrollToSmoothly(elem.offsetTop-OFFSET, 10,() => {
+              try {
+                callback(); 
+                lastsScoll(); 
+                LAST_TARGET = elem.id;
+                if(!noPush) history.pushState(null,null,'#'+elem.id);
+                
+               // location.hash = elem.id;
+              } catch (e) {
+                alert("error jumping to: "+h+ "location");
+              }
+            });
           }, 10)
             
     }
@@ -387,8 +456,9 @@
     }
 
     function execute(divName, editor, toUpdateUI, toJump, callback) {
-          try {
-
+          try { 
+            CHANGED = true;
+            beforeExecute(divName);
             var val = (1,eval)(editor.getValue("\n"));
             let show = val => {
               ($e(divName + "-display").innerHTML = val+'   DONE');
@@ -414,7 +484,7 @@
     function tryIt(divName,editor, toDelay=200) {
 
       if(!canExecute(divName)) {
-        _runAll(__editorsPending, divName);
+        setTimeout(() => _runAll(__editorsPending, divName), 300);
         return;
       }
       var _err = $e(divName + "-error");
@@ -444,6 +514,7 @@
           console.log("item "+divName+"not found");
           return;
         }
+        beforeExecute(divName);
         _code = editor.getValue("\n");
         var val = (1,eval)(_code);
 
@@ -468,7 +539,7 @@
     // =======================================================================
 
     function showPopup(timeout, action,msg,type){
-      alertify.notify((msg||'Please execute preceeding code snippet'),(type||'error'),timeout, action );
+      alertify.notify((msg||'Executing all preceeding code snippet, this may take some time'),(type||'error'),timeout, action );
       //alertify.notify('sample', 'success', 5, function(){  console.log('dismissed'); });
     }
 
@@ -675,6 +746,20 @@
       _lastlyStack = [];
     }
 
+    window.addEventListener('popstate', e=> {
+      let _hash = e.target.location.hash.substr(1);
+      console.log(e);
+      if(_hash && LAST_TARGET !== _hash) {
+        jumpTag(_hash,20,undefined, true);
+      }
+
+    });
+
+    window.onbeforeunload = function() { 
+        if( CHANGED )
+          return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
+    }
+
     var $$ = {
       D:    _show,
       D2:   _displayEval,
@@ -683,11 +768,24 @@
       clear:  clearDisplay,
       render: render,
       objInfo:objInfo,
+      executeDiv: '',     // the tryit div being executed
+      beforeExccute: () => false,  // placeholder 
       H:H,
       lastly: _lastly, // pass a function after all items have been displayed, this call be called several
                       // times, the actions are performed in the order they are posted
       json: (...v) => _show(...v.map(json))
     };
+
+    function beforeExecute(divName) {
+      $$.executeDiv = divName;
+      if(typeof $$.beforeExecute === 'function') {
+        try {
+          $$.beforeExecute(divName);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
 
     return ({
         makeEditor: makeEditor,
@@ -716,7 +814,7 @@ function setDisplay(elem, type) {
 var {$$, jumpTag, jumpBack, _display} = $tryit;
 var objInfo = $$.objInfo; 
 document.addEventListener('DOMContentLoaded', (event) => {
-    const $q = (...args) => $tryit.asArray(document.querySelectorAll(...args));
+    const $q = (arg1,arg2) => $tryit.asArray(document.querySelectorAll(arg1,arg2));
     if(hljs) { 
        document.querySelectorAll('pre code')
         .forEach(block => hljs.highlightBlock(block));
@@ -744,4 +842,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
 });
+
+
 

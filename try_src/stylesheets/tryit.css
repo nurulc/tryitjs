@@ -427,10 +427,3 @@ div.try-page[data-pagevisible="true"] {
 div.try-page[data-pagevisible="false"] {
   display: none;
 }
-
-/* helper for include locations */
-.icon-right {
-    position: relative;
-    float: right;
-    top: -3rem;
-}

@@ -27,8 +27,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var $tryit = function () {
-  var CHANGED = false;
-
   function Identity(x) {
     return x;
   }
@@ -258,10 +256,9 @@ var $tryit = function () {
     var ix = __editorsPending.indexOf(tag);
 
     if (ix <= 0) return true;
-    showPopup(3, function () {
-      return false;
-    }); //showPopup(3,() => jump(__editorsPending[0]));
-    //jump(__editorsPending[0]);
+    showPopup(1, function () {
+      return jump(__editorsPending[0]);
+    }); //jump(__editorsPending[0]);
 
     return false;
   } // function asArray(val) {
@@ -377,13 +374,10 @@ var $tryit = function () {
     return elem;
   }
 
-  var LAST_TARGET;
-
-  function jumpTag(h, OFFSET, callback, noPush) {
+  function jumpTag(h, OFFSET, callback) {
     OFFSET = +(OFFSET || 30);
     callback = callback || Identity;
     var elem = typeof h === 'string' ? $e(h) : h;
-    if (LAST_TARGET === elem.id) return;
 
     var _makeSegmentVisible = makeSegmentVisible(elem),
         _makeSegmentVisible2 = _slicedToArray(_makeSegmentVisible, 2),
@@ -398,14 +392,8 @@ var $tryit = function () {
       };
 
       scrollToSmoothly(elem.offsetTop - OFFSET, 10, function () {
-        try {
-          callback();
-          lastsScoll();
-          LAST_TARGET = elem.id;
-          if (!noPush) history.pushState(null, null, '#' + elem.id); // location.hash = elem.id;
-        } catch (e) {
-          alert("error jumping to: " + h + "location");
-        }
+        callback();
+        lastsScoll();
       });
     }, 10);
   }
@@ -428,7 +416,6 @@ var $tryit = function () {
 
   function execute(divName, editor, toUpdateUI, toJump, callback) {
     try {
-      CHANGED = true;
       beforeExecute(divName);
       var val = (1, eval)(editor.getValue("\n"));
 
@@ -458,9 +445,8 @@ var $tryit = function () {
     var toDelay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 200;
 
     if (!canExecute(divName)) {
-      setTimeout(function () {
-        return _runAll(__editorsPending, divName);
-      }, 300);
+      _runAll(__editorsPending, divName);
+
       return;
     }
 
@@ -527,7 +513,7 @@ var $tryit = function () {
 
 
   function showPopup(timeout, action, msg, type) {
-    alertify.notify(msg || 'Executing all preceeding code snippet, this may take some time', type || 'error', timeout, action); //alertify.notify('sample', 'success', 5, function(){  console.log('dismissed'); });
+    alertify.notify(msg || 'Please execute preceeding code snippet', type || 'error', timeout, action); //alertify.notify('sample', 'success', 5, function(){  console.log('dismissed'); });
   }
 
   function easeIn(start, pos, end) {
@@ -743,20 +729,6 @@ var $tryit = function () {
   function clearLastly() {
     _lastlyStack = [];
   }
-
-  window.addEventListener('popstate', function (e) {
-    var _hash = e.target.location.hash.substr(1);
-
-    console.log(e);
-
-    if (_hash && LAST_TARGET !== _hash) {
-      jumpTag(_hash, 20, undefined, true);
-    }
-  });
-
-  window.onbeforeunload = function () {
-    if (CHANGED) return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
-  };
 
   var $$ = {
     D: _show,
