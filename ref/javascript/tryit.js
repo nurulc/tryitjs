@@ -472,7 +472,7 @@ var $tryit = function () {
     _err.innerHTML = ""; //_disp.style.display = "none";
 
     _disp.innerHTML = "";
-    _disp.style['max-height'] = "30rem";
+    _disp.style['max-height'] = "100rem";
     setTimeout(function () {
       return execute(divName, editor, true, true, runLastly);
     }, toDelay);

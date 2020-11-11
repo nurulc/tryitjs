@@ -493,7 +493,7 @@
       _err.innerHTML = "";
       //_disp.style.display = "none";
       _disp.innerHTML = "";
-      _disp.style['max-height'] = "30rem";
+      _disp.style['max-height'] = "100rem";
       
       setTimeout( () => execute(divName, editor, true, true, runLastly),toDelay);
     }

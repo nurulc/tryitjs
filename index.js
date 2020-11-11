@@ -334,7 +334,9 @@ function gen(config, tocContents, addPrefix) {
             case "!md"   : return mdToHtml(x);
             case "!tryit": return "\n"+tryit(x,i++); 
             //case "!end" : return (bodyEnd(version)+"\n\t<script>\nmakeEditor();\n"+highlighter+"</script>\n</body></html>");
-            case "!end" : return (config.onend||'')+bodyEnd(version)+"\n</body></html>";
+            case "!end" : 
+                console.log("!end", x);
+                return (config.onend||'')+bodyEnd(version)+(x)+"\n</body></html>";
             case "!--": return "";
             default: return x;
         }
@@ -398,6 +400,9 @@ function _genHTML(bodyText, config, readLines, srcDir, inputFile, targetDir, out
     return linesPromise.then( lines => {
       //lines.map((l,ix) => console.log(ix,l));
       let sects = sections(lines.filter(s => !s.trim().startsWith('!--')));
+
+      let last = sects[sects.length-1];
+      console.log('last', sects.length-1, last);
 
       let tocContents = toc(sects);
       //console.log('toc content',tocContents);
