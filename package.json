@@ -45,6 +45,7 @@
     "reload": "^3.1.0"
   },
   "dependencies": {
+    "highlight.js": "^10.3.2",
     "memoize": "^0.1.1",
     "run-all": "^1.0.1",
     "showdown": "^1.9.1"

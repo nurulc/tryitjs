@@ -8,10 +8,10 @@
 !-- add a title 
 
 <title>Test Tryit</title>
-<base href="/try_docs" />
 !-- add some custon scripts, in this case the lodash library
 
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/solarized-light.min.css">
 !--
 !-- some in-line script
 
@@ -118,7 +118,7 @@ $$.HTML(
   background-color: yellow;
 }
 !md
-# Cereate UI Element
+# Create UI Element
 
 !tryit
 $$.HTML(`
@@ -135,4 +135,31 @@ $$.HTML(`
 			
 !-- include another tryit file
 @@include array.try
+
+!render-start
+!html
+<style>
+.item.yellow {
+  background-color: yellow;
+}
+</style>
+!md
+# Cereate UI Element
+
+!tryit
+var x = 1;
+
+// hello
+$$.HTML(`
+<div class="ui menu">
+  <div class="header item yellow exec" id="tryit1-run">
+    Run <i class="caret square right icon"></i>
+  </div>
+  <button id="jump_tryit2" class="item circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+  <button id="jump_tryit2" class="item circular ui icon yellow button jump_back"><i class="icon angle double up"></i></button>
+  <div class="right menu">
+     <button id="ra_1" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+  </div>
+</div>`)
+!render-end
 !end

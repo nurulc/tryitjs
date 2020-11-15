@@ -427,3 +427,18 @@ div.try-page[data-pagevisible="true"] {
 div.try-page[data-pagevisible="false"] {
   display: none;
 }
+
+p.tryit {
+  color: red;
+  background-color: #eeeeff;
+}
+
+p.md {
+  color: darkgreen;
+  background-color: #eeffee;
+}
+
+p.md {
+  color: darkred;
+  background-color: #ffeeee;
+}

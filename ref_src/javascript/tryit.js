@@ -188,7 +188,7 @@
         function execCode() { return tryIt(id,editor);}
       }
       catch(err) {
-        alert("Error creating eritor " +id+' ' +err.toString())
+        alert("Error creating editor " +id+' ' +err.toString())
       }
     }
 
@@ -202,7 +202,7 @@
     }
 
     function makeEditor() {
-      var elts = document.querySelectorAll(".tryit");
+      var elts = document.querySelectorAll("textarea.tryit");
       let list = Array.prototype.slice.call(elts);
       list.map( e => e.id).forEach(_makeEditor);
       document.querySelectorAll('div[data-pagevisible="true"]')

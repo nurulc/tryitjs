@@ -415,6 +415,10 @@ div.D2:nth-child(odd)  {
 
 /*    PAGE MARKERS    */
 
+.tryit-container {
+  margin-bottom: 3rem !important;
+}
+
 .try-page {
   padding-top: 1rem;
 }
@@ -433,4 +437,55 @@ div.try-page[data-pagevisible="false"] {
     position: relative;
     float: right;
     top: -3rem;
+}
+
+p.tryit {
+    color: red;
+    background-color: #eeeeff;
+    margin-bottom: -12px;
+    padding-bottom: 0px;
+}
+
+p.md {
+  color: darkgreen;
+  background-color: #eeffee;
+  margin-bottom: -12px;
+  padding-bottom: 0px;
+}
+
+p.html {
+  color: darkred;
+  background-color: #ffeeee;
+  margin-bottom: -12px;
+  padding-bottom: 0px;
+}
+
+.shrink {
+  font-weight: bolder;
+  font-size: 1.2rem;
+  color: #e2e2ef;
+  background-color: lightslategrey;
+}
+
+.active.shrink {
+  margin-bottom: -20px;
+  padding-bottom: 0px;
+/*  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;*/
+}
+
+.my-styled {
+  border-radius: 5px;
+  border: 1px solid #73AD21;
+  padding-right: 1rem
+  padding-bottom: 1rem;
+  margin-left: 3rem;
+  margin-right: 1rem;
+  margin-bottom: 2rem; 
+}
+.my-styled~.shrink {
+  font-weight: bolder;
+  font-size: 1.5rem;
+  color: #d2d2ef;
+  background-color: lightslategrey;
 }

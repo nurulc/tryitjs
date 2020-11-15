@@ -228,7 +228,8 @@ var $tryit = function () {
         return tryIt(id, editor);
       }
     } catch (err) {
-      alert("Error creating eritor " + id + ' ' + err.toString());
+      alert("Error creating editor " + id + ' ' + err.toString());
+      console.log(e);
     }
   }
 
@@ -805,7 +806,7 @@ var $tryit = function () {
 
   return {
     makeEditor: function () {
-      var elts = document.querySelectorAll(".tryit");
+      var elts = document.querySelectorAll("textarea.tryit");
       var list = Array.prototype.slice.call(elts);
       list.map(function (e) {
         return e.id;
