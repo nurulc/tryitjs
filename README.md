@@ -2,7 +2,7 @@
 
 CLI (command line) application to generate HTML file containing editable Javascript code snippets that can be edited and executed in the browser. This is designed to help npm module developers to publish pages to that other developers can try out ther library with the minimum of effort.
 
-<a href="https://unpkg.com/tryitjs/index.html">Demo of a TryITjs</a><br />
+<a href="https://unpkg.com/tryitjs/try_it/index.html">Demo of a TryITjs</a><br />
 
 ## Instalation
 
