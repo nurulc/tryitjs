@@ -4,33 +4,68 @@
 !-- This is the head section
 
 !head
+@@include sections/head.try
 
-!-- add a title 
+!md Introduction to Tyit
+#TryITJS
 
-<title>Test Tryit</title>
-!-- add some custon scripts, in this case the lodash library
+## Intrduction
 
-<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/solarized-light.min.css">
-!--
-!-- some in-line script
+This live demo will illustrate how TryitJS is used to create a HTML file to document API library.
 
-<script>
-let words = ['sky', 'wood', 'forest', 'falcon', 
-    'pear', 'ocean', 'universe'];
-</script>
-!-- end of the inline script
+A tryit html page is generated from a _try_ file generally placed in the try_src directory. A top level **try** file consists of 
 
+```
+  !head
+ ... content for html <head>;
+
+  <scripts>...
+  <links ...>
+  <meta ...>
+
+  Go here...
+ ```
+
+
+
+
+!render-start Create Headder section
+    !head 
+    @@include sections/head.try
+!render-end
  
 !md Add some markdown
+## Body of .try file
 
-#Tryit demo 
+!render-start Create Body section
+  !md
+  ## Tryit demo 
 
-## We are going to demo some lodash functions
+  ### We are going to demo some lodash functions
+
+    We are per created an array __words__ press **Run** button to execute 
+    ```
+     let words = ['sky', 'wood', 'forest', 'falcon', 
+        'pear', 'ocean', 'universe'];
+    ``` 
+
+  !-- now we can try some code
+    !tryit 
+  words // display words (just like python notebooks the last expression result is displayed)
+  !--
+  !--
+!render-end
+!md
+**Result:**
+
+
+## Tryit demo 
+
+### We are going to demo some lodash functions
 
 We are per created an array __words__ press **Run** button to execute 
 ```
- let words = ['sky', 'wood', 'forest', 'falcon', 
+ let words = ['sky', 'wood', 'forest', 'falcon', 'xxx',
     'pear', 'ocean', 'universe'];
 ``` 
 
@@ -39,7 +74,9 @@ We are per created an array __words__ press **Run** button to execute
 words // display words (just like python notebooks the last expression result is displayed)
 !--
 !--
+
 !md More markdown
+
 
 ### Using some lodash functions 1 _
 
@@ -114,9 +151,11 @@ $$.HTML(
 )
 
 !html
+<style>
 .item.yellow {
   background-color: yellow;
 }
+</style>
 !md
 # Create UI Element
 

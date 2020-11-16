@@ -4,23 +4,19 @@
 !-- This is the head section
 
 !head
+@@include ../sections/head.try
 
-!-- add a title 
+!md
+# Intrduction
 
-<title>Test Tryit</title>
-<base href="/try_docs" />
-!-- add some custon scripts, in this case the lodash library
+This live demo will illustrate how TryitJS is used to create a HTML file to document API library.
 
-<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
-!--
-!-- some in-line script
 
-<script>
-let words = ['sky', 'wood', 'forest', 'falcon', 
-    'pear', 'ocean', 'universe'];
-</script>
-!-- end of the inline script
 
+!render-start Create Headder section
+!head
+@@include ../sections/head.try
+!render-end
  
 !md Add some markdown
 

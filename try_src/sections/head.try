@@ -1,0 +1,16 @@
+
+!-- add a title 
+
+<title>Test Tryit</title>
+!-- add some custon scripts, in this case the lodash library
+
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/solarized-light.min.css">
+!--
+!-- some in-line script
+
+<script>
+let words = ['sky', 'wood', 'forest', 'falcon', 
+    'pear', 'ocean', 'universe'];
+</script>
+!-- end of the inline script
