@@ -1,165 +1,160 @@
+!head  /* TOP LEVEL .try file*/
 
-!-- This is a test file
-!--
-!-- This is the head section
+	<!-- add a title -->
+	<title>Test Tryit</title>
+	
+	<!-- add some custon scripts, in this case the lodash library -->
 
-!head
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/solarized-light.min.css">
 
-!-- add a title 
+	<!-- some in-line script -->
 
-<title>Test Tryit</title>
-!-- add some custon scripts, in this case the lodash library
-
-<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/solarized-light.min.css">
-!--
-!-- some in-line script
-
-<script>
-let words = ['sky', 'wood', 'forest', 'falcon', 
-    'pear', 'ocean', 'universe'];
-</script>
-!-- end of the inline script
+	<script>
+	let words = ['sky', 'wood', 'forest', 'falcon', 
+	    'pear', 'ocean', 'universe'];
+	</script>
+	<!-- end of the inline script -->
 
  
-!md Add some markdown
+!md /* Add some markdown */
+	#Tryit demo 
 
-#Tryit demo 
+	## We are going to demo some lodash functions
 
-## We are going to demo some lodash functions
+	We are per created an array __words__ press **Run** button to execute 
+	```
+	 let words = ['sky', 'wood', 'forest', 'falcon', 
+	    'pear', 'ocean', 'universe'];
+	``` 
 
-We are per created an array __words__ press **Run** button to execute 
-```
- let words = ['sky', 'wood', 'forest', 'falcon', 
-    'pear', 'ocean', 'universe'];
-``` 
 
-!-- now we can try some code
-!tryit 
-words // display words (just like python notebooks the last expression result is displayed)
-!--
-!--
-!md More markdown
+!tryit /* Display editable script */
+	words // display words (just like python notebooks the last expression result is displayed)
 
-### Using some lodash functions 1 _
+!md /* More markdown */
+	### Using some lodash functions 1 _
 
-* \_.first
-* \_.last
+	* \_.first
+	* \_.last
 
 !tryit
-//This is some javascript code - press run to execute it
-var firstWord =  _.first(words);
-var lastWord = _.last(words);
+	//This is some javascript code - press run to execute it
+	var firstWord =  _.first(words);
+	var lastWord = _.last(words);
 
-// Note the last expression is displayed
-$$.D2(`({
-   firstWord,
-   lastWord
-})`);
+	// Note the last expression is displayed
+	$$.D2(`({
+	   firstWord,
+	   lastWord
+	})`);
 
 !md
-## Let's add some HTML
+	## Let's add some HTML
 
-We use the $$.HTML function to do this. The other $$ functions are:
+	We use the $$.HTML function to do this. The other $$ functions are:
 
-* $$.display(value)
-* $$.clear()
-* $$.D2('eval-string')     __eval-string__ is a javascript expression in string from, the eval string and its value is displayed. This is useful for displaying variables name and value.
-* $$.HTML(some_html_string) - render html in the display area
-* $$.lastly( some-function ) - this will be executed after all the display rendering is completed
+	* $$.display(value)
+	* $$.clear()
+	* $$.D2('eval-string')     __eval-string__ is a javascript expression in string from, the eval string and its value is displayed. This is useful for displaying variables name and value.
+	* $$.HTML(some_html_string) - render html in the display area
+	* $$.lastly( some-function ) - this will be executed after all the display rendering is completed
 
 !tryit
     $$.lastly( // code is activated after all data/html display has been performed 
       () => {
-          $('.ui .card')
-            .popup({
-              hoverable  : true,
-              position   : 'bottom left'
-              });
+	  $('.ui .card')
+	    .popup({
+	      hoverable  : true,
+	      position   : 'bottom left'
+	      });
 
-    }
-); // activate popup after we have displayed the HTML below
+    	}
+      ); // activate popup after we have displayed the HTML below
 
 
-// Display some HTML using $$.HTML(...)
-$$.HTML(
-`<div class="ui card" data-html="<div class='header'>User Rating</div>
-  <div class='content'>
-    <div class='ui star rating'><i class='active icon'>
-      </i><i class='active icon'></i>
-      <i class='active icon'></i><i class='active icon'>
-      </i><i class='active icon'></i>
-    </div>
-  </div>">
-  <div class="image">
-    <img src="https://semantic-ui.com/images/movies/totoro-horizontal.jpg">
-  </div>
-  <div class="content">
-    <div class="header">My Neighbor Totoro</div>
-    <div class="description">
-      Two sisters move to the country with their father in order to be closer to their hospitalized mother, and discover the surrounding trees are inhabited by magical spirits.
-    </div>
-  </div>
-  <div class="ui two bottom attached buttons">
-    <div class="ui button">
-      <i class="add icon"></i>
-      Queue
-    </div>
-    <div class="ui primary button">
-      <i class="play icon"></i>
-      Watch
-    </div>
-  </div>
-</div>`
-)
+	// Display some HTML using $$.HTML(...)
+	$$.HTML(
+	`<div class="ui card" data-html="<div class='header'>User Rating</div>
+	  <div class='content'>
+	    <div class='ui star rating'><i class='active icon'>
+	      </i><i class='active icon'></i>
+	      <i class='active icon'></i><i class='active icon'>
+	      </i><i class='active icon'></i>
+	    </div>
+	  </div>">
+	  <div class="image">
+	    <img src="https://semantic-ui.com/images/movies/totoro-horizontal.jpg">
+	  </div>
+	  <div class="content">
+	    <div class="header">My Neighbor Totoro</div>
+	    <div class="description">
+	      Two sisters move to the country with their father in order to be closer to their hospitalized mother, and discover the surrounding trees are inhabited by magical spirits.
+	    </div>
+	  </div>
+	  <div class="ui two bottom attached buttons">
+	    <div class="ui button">
+	      <i class="add icon"></i>
+	      Queue
+	    </div>
+	    <div class="ui primary button">
+	      <i class="play icon"></i>
+	      Watch
+	    </div>
+	  </div>
+	</div>`
+	)
 
 !html
-.item.yellow {
-  background-color: yellow;
-}
+	<style>
+		.item.yellow {
+		  background-color: yellow;
+		}
+	</style>
 !md
 # Create UI Element
 
 !tryit
-$$.HTML(`
-<div class="ui menu">
-  <div class="header item yellow exec" id="tryit1-run">
-    Run <i class="caret square right icon"></i>
-  </div>
-  <button id="jump_tryit2" class="item circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
-  <button id="jump_tryit2" class="item circular ui icon yellow button jump_back"><i class="icon angle double up"></i></button>
-  <div class="right menu">
-     <button id="ra_1" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
-  </div>
-</div>`)
-			
+	$$.HTML(`
+	<div class="ui menu">
+	  <div class="header item yellow exec" id="tryit1-run">
+	    Run <i class="caret square right icon"></i>
+	  </div>
+	  <button id="jump_tryit2" class="item circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+	  <button id="jump_tryit2" class="item circular ui icon yellow button jump_back"><i class="icon angle double up"></i></button>
+	  <div class="right menu">
+	     <button id="ra_1" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+	  </div>
+	</div>`)
+!md
 !-- include another tryit file
 @@include array.try
 
 !render-start
-!html
-<style>
-.item.yellow {
-  background-color: yellow;
-}
-</style>
-!md
-# Cereate UI Element
+	!html
+	<style>
+	.item.yellow {
+	  background-color: yellow;
+	}
+	</style>
+	!md
+	# Cereate UI Element
 
-!tryit
-var x = 1;
+	!tryit
+	var x = 1;
 
-// hello
-$$.HTML(`
-<div class="ui menu">
-  <div class="header item yellow exec" id="tryit1-run">
-    Run <i class="caret square right icon"></i>
-  </div>
-  <button id="jump_tryit2" class="item circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
-  <button id="jump_tryit2" class="item circular ui icon yellow button jump_back"><i class="icon angle double up"></i></button>
-  <div class="right menu">
-     <button id="ra_1" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
-  </div>
-</div>`)
+	// hello
+	$$.HTML(`
+	<div class="ui menu">
+	  <div class="header item yellow exec" id="tryit1-run">
+	    Run <i class="caret square right icon"></i>
+	  </div>
+	  <button id="jump_tryit2" class="item circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+	  <button id="jump_tryit2" class="item circular ui icon yellow button jump_back"><i class="icon angle double up"></i></button>
+	  <div class="right menu">
+	     <button id="ra_1" title="Execute all scripts above" class="ui right floated button circular icon green run_all"> <i class="fast backward icon"></i> </button>
+	  </div>
+	</div>`)
 !render-end
+
 !end
