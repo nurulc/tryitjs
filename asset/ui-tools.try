@@ -14,7 +14,7 @@
                 <input class="prompt" type="text" placeholder="${placeholder}">
                 <i class="search icon"></i>
               </div>
-              <div class="results dropdown" style="z-index: 1000"></div>
+              <div class="results dropdown" ></div>
             </div>
             `;
 
