@@ -26,5 +26,6 @@
               onSelect
             });
         });
-        return uiDropdown;
+        return HTML(uiDropdown);
 }
+</script>
