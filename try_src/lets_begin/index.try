@@ -1,0 +1,74 @@
+!head  /* TOP LEVEL .try file*/
+    <title>Introducing TryitJS</title>
+    @@include ../tools/head.try
+
+!html
+    @@include ../tools/divtools.try
+
+
+!md
+# lets Begin
+
+This is an interactive tutorial on how create TryItJS can be use to document a API. 
+
+```tryit
+
+  \!head --- to be a page this must be at the top of the page
+      .... HTML HEAD elements go here ...
+  \!md
+      .... Markdown elements go here ...    
+  \!html
+      ... some inline HTML markup goes here...
+
+  
+  \@@include xxx.try  --- this includes the body of the file 'xxx.tyy' here (a page fragment)
+  \!tryit 
+        ... Javascript the user can edit and execute goes here .... 
+  
+  \!end --- end of the file
+        ... HTML ot add to the bottom of the page goes here...  
+  
+  ```
+
+!md
+    ## [Back](./index.html)
+  
+!tryit
+  // Your code goes here
+
+  var plot = plotDiv();
+
+    // Make an instance of two and place it on the page.
+    var elem = plot; //get the div for plotting
+    var params = { width: 285, height: 200 };
+    var two = new Two(params).appendTo(elem);
+
+    // two has convenience methods to create shapes.
+    var circle = two.makeCircle(72, 100, 50);
+    var rect = two.makeRectangle(213, 100, 100, 100);
+
+    // The object returned has many stylable properties:
+    circle.fill = '#FF8000';
+    circle.stroke = 'orangered'; // Accepts all valid css color
+    circle.linewidth = 5;
+
+    rect.fill = 'rgb(0, 200, 255)';
+    rect.opacity = 0.75;
+    rect.noStroke();
+
+    // Don't forget to tell two to render everything
+    // to the screen
+    two.update(); 
+
+
+
+
+
+
+
+
+
+
+
+
+!end

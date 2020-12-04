@@ -1,13 +1,9 @@
 
 !head  /* TOP LEVEL .try file*/
-
 	<!-- add a title -->
-	<title>Test Tryit</title>
-	
-	<!-- add some custon scripts, in this case the lodash library -->
+	<title>Lodash Tutorial/head.try
 
-	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/solarized-light.min.css">
+	@@include ../tools/head.try
 
 	<!-- some in-line script -->
 

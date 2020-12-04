@@ -489,3 +489,42 @@ p.html {
   color: #d2d2ef;
   background-color: lightslategrey;
 }
+
+/* Display container */
+.display-container {
+  display: flex;
+  border: 1px solid #aaa;
+  justify-content: flex-start;
+}
+
+.display-container > div {
+  border-right: 1px solid #aaa;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+
+.tryit-section {
+  background-color: #919199;
+  color: #fafafa;
+}
+
+pre.language-tryit {
+  background-color: #f0f0f0;
+  margin-left: 2rem;
+  height: 15rem;
+  width: 75%;
+  transform: scale(0.8); 
+  transform-origin: top center;
+  overflow: hidden;
+  transition: width 1s ease-in-out;
+  transition: height 1s ease-in-out;
+}
+
+pre.language-tryit:hover {
+  width: 100%;
+  height: auto;
+  transform-origin: top left;
+}

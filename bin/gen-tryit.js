@@ -9,6 +9,7 @@ const {
   tryFilesPromise,
   writeJson,
   readJson,
+  readFileOrUrl,
   log
  } = require('../lib/fileio');
 
@@ -158,9 +159,12 @@ function ARGS(args) {
 
 
     if(inFiles.length === 1 ) {
+      srcDir = fileInfo(inFiles[0]).dir || '.';
       if(outFile) {
           targetDir = fileInfo(outFile).dir || '.';
       }
+      
+      console.log({inFiles, srcDir, outFile});
       return Promise.resolve([fileItem( inFiles[0], outFile, srcDir, targetDir)]);
     }
 
@@ -193,12 +197,13 @@ function ARGS(args) {
 
 ARGS(process.argv.slice(2)).then( inFiles => {
   let refDirBase = path.join(SCRIPT_DIR,'..');
+  const readLinesFrom = readFileOrUrl; //readLines
   inFiles.forEach( ({inFile, outFile, srcDir, targetDir}) => {
     processLocal(refDirBase, targetDir)
       //outFile = path.join(targetDir,outFile);
     
     if(!debug){
-      genHTML( fs.readFileSync(inFile, 'utf8'), userConfig, readLines, srcDir, inFile, targetDir, outFile)
+      genHTML( fs.readFileSync(inFile, 'utf8'), userConfig, readLinesFrom, srcDir, inFile, targetDir, outFile)
         .then(htmlText => {
             writeOut(outFile, htmlText);
             console.log('generated: ', outFile);

@@ -1,0 +1,79 @@
+!head
+	<title>Wht TryITJs</title>
+	@@include ../tools/head.try
+
+!html
+	@@include ../tools/divtools.try
+!md
+    # Why TryITjs
+
+
+    ### Problem Statement
+    I have a Javascript library on github and I wanted to make a tutorials for it. 
+    I can certainly create _.md_ pages easily and that's great. But the reader cannot actually play with the sample code, explore the options and gain confidence that the library will be useful to the reader. 
+
+    * Github repository only allows .md (markdown) file to be rendered on the site
+        * For security reasons, no javascript is allowed.
+    * HTML files are only displayed for editing not rendered as a HTML markup for the browser
+    * Github pages allow html file to be rendered, but there is no backed processing,
+    so Jupyter Notebooks cannot be served from there
+    * Understandably there is no facility to run your own backend server.  
+    * Markdown is great for just text documentation, but it has no facility to use Javascript on those pages (security concern)
+
+    I wanted HTML file that provides features similar to Jupyter with fewer frills and only the Javascript code snippets can be edited and executed. 
+
+
+
+    So I had the following requirements for a CLI tool:
+    1. Each tutorial should be a single HTML page
+    1. The source file (.try) based on existing markup standards:
+        - Javascript
+        - Markdown
+        - HTML
+    1. The additions should be minimal
+    1. Should give predictable results
+    1. The system sould be easy for the authors, and simple for the end user
+        - Minimal number of markers for TryitJS features
+        - Each TryitJS markup tag should be in a line of its own
+            - Allow a tutorial to be built up from smaller nodules
+    1. Minimal dependency
+    1. Support all features using Javascript on the users browser
+    1. Besides the HTML, file no other file should be required
+        - Make is very easy to deploy on any site supporting simple web serving
+
+- Minimal number of markers for TryitJS features
+        - Each TryitJS markup tag should be in a line of its own
+            - Allow a tutorial to be built up from smaller nodules
+
+!md
+    # Structure of TryItjs file
+
+    ## Structure of .try file
+    Markdown is great for just text documentation, but it has no facility to use Javascript on those pages (security concern)
+
+
+	### A page definition
+
+	To generate a HTML file we need a _page_.__try__ 
+
+	```tryit
+
+	  \!head --- to be a page this must be at the top of the page
+	      .... HTML HEAD elements go here ...
+	  \!md
+	      .... Markdown elements go here ...    
+	  \!html
+	      ... some inline HTML markup goes here...
+
+	  
+	  \@@include xxx.try  --- this includes the body of the file 'xxx.tyy' here (a page fragment)
+	  \!tryit 
+	        ... Javascript the user can edit and execute goes here .... 
+	  
+	  \!end --- end of the file
+	        ... HTML ot add to the bottom of the page goes here...  
+	  
+	  ```
+
+
+!end

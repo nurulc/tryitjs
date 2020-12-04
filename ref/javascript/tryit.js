@@ -60,11 +60,17 @@ var $tryit = function () {
     return res;
   }
 
+  var EMPTY_ELEMENT = {
+    innerText: ""
+  };
+
+  function isEmptyElement(x) {
+    return x === null || x === EMPTY_ELEMENT;
+  }
+
   function $e(name) {
     var e = document.getElementById(name);
-    if (!e) return {
-      innerText: ""
-    };
+    if (!e) return EMPTY_ELEMENT;
     return e;
   }
 
@@ -274,7 +280,7 @@ var $tryit = function () {
     if (next_button) {
       var b = $e(next_button);
 
-      if (b) {
+      if (!isEmptyElement(b)) {
         asArray(classToRemove).forEach(function (cls) {
           return b.classList.remove(cls);
         });
@@ -371,7 +377,7 @@ var $tryit = function () {
 
   function toHeader(elem) {
     if (dataset(elem).pagevisible) {
-      return elem.querySelector('h1');
+      return elem.querySelector("h1");
     }
 
     return elem;
@@ -426,14 +432,18 @@ var $tryit = function () {
     }, 0);
   }
 
+  var lastExecTime = 0.0;
+
   function execute(divName, editor, toUpdateUI, toJump, callback) {
     try {
       CHANGED = true;
+      var t0 = performance.now();
       beforeExecute(divName);
       var val = (1, eval)(editor.getValue("\n"));
+      lastExecTime = performance.now() - t0;
 
       var show = function (val) {
-        $e(divName + "-display").innerHTML = val + '   DONE';
+        $e(divName + "-display").innerHTML = val;
       };
 
       render(val).then(function (res) {
@@ -610,6 +620,12 @@ var $tryit = function () {
     return x.replace(/&/g, '~AMP~').replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/~AMP~/g, "&amp;");
   }
 
+  function blueDiv(content) {
+    return "<div class=\"tryit-section\">".concat(content, "</div>\n");
+  } // var lines = document.querySelector('.language-tryit').innerText.split('\n');
+  // $$.HTML('<pre>'+sections(lines)+'</pre>');
+
+
   function smallArray(a) {
     var depth = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
     var len = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 40;
@@ -625,14 +641,24 @@ var $tryit = function () {
     return false;
   }
 
+  function H(s) {
+    return {
+      _toHtml: function _toHtml() {
+        return '<br/><p><b>' + asHTML(s) + '</b></p>';
+      }
+    };
+  }
+
   function display(d) {
     if (d && d._toHtml) {
       return d._toHtml();
     } else if (typeof d === "string") {
-      if (d && d.length > 20000) d = d.substr(0, 20000) + "... MORE";
-      if (d.length < 100) return asHTML(d) + "<br/>";
-      return "<pre>" + asHTML(d) + "</pre>";
-    } else if (isPrimitive(d)) return d.toString();else if (smallArray(d)) {
+      if (d && d.length > 20000) {
+        d = d.substr(0, 20000) + "... MORE";
+        return "<pre>" + asHTML(d) + "</pre>";
+      } //       if( d.length < 100) return  asHTML(d) + "<br/>"
+      else if (d.indexOf('\n') === -1) return "<pre>" + JSON.stringify(asHTML(d)) + "</pre>";else return "<pre>" + asHTML(d) + "</pre>";
+    } else if (isPrimitive(d)) return "<pre>" + d.toString() + "</pre>";else if (smallArray(d)) {
       var v = JSON.stringify(d, null, " ");
       if (v.length < 150) v = JSON.stringify(d);
       if (v && v.length > 20000) v = v.substr(0, 20000) + "... MORE";
@@ -643,17 +669,7 @@ var $tryit = function () {
   }
 
   function __2ToDisplay(title, val) {
-    return "\n        <div class=\"ui container grid\">\n          <div class=\"three wide column expression\" title=\"Expression\">".concat(title, "</div>\n          <div class=\"thirteen wide column expression-value\">").concat(display(val), "</div>\n        </div>"); // return (
-    //   `<div class="ui segment">
-    //     <div class="ui left close rail left-row" style="position: static; width: auto; display: inline-block">
-    //       <div class="ui segment">${title}</div>
-    //     </div>
-    //     <div class="ui segment right-row" style="display: inline-block; width: 60%; top: -75px" >
-    //        <p>${val}</p>
-    //        <p></p>
-    //      </div>
-    //   </div>
-    //   ` );
+    return "\n\t\t\t\t<div class=\"ui container grid\">\n\t\t\t\t\t<div class=\"three wide column expression\" title=\"Expression\">".concat(title, "</div>\n\t\t\t\t\t<div class=\"thirteen wide column expression-value\">").concat(display(val), "</div>\n\t\t\t\t</div>");
   }
 
   // Display utilities
@@ -667,36 +683,54 @@ var $tryit = function () {
 
   function pushDisplay(s) {
     var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'h';
+    //if(NO_DISPLAY) return;
     if (!(s instanceof Promise) && s !== undefined) s = Promise.resolve(s);
 
     _displayStack.push([s, type]);
   }
 
   function _show() {
+    var pd = pushDisplay;
+
     for (var _len = arguments.length, list = new Array(_len), _key = 0; _key < _len; _key++) {
       list[_key] = arguments[_key];
     }
 
-    list.forEach(function (v) {
-      return pushDisplay(v, 'd');
-    });
+    if (list.length > 1) {
+      pd('<div class="display-container">'); //pushDisplay(list.map(v => `<div>${display(v)}</div>\n`),'h');
+
+      list.forEach(function (v) {
+        pd('<div>');
+        pd(v, 'd');
+        pd('</div>');
+      });
+      pd('</div>');
+    } else {
+      list.forEach(function (v) {
+        return pd(v, 'd');
+      });
+    }
+  }
+
+  function round2(time) {
+    return Math.round(time * 100.0) / 100.0;
   }
 
   function render(val) {
     if (arguments.length > 0) _show(val);
 
-    var promises = _displayStack.map(function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 2),
-          p = _ref2[0],
-          type = _ref2[1];
+    var promises = _displayStack.map(function (_ref5) {
+      var _ref6 = _slicedToArray(_ref5, 2),
+          p = _ref6[0],
+          type = _ref6[1];
 
       return p;
     });
 
-    var types = _displayStack.map(function (_ref3) {
-      var _ref4 = _slicedToArray(_ref3, 2),
-          p = _ref4[0],
-          type = _ref4[1];
+    var types = _displayStack.map(function (_ref7) {
+      var _ref8 = _slicedToArray(_ref7, 2),
+          p = _ref8[0],
+          type = _ref8[1];
 
       return type;
     });
@@ -706,10 +740,10 @@ var $tryit = function () {
         var res = list.map(function (v, i) {
           return [v, types[i]];
         });
-        return Promise.resolve('<div class="ui accordion">' + '<div class="active title"><i class="dropdown icon"></i>Results</div>' + '<div class="active content">' + res.map(function (_ref5) {
-          var _ref6 = _slicedToArray(_ref5, 2),
-              v = _ref6[0],
-              type = _ref6[1];
+        return Promise.resolve('<div class="ui accordion">' + '<div class="active title"><i class="dropdown icon"></i>Results ( ' + round2(lastExecTime) + ' ms)</div>' + '<div class="active content">' + res.map(function (_ref9) {
+          var _ref10 = _slicedToArray(_ref9, 2),
+              v = _ref10[0],
+              type = _ref10[1];
 
           return type === 'h' ? v : display(v);
         }).join('\n') + '</div></div>');
@@ -725,7 +759,7 @@ var $tryit = function () {
 
   function valOrFunc(v) {
     try {
-      return typeof v === 'function' ? v() : v;
+      return typeof v === 'function' ? v(false) : v;
     } catch (err) {
       alert(err);
     }
@@ -759,6 +793,41 @@ var $tryit = function () {
   };
 
   var $$ = {
+    codeHighlight: //hljs.highlightAuto('<span>Hello World!</span>').value
+    function (_lines) {
+      var HL = hljs.highlightAuto;
+
+      var _lines$reduce = _lines.reduce(function (_ref, line) {
+        var _ref2 = _slicedToArray(_ref, 3),
+            list = _ref2[0],
+            type = _ref2[1],
+            content = _ref2[2];
+
+        if (line.match(/^\s*(![a-z_\-]+|!--)/)) {
+          if (content || type.match(/!render-(start|end)/)) list.push([type, content]);
+          return [list, line, ''];
+        }
+
+        line = (content ? '\n' : '') + line;
+        return [list, type, content + line];
+      }, [[], '!html', '']),
+          _lines$reduce2 = _slicedToArray(_lines$reduce, 3),
+          list = _lines$reduce2[0],
+          type = _lines$reduce2[1],
+          content = _lines$reduce2[2];
+
+      if (content) {
+        list.push([type, content]);
+      }
+
+      return list.flatMap(function (_ref3) {
+        var _ref4 = _slicedToArray(_ref3, 2),
+            type = _ref4[0],
+            body = _ref4[1];
+
+        return [blueDiv(type), HL(body).value];
+      }).join('\n');
+    },
     D: _show,
     D2: function (string) {
       if (typeof string === 'string') {
@@ -796,17 +865,11 @@ var $tryit = function () {
     },
     executeDiv: '',
     // the tryit div being executed
-    beforeExccute: function beforeExccute() {
+    beforeExecute: function () {
       return false;
     },
     // placeholder 
-    H: function (s) {
-      return {
-        _toHtml: function _toHtml() {
-          return '<br/><p><b>' + asHTML(s) + '</b></p>';
-        }
-      };
-    },
+    H: H,
     lastly: _lastly,
     // pass a function after all items have been displayed, this call be called several
     // times, the actions are performed in the order they are posted
@@ -879,8 +942,9 @@ var $tryit = function () {
       return __editors.jumpback();
     },
     jumpTag: function (aTag) {
+      var toToggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       jumpTag(aTag);
-      toggle();
+      toToggle && toggle();
     },
     jumpBack: function () {
       jumpback();
@@ -894,7 +958,8 @@ var $tryit = function () {
     pageNext: function () {
       pagePrevNext(this, true);
     },
-    asArray: asArray
+    asArray: asArray,
+    H: H
   };
 }(); //====================================================
 //
@@ -902,6 +967,7 @@ var $tryit = function () {
 
 
 function setDisplay(elem, type) {
+  if (!elem || !elem.dataset) return;
   elem.dataset.pagevisible = type;
   elem.style.display = type === 'false' ? 'none' : 'block';
 }
@@ -909,7 +975,8 @@ function setDisplay(elem, type) {
 var $$ = $tryit.$$,
     jumpTag = $tryit.jumpTag,
     jumpBack = $tryit.jumpBack,
-    _display = $tryit._display;
+    _display = $tryit._display,
+    H = $tryit.H;
 var objInfo = $$.objInfo;
 document.addEventListener('DOMContentLoaded', function () {
   var $q = function (arg1, arg2) {
@@ -917,32 +984,35 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   if (hljs) {
-    document.querySelectorAll('pre code').forEach(function (block) {
-      return hljs.highlightBlock(block);
-    }); // (block) => {
-    //     hljs.highlightBlock(block);
-    // });
+    document.querySelectorAll('pre code').forEach(highlightCodeBlock);
   }
 
   $tryit.makeEditor();
   var allPages = $q('div[data-pagevisible]');
   allPages.forEach(function (elem, i) {
     return i !== 0 ? setDisplay(elem, "false") : '';
-  }); // for(let i=1; i<allPages.length; i++) {
-  //   let elem = allPages[i];
-  //   elem.dataset.pagevisible = "false";
-  // }
-
+  });
   $q('.page_prev').forEach(function (e) {
     return e.onclick = $tryit.pagePrev;
   });
   $q('.page_next').forEach(function (e) {
     return e.onclick = $tryit.pageNext;
   });
+  $('pre:has(code.language-tryit)').addClass('language-tryit');
 
   if (location.hash) {
     setTimeout(function () {
-      return jumpTag(location.hash.substr(1));
+      return jumpTag(location.hash.substr(1), false);
     }, 100);
   }
 });
+
+function highlightCodeBlock(block) {
+  if (!block || !hljs) return;
+
+  if (block.classList.contains('language-tryit')) {
+    var _lines = (block.innerText || '').split('\n');
+
+    block.innerHTML = $$.codeHighlight(_lines);
+  } else hljs.highlightBlock(block);
+}
