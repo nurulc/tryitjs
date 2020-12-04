@@ -1,0 +1,57 @@
+!html
+	<script>
+	function Identity(x) { return x}
+	function genID(prefix) { return (prefix || 'T')+Math.round(Math.random()*100000); }
+	function capitalStr( phrase ) { return phrase.replace(/\b\w/g, c => c.toUpperCase());}
+	function addDiv(id, ext) {
+		let targetDivName = `#${id}_${ext}`;
+		let targetDiv = document.querySelector(targetDivName);
+		if(!targetDiv) {
+			targetDiv = document.createElement('div');
+			targetDiv.id = targetDivName.substr(1);
+			let sibling = document.querySelector('#'+id);
+			sibling.after(targetDiv);
+		}
+		else targetDiv.innerHTML = '';
+		return targetDiv;
+	}
+
+	function plotDiv() {
+		let dn = $$.executeDiv;
+		return addDiv(dn+'-display','plot'); // add a div for plotting after the display div
+	}
+
+	function HTML(data) {
+	        if(data === undefined || typeof data._toHtml === 'function') return data;
+		return { _toHtml: () => data }
+	}
+
+	function multiSelect(opts,list) {
+		let {onchange, id} = opts || {};
+		id = id || genID();
+		let html = `
+			<div id="${id}" class="ui multiple selection dropdown">
+			  <input name="thick" type="hidden">
+			  <i class="dropdown icon"></i>
+			  <div class="default text">100</div>
+			  <div class="menu">
+				${list.map(([key,val]) => `<div class="item" data-value="${key}">${val}</div>`).join('\n')}
+			  </div> 
+			</div>
+		`;
+		
+			onchange = onchange || Identity
+			$$.lastly(() => {
+				$('#'+id).dropdown();
+				if(opts.onchange){
+					$('#'+id).change( function(e) { 
+					 let list = $(e.currentTarget).dropdown("get values");
+					 onchange(list,e);
+				   } );
+				} 
+			 });
+		
+		return HTML(html);
+	}
+	</script>
+ 

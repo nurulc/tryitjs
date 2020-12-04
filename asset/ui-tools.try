@@ -1,0 +1,33 @@
+!html
+    <script>
+       function UIcategoryList(source, options) {
+            let {caption, onSelect,id, type, placeholder} = options|| {};
+            if(caption) caption = `<p class="ui header huge">${caption}</p>`;
+            else caption = '';
+            type = type || 'category';
+            id = id || genID($$.executeDiv);
+            placeholder = placeholder || 'Search...';
+
+            let uiDropdown = `${caption}
+              <div class="ui search" id="${id}">
+              <div class="ui icon input">
+                <input class="prompt" type="text" placeholder="${placeholder}">
+                <i class="search icon"></i>
+              </div>
+              <div class="results dropdown" ></div>
+            </div>
+            `;
+
+            // Fill in the country dropdown list
+            $$.lastly(() => {
+              $('#'+id)
+                .search({
+                  type,
+                  source,
+                  onSelect
+                });
+            });
+            return HTML(uiDropdown);
+    }
+
+ </script>
