@@ -2,6 +2,7 @@
 const fs = require('fs'); 
 const path = require('path');
 const {genHTML} = require('../index');
+const SCRIPT_DIR = __dirname;
 const {
   readLines,
   saveData,
@@ -15,9 +16,25 @@ const {
 
  const {normalize} = require('../lib/path-utils');
 
-let baseConfig = require('../.tryit').default;
+//let baseConfig = require('../.tryit').default;
+let baseConfig = readTryConfig();
 let userConfig = {...baseConfig}, outFile,inFile, srcDir, targetDir, debug, userConfigFile, isLocal = false;
-const SCRIPT_DIR = __dirname;
+
+
+function readTryConfig() {
+  let configName = path.join(SCRIPT_DIR,'..', '.tryitjs.json');
+  console.log("try reading", configName);
+  if(fileExists(configName)) {
+    console.log("reading", configName);
+    let bc = readJson(configName);
+    if(!bc) {
+      console.log(".tryitjs.json not found");
+    }
+    else return bc;
+  }
+  else console.log(".tryitjs.json not found");
+  return require('../.tryit').default;
+}
 
 function createNecessaryFiles(refDir,target='.') {
   const fileList = [

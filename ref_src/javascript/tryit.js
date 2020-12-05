@@ -168,16 +168,28 @@
 	//        mode: "javascript",
 					theme: "cobalt",
 					matchBrackets: true,
+					autoCloseBrackets: '()[]{}\'\'""``', 
 					continueComments: "Enter",
 					extraKeys: {
 									"Ctrl-Enter": execCode,
 									"Cmd-Enter": execCode,
-									"Ctrl-/": "toggleComment"
+									"Ctrl-/": "toggleComment",
+									"Ctrl-F": "search",
+					                "Ctrl-Space": "autocomplete",
+
 					},
 					tabSize: 2,
 					matchBrackets: true,
 					continueComments: "Enter",
-					keyMap: "sublime"
+					keyMap: "sublime",
+					lineWrapping: true,
+					lint: { bitwise: true, esversion: 10, notypeof: true, expr: true, asi: true },
+					foldGutter: true,
+					gutters: ["CodeMirror-lint-markers","CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+					tabSize: 2,
+					indentUnit: 2,
+  					mode: {name: "javascript", globalVars: true}
+
 				});
 				if(textarea.value !== contents) editor.setValue(contents);
 				__editorsPending.push(id);

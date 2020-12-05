@@ -214,14 +214,26 @@ var $tryit = function () {
         //        mode: "javascript",
         theme: "cobalt",
         matchBrackets: true,
+        autoCloseBrackets: '()[]{}\'\'""``',
         continueComments: "Enter",
         extraKeys: {
           "Ctrl-Enter": execCode,
           "Cmd-Enter": execCode,
-          "Ctrl-/": "toggleComment"
+          "Ctrl-/": "toggleComment",
+          "Ctrl-F": "search",
+          "Ctrl-Space": "autocomplete"
         },
         tabSize: 2
-      }, _defineProperty(_CodeMirror$fromTextA, "matchBrackets", true), _defineProperty(_CodeMirror$fromTextA, "continueComments", "Enter"), _defineProperty(_CodeMirror$fromTextA, "keyMap", "sublime"), _CodeMirror$fromTextA));
+      }, _defineProperty(_CodeMirror$fromTextA, "matchBrackets", true), _defineProperty(_CodeMirror$fromTextA, "continueComments", "Enter"), _defineProperty(_CodeMirror$fromTextA, "keyMap", "sublime"), _defineProperty(_CodeMirror$fromTextA, "lineWrapping", true), _defineProperty(_CodeMirror$fromTextA, "lint", {
+        bitwise: true,
+        esversion: 10,
+        notypeof: true,
+        expr: true,
+        asi: true
+      }), _defineProperty(_CodeMirror$fromTextA, "foldGutter", true), _defineProperty(_CodeMirror$fromTextA, "gutters", ["CodeMirror-lint-markers", "CodeMirror-linenumbers", "CodeMirror-foldgutter"]), _defineProperty(_CodeMirror$fromTextA, "tabSize", 2), _defineProperty(_CodeMirror$fromTextA, "indentUnit", 2), _defineProperty(_CodeMirror$fromTextA, "mode", {
+        name: "javascript",
+        globalVars: true
+      }), _CodeMirror$fromTextA));
       if (textarea.value !== contents) editor.setValue(contents);
 
       __editorsPending.push(id);
