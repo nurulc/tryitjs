@@ -10,7 +10,7 @@ const {
   tryFilesPromise,
   writeJson,
   readJson,
-  readFileOrUrl,
+  includeFileOrUrl,
   log
  } = require('../lib/fileio');
 
@@ -214,7 +214,7 @@ function ARGS(args) {
 
 ARGS(process.argv.slice(2)).then( inFiles => {
   let refDirBase = path.join(SCRIPT_DIR,'..');
-  const readLinesFrom = readFileOrUrl; //readLines
+  const readLinesFrom = includeFileOrUrl; //readLines
   inFiles.forEach( ({inFile, outFile, srcDir, targetDir}) => {
     processLocal(refDirBase, targetDir)
       //outFile = path.join(targetDir,outFile);
