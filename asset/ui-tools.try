@@ -1,3 +1,5 @@
+@@once
+@@include div-tools.try
 !html
     <script>
        function UIcategoryList(source, options) {
