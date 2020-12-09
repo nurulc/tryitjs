@@ -2,10 +2,16 @@
 
 !html
 <script>
-  function plotIt(data, layout,config) {
-    let dn = $$.executeDiv +'-plot';
-
-    $$.HTML(`<div id="${dn}" />`);
-    $$.lastly(true,() => Plotly.newPlot(dn, data, layout,config));
+  function plotIt(dn, data, layout,config) {
+   
+   if(typeof dn === 'string') {
+      _plot(dn, data, layout, config);
+   } else {
+      _plot(genID($$.executeDiv), dn, data, layout);
+   }
+   function _plot(dn, data, layout, config) {
+      $$.HTML(`<div id="${dn}" />`);
+      $$.lastly(true,() => Plotly.newPlot(dn, data, layout,config));
+   }
   }
  </script>
