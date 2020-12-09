@@ -1,6 +1,6 @@
 @@once
 
-@@include divtools.try
+@@include div-tools.try
 @@include doPlot.try
 !html
     <script>
