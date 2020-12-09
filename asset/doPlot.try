@@ -2,7 +2,7 @@
 @@include divtools.try
 !html
 <script>
-  function plotIt(dn, data, layout,config) {
+  function newPlot(dn, data, layout,config) {
    
    if(typeof dn === 'string') {
       _plot(dn, data, layout, config);
