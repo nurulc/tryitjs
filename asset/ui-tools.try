@@ -1,6 +1,7 @@
 @@once
 
 @@include divtools.try
+@@include doPlot.try
 !html
     <script>
        function UIcategoryList(source, options) {
