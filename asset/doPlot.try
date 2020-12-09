@@ -5,7 +5,7 @@
   function newPlot(dn, data, layout,config) {
    
    if(typeof dn === 'string') {
-      _plot(dn, data, layout, config);
+      Plotly.newPlot(dn, data, layout, config);
    } else {
       _plot(genID($$.executeDiv), dn, data, layout);
    }
