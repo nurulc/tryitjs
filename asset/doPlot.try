@@ -1,5 +1,5 @@
 @@once
-
+@@include divtools.try
 !html
 <script>
   function plotIt(dn, data, layout,config) {
