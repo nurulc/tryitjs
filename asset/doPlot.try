@@ -1,0 +1,11 @@
+@@once
+
+!html
+<script>
+  function plotIt(data, layout,config) {
+    let dn = $$.executeDiv +'-plot';
+
+    $$.HTML(`<div id="${dn}" />`);
+    $$.lastly(true,() => Plotly.newPlot(dn, data, layout,config));
+  }
+ </script>
