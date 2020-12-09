@@ -1,5 +1,5 @@
 @@once
-@@include divtools.try
+@@include div-tools.try
 !html
 <script>
   function newPlot(dn, data, layout,config) {
