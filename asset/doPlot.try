@@ -6,12 +6,14 @@
    
    if(typeof dn === 'string') {
       Plotly.newPlot(dn, data, layout, config);
+      return dn;
    } else {
       _plot(genID($$.executeDiv), dn, data, layout);
    }
    function _plot(dn, data, layout, config) {
       $$.HTML(`<div id="${dn}" />`);
       $$.lastly(true,() => Plotly.newPlot(dn, data, layout,config));
+      return dn;
    }
   }
  </script>
