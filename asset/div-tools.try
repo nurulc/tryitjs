@@ -1,3 +1,4 @@
+@@once
 !html
 	<script>
 	function Identity(x) { return x}
