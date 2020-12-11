@@ -37,6 +37,7 @@ var $tryit = function () {
 
   function asArray(arrayLike) {
     if (arrayLike === undefined || arrayLike === null) return [];
+    if (typeof arrayLike === 'string') return [arrayLike];
     if (Array.isArray(arrayLike)) return arrayLike;
 
     if (arrayLike instanceof NodeList || typeof arrayLike.forEach === 'function') {
@@ -315,7 +316,9 @@ var $tryit = function () {
 
     if (ix !== 0) return false;
     __editorsPending = __editorsPending.slice(1);
-    addRemoveCSSclass(__editorsPending[0], "yellow", "green").title = "Script ready to execute"; // let next_button = __editorsPending[0];
+    var divName = __editorsPending[0];
+    addRemoveCSSclass(divName, "yellow", "green").dataset.tooltip = "Execute Script (Ctrl+Enter)";
+    _addRemoveCSSclass('ra_' + getIDNumber(divName), "green", "grey").dataset.tooltip = "All previous scripts executed"; // let next_button = __editorsPending[0];
     // if(next_button) {
     //    let b = $e(next_button+'-run');
     //    if(b) {
@@ -436,9 +439,10 @@ var $tryit = function () {
     var toJump = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
     //(divName);
     //addRemoveCSSclass(divName, "blue", "green");
+    //console.log('UpdateUI', divName);
     replaceCSSClass(divName);
-    _addRemoveCSSclass('ra_' + getIDNumber(divName), "green", "grey").title = "Previous scripts executed";
-    _addRemoveCSSclass(divName + "-run", ["green", "yellow"], "blue").title = "Script executed and displayed";
+    _addRemoveCSSclass('ra_' + getIDNumber(divName), "green", "grey").dataset.tooltip = "All previous scripts executed";
+    _addRemoveCSSclass(divName + "-run", ["green", "yellow"], "blue").dataset.tooltip = "Re-Execute Script (Ctrl+Enter)";
     if (toJump) setTimeout(function () {
       return jump(divName);
     }, 0);
@@ -495,6 +499,7 @@ var $tryit = function () {
 
     _disp.innerHTML = "";
     _disp.style['max-height'] = "100rem";
+    NO_DISPLAY = false;
     setTimeout(function () {
       return execute(divName, editor, true, true, runLastly);
     }, toDelay);
@@ -517,6 +522,7 @@ var $tryit = function () {
 
     try {
       console.log("run all " + divName);
+      NO_DISPLAY = true;
       var _editor = editorFor[divName];
 
       if (!item) {
@@ -528,7 +534,8 @@ var $tryit = function () {
       _code = _editor.getValue("\n");
       var val = (1, eval)(_code);
       render(val).then(function () {
-        replaceCSSClass(divName, false);
+        //replaceCSSClass(divName, false);
+        updateUI(divName, false);
 
         _runAll(newList, item);
       }).catch(function (e) {
@@ -688,6 +695,7 @@ var $tryit = function () {
   // 
   var _displayStack = [];
   var _lastlyStack = [];
+  var NO_DISPLAY = false;
 
   function clearDisplay() {
     _displayStack = [];
@@ -748,7 +756,7 @@ var $tryit = function () {
     });
 
     var resPromise = Promise.all(promises).then(function (list) {
-      {
+      if (!NO_DISPLAY) {
         var res = list.map(function (v, i) {
           return [v, types[i]];
         });
@@ -759,21 +767,31 @@ var $tryit = function () {
 
           return type === 'h' ? v : display(v);
         }).join('\n') + '</div></div>');
-      }
+      } else return Promise.resolve(undefined);
     });
     clearDisplay();
     return resPromise;
   }
 
-  function _lastly(fn) {
-    _lastlyStack.push(fn);
+  function _lastly(onDisplay, fn) {
+    //console.log("lastly", onDisplay,fn, NO_DISPLAY)
+    if (typeof onDisplay === 'boolean' && typeof fn === 'function') {
+      if (onDisplay && !NO_DISPLAY) {
+        _lastlyStack.push(fn); // only add the function if we are displaying
+
+      }
+    } else if (typeof onDisplay === 'function') {
+      fn = onDisplay;
+
+      _lastlyStack.push(onDisplay);
+    }
   }
 
   function valOrFunc(v) {
     try {
-      return typeof v === 'function' ? v(false) : v;
+      return typeof v === 'function' ? v(NO_DISPLAY) : v;
     } catch (err) {
-      alert(err);
+      if (!NO_DISPLAY) alert(err);
     }
   }
 
@@ -971,6 +989,7 @@ var $tryit = function () {
       pagePrevNext(this, true);
     },
     asArray: asArray,
+    saveAll: saveAll,
     H: H
   };
 }(); //====================================================
@@ -988,7 +1007,8 @@ var $$ = $tryit.$$,
     jumpTag = $tryit.jumpTag,
     jumpBack = $tryit.jumpBack,
     _display = $tryit._display,
-    H = $tryit.H;
+    H = $tryit.H,
+    saveAll = $tryit.saveAll;
 var objInfo = $$.objInfo;
 document.addEventListener('DOMContentLoaded', function () {
   var $q = function (arg1, arg2) {
@@ -1016,6 +1036,12 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () {
       return jumpTag(location.hash.substr(1), false);
     }, 100);
+  }
+});
+document.addEventListener("keydown", function (event) {
+  if (navigator.platform === "MacIntel" ? event.metaKey : event.ctrlKey && event.key === "s") {
+    event.preventDefault();
+    saveAll(); // ... your code here ...
   }
 });
 

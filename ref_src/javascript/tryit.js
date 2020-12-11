@@ -1,5 +1,4 @@
 
- 
 
  var $tryit = (function (props) {
 		let CHANGED = false;
@@ -9,6 +8,7 @@
 
 		function asArray(arrayLike) {
 			if(arrayLike === undefined || arrayLike === null) return [];
+			if(typeof arrayLike === 'string') return [arrayLike];
 			if(Array.isArray(arrayLike)) return arrayLike;
 
 			if( arrayLike instanceof NodeList  || 
@@ -309,7 +309,9 @@
 			let ix = __editorsPending.indexOf(tag);
 			if( ix !== 0) return false;
 			__editorsPending = __editorsPending.slice(1);
-			addRemoveCSSclass(__editorsPending[0], "yellow", "green").title = "Script ready to execute";
+			let divName = __editorsPending[0];
+			addRemoveCSSclass(divName, "yellow", "green").dataset.tooltip = "Execute Script (Ctrl+Enter)";
+			_addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").dataset.tooltip = "All previous scripts executed";
 			// let next_button = __editorsPending[0];
 			// if(next_button) {
 			//    let b = $e(next_button+'-run');
@@ -462,9 +464,10 @@
 		function updateUI(divName,toJump=true) {
 			//(divName);
 			//addRemoveCSSclass(divName, "blue", "green");
+			//console.log('UpdateUI', divName);
 			replaceCSSClass(divName);
-			_addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").title = "Previous scripts executed";
-			_addRemoveCSSclass(divName+"-run",["green", "yellow"], "blue").title = "Script executed and displayed";
+			_addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").dataset.tooltip = "All previous scripts executed";
+			_addRemoveCSSclass(divName+"-run",["green", "yellow"], "blue").dataset.tooltip = "Re-Execute Script (Ctrl+Enter)";
 			if(toJump) setTimeout( () => jump(divName),0);
 		}
 
@@ -511,7 +514,7 @@
 			//_disp.style.display = "none";
 			_disp.innerHTML = "";
 			_disp.style['max-height'] = "100rem";
-			
+			NO_DISPLAY = false;
 			setTimeout( () => execute(divName, editor, true, true, runLastly),toDelay);
 		}
 
@@ -526,6 +529,7 @@
 
 			try {
 				console.log("run all "+divName);
+				NO_DISPLAY = true;
 				let editor = editorFor[divName];
 				if(!item) {
 					console.log("item "+divName+"not found");
@@ -537,7 +541,8 @@
 				var val = (1,eval)(_code);
 
 				render(val).then(res => {
-						replaceCSSClass(divName, false);
+						//replaceCSSClass(divName, false);
+						updateUI(divName,false)
 						_runAll(newList, item);
 				}).catch(e => (clearLastly(), alert(e)));
 
@@ -789,8 +794,17 @@
 			return resPromise;
 		}
 
-		function _lastly(fn) {
-			_lastlyStack.push(fn);
+		function _lastly(onDisplay, fn) {
+			//console.log("lastly", onDisplay,fn, NO_DISPLAY)
+			if(typeof onDisplay === 'boolean' && typeof fn === 'function') {
+				if(onDisplay && !NO_DISPLAY) {
+					_lastlyStack.push(fn); // only add the function if we are displaying
+				}
+			}
+			else if(typeof onDisplay === 'function') {
+				fn = onDisplay;
+				_lastlyStack.push(onDisplay);
+			}
 		}
 
 		function valOrFunc(v) {
@@ -864,6 +878,7 @@
 				pagePrev:pagePrev,
 				pageNext: pageNext,
 				asArray:asArray,
+				saveAll: saveAll,
 				H: H
 
 		});
@@ -879,7 +894,7 @@ function setDisplay(elem, type) {
 	 elem.style.display = (type==='false')?'none':'block';
 }
 
-var {$$, jumpTag, jumpBack, _display,H} = $tryit;
+var {$$, jumpTag, jumpBack, _display,H, saveAll} = $tryit;
 var objInfo = $$.objInfo; 
 document.addEventListener('DOMContentLoaded', (event) => {
 		const $q = (arg1,arg2) => $tryit.asArray(document.querySelectorAll(arg1,arg2));
@@ -905,6 +920,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		}
 
 });
+
+document.addEventListener("keydown", function keydown (event) {
+    if (navigator.platform === "MacIntel" ? event.metaKey : event.ctrlKey && event.key === "s") {
+        event.preventDefault()
+        saveAll();
+        // ... your code here ...
+    }
+})
 
 function highlightCodeBlock(block) {
 	if(!block || !hljs) return;
