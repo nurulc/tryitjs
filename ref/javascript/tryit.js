@@ -377,7 +377,20 @@ var $tryit = function () {
     }
 
     return [segment, curSeg];
-  }
+  } // function pagePrevNextOld(elem,forward) {
+  // 	let curPage = findSegment(elem);
+  // 	if(!dataset(curPage).pagevisible ) return;
+  // 	let targetPage = forward?
+  // 									curPage.nextElementSibling:
+  // 									curPage.previousElementSibling; 
+  // 	if(!dataset(targetPage).pagevisible ) 
+  // 		setDisplay(targetPage, 'true');
+  // 	jumpTag(targetPage,60, () => {
+  // 		setDisplay(curPage, 'false');
+  // 	});
+  // 	return [targetPage, curPage];
+  // }
+
 
   function pagePrevNext(elem, forward) {
     var curPage = findSegment(elem);
@@ -448,6 +461,44 @@ var $tryit = function () {
     }, 0);
   }
 
+  function progress(action, maxV) {
+    var $progress = $('.execution.progress .ui.progress');
+
+    switch (action) {
+      case 'init':
+        {
+          //alert('init '+maxV);
+          $progress.progress({
+            total: maxV,
+            text: {
+              active: '{value} of {total} done'
+            }
+          });
+          $progress.progress('reset');
+          $progress.data('value', 1);
+          $progress.data('total', maxV);
+          $progress.data('tryitdelay', maxV > 5 ? 1500 : 500);
+          $('.execution.progress').css("display", "block");
+          break;
+        }
+
+      case 'step':
+        {
+          //alert('step');
+          $progress.progress('increment');
+          break;
+        }
+
+      case 'done':
+        {
+          var delay = $progress.data('tryitdelay');
+          setTimeout(function () {
+            return $('.execution.progress').css("display", "none");
+          }, delay);
+        }
+    }
+  }
+
   var lastExecTime = 0.0;
 
   function execute(divName, editor, toUpdateUI, toJump, callback) {
@@ -485,7 +536,7 @@ var $tryit = function () {
 
     if (!canExecute(divName)) {
       setTimeout(function () {
-        return _runAll(__editorsPending, divName);
+        return _runAll(__editorsPending, divName, true);
       }, 300);
       return;
     }
@@ -505,13 +556,20 @@ var $tryit = function () {
     }, toDelay);
   }
 
-  function _runAll(list, item) {
+  function _runAll(list, item, toInit) {
     var _list = _toArray(list),
         divName = _list[0],
         newList = _list.slice(1);
 
+    if (toInit) {
+      var ix = list.indexOf(item);
+      if (ix === -1) ix = list.length - 1;
+      progress('init', ix);
+    }
+
     if (item === divName) {
       var editor = editorFor[divName];
+      progress('done');
       setTimeout(function () {
         return tryIt(divName, editor);
       }, 200);
@@ -527,6 +585,7 @@ var $tryit = function () {
 
       if (!item) {
         console.log("item " + divName + "not found");
+        progress('done');
         return;
       }
 
@@ -536,15 +595,18 @@ var $tryit = function () {
       render(val).then(function () {
         //replaceCSSClass(divName, false);
         updateUI(divName, false);
-
-        _runAll(newList, item);
+        progress('step');
+        setTimeout(function () {
+          return _runAll(newList, item);
+        }, 1);
       }).catch(function (e) {
-        return clearLastly(), alert(e);
+        return clearLastly(), progress('done'), alert(e);
       });
     } catch (e) {
       var err = $e(divName + "-error");
       err.innerText = e.toString() + e.stack.toString() + "\n\ndiv:" + divName + "\n-------------------------\n" + asHTML(_code);
       err.style.display = "block";
+      progress('done');
       console.log(e.stack);
       clearDisplay();
       clearLastly();
@@ -952,7 +1014,7 @@ var $tryit = function () {
         var id = n.id.substr(3);
 
         n.onclick = function () {
-          return _runAll(__editorsPending, 'tryit' + id);
+          return _runAll(__editorsPending, 'tryit' + id, true);
         };
       });
       document.querySelectorAll(".save_data").forEach(function (n) {

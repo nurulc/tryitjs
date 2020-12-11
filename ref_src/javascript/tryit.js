@@ -241,7 +241,7 @@
 			document.querySelectorAll(".run_all")
 				.forEach(n => {
 					let id = n.id.substr(3); 
-					n.onclick=() => _runAll(__editorsPending, 'tryit'+id);
+					n.onclick=() => _runAll(__editorsPending, 'tryit'+id, true);
 				}
 			);
 			document.querySelectorAll(".save_data")
@@ -381,19 +381,19 @@
 		}
 
 
-		function pagePrevNextOld(elem,forward) {
-			let curPage = findSegment(elem);
-			if(!dataset(curPage).pagevisible ) return;
-			let targetPage = forward?
-											curPage.nextElementSibling:
-											curPage.previousElementSibling; 
-			if(!dataset(targetPage).pagevisible ) 
-				setDisplay(targetPage, 'true');
-			jumpTag(targetPage,60, () => {
-				setDisplay(curPage, 'false');
-			});
-			return [targetPage, curPage];
-		}
+		// function pagePrevNextOld(elem,forward) {
+		// 	let curPage = findSegment(elem);
+		// 	if(!dataset(curPage).pagevisible ) return;
+		// 	let targetPage = forward?
+		// 									curPage.nextElementSibling:
+		// 									curPage.previousElementSibling; 
+		// 	if(!dataset(targetPage).pagevisible ) 
+		// 		setDisplay(targetPage, 'true');
+		// 	jumpTag(targetPage,60, () => {
+		// 		setDisplay(curPage, 'false');
+		// 	});
+		// 	return [targetPage, curPage];
+		// }
 
 		function pagePrevNext(elem,forward) {
 			let curPage = findSegment(elem);
@@ -471,6 +471,37 @@
 			if(toJump) setTimeout( () => jump(divName),0);
 		}
 
+		function progress(action, maxV) {
+			    const $progress       = $('.execution.progress .ui.progress');
+			     
+			    switch(action) {
+			    	case 'init' : {
+			    		    //alert('init '+maxV);
+							$progress.progress({
+							    total    : maxV,
+							    text     : {
+							      active: '{value} of {total} done'
+							    }
+							});
+							$progress.progress('reset');
+							$progress.data('value', 1);
+							$progress.data('total', maxV);
+							$progress.data('tryitdelay', maxV>5 ? 1500: 500);
+							$('.execution.progress').css("display","block")
+							break;
+			    	}
+			    	case 'step': {
+			    		//alert('step');
+			    		$progress.progress('increment');
+			    		break;
+			    	}
+			    	case 'done': {
+			    		let delay = $progress.data('tryitdelay');
+			    		setTimeout(() => $('.execution.progress').css("display","none"), delay);
+			    	}
+			    }
+		}
+
 
 		let lastExecTime = 0.0;
 		function execute(divName, editor, toUpdateUI, toJump, callback) {
@@ -504,7 +535,7 @@
 		function tryIt(divName,editor, toDelay=200) {
 
 			if(!canExecute(divName)) {
-				setTimeout(() => _runAll(__editorsPending, divName), 300);
+				setTimeout(() => _runAll(__editorsPending, divName, true), 300);
 				return;
 			}
 			var _err = $e(divName + "-error");
@@ -518,10 +549,17 @@
 			setTimeout( () => execute(divName, editor, true, true, runLastly),toDelay);
 		}
 
-		function _runAll(list, item) {
+		function _runAll(list, item, toInit) {
 			let [divName, ...newList] = list;
+			if(toInit) {
+				let ix = list.indexOf(item);
+				if( ix === -1 ) ix = list.length-1;
+			
+				progress('init', ix);
+			}
 			if(item === divName){ 
 				let editor = editorFor[divName];
+				progress('done');
 				setTimeout(() => tryIt(divName, editor), 200);
 				return;
 			}
@@ -533,6 +571,7 @@
 				let editor = editorFor[divName];
 				if(!item) {
 					console.log("item "+divName+"not found");
+					progress('done');
 					return;
 				}
 
@@ -542,14 +581,16 @@
 
 				render(val).then(res => {
 						//replaceCSSClass(divName, false);
-						updateUI(divName,false)
-						_runAll(newList, item);
-				}).catch(e => (clearLastly(), alert(e)));
+						updateUI(divName,false);
+						progress('step');
+						setTimeout( () => _runAll(newList, item),1);
+				}).catch(e => (clearLastly(), progress('done'), alert(e)));
 
 			} catch (e) {
 				var err = $e(divName + "-error");
 				err.innerText = e.toString()+e.stack.toString()+"\n\ndiv:"+divName+"\n-------------------------\n"+asHTML(_code);
 				err.style.display = "block";
+				progress('done')
 				console.log(e.stack);
 				clearDisplay();
 				clearLastly();
