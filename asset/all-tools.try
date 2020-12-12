@@ -3,5 +3,5 @@
 @@include doPlot.try
 !html
 <script>
-@include utils.js
+@@include utils.js
 </script>
