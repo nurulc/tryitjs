@@ -1,7 +1,11 @@
 
 function capitalize (value) {
-  return  value.trim()
-               .split(' ')
-                  .map(s => s.charAt(0).toUpperCase() + s.slice(1))
-               .join(' ')
+  return  value.split(' ')
+                  .map(wordCap)
+                .join(' ')
+}
+
+function wordCap(word) {
+  if(!word) return '';
+  return word.charAt(0).toUpperCase() + word.substr(1)
 }
