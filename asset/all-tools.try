@@ -1,3 +1,7 @@
 @@once
 @@include ui-tools.try
 @@include doPlot.try
+!html
+<script>
+@include utils.js
+</script>
