@@ -23,7 +23,7 @@
 	}
 
 	function HTML(data) {
-	        if(data === undefined || typeof data._toHtml === 'function') return data;
+	    if(data === undefined || typeof data._toHtml === 'function') return data;
 		return { _toHtml: () => data }
 	}
 
