@@ -1,6 +1,6 @@
 {
   "name": "tryitjs",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Generate HTML file with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,9 @@
     "generate",
     "html",
     "editable",
-    "javascript"
+    "javascript",
+    "code",
+    "IDE"
   ],
   "author": "Nurul Choudhury",
   "license": "MIT",

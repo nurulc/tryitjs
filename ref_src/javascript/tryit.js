@@ -60,6 +60,7 @@
 		let editorFor = {
 
 		};
+        let pageInfo, allEditors;
 
 		let editorData = ( () => {
 			let data = window.localStorage[WINDOW_LOCATION];
@@ -142,15 +143,15 @@
 				window.localStorage[WINDOW_LOCATION] = JSON.stringify(setEditorValue(id));
 		}
 
-		function getEditors() {
-			return __editors.jumpback();slice();
-		}
+		// function getEditors() {
+		// 	return __editors.jumpback();slice();
+		// }
 
 		function getPendingEditors() {
 			return __editorsPending.slice();
 		}
 
-		function _makeEditor(id) {
+		function _makeEditor(id, callback=Identity) {
 			try {
 				// let originalContents = textarea.value;
 				// let contents = originalContents;
@@ -192,14 +193,15 @@
 
 				});
 				if(textarea.value !== contents) editor.setValue(contents);
-				__editorsPending.push(id);
-
-				__editors.push(id);
+				// __editorsPending.push(id);
+				// __editors.push(id);
+				// editorFor[id] = editor;
 				setEditorHeight(editor,lines);
-				editorFor[id] = editor;
+				callback(id, editor);
+                function execCode() { return tryIt(id,editor);}
 
-				document.querySelector(`#${id}-run`).onclick = execCode;
-				function execCode() { return tryIt(id,editor);}
+				// document.querySelector(`#${id}-run`).onclick = execCode;
+				// function execCode() { return tryIt(id,editor);}
 			}
 			catch(err) {
 				alert("Error creating editor " +id+' ' +err.toString())
@@ -215,10 +217,103 @@
 			return editor;
 		}
 
+		class EditorProxy {
+		  constructor(name) {
+		    this.name = name;
+		    this._editor = undefined;
+		    this.requiredContent = undefined;
+		  }
+		  hasEditor() {
+		    return this._editor !== undefined;
+		  }
+
+		  get editor() {
+		  	return this._editor;
+		  }
+
+		  set editor(anEditor) {
+		  	this._editor = anEditor;
+		  	if(this.requiredContent) anEditor.setValue(this.requiredContent);
+		  	this.requiredContent = undefined;
+		  }
+
+		  getValue() {
+		  	if(this._editor) return this._editor.getValue('\n');
+		  	return document.getElementById(this.name).value; 
+		  }
+
+		  setValue(content) {
+		  	if(this._editor) this._editor.setValue(content);
+		  	else this.requiredContent = content; 
+		  }
+		  
+		  toString() {
+		    return `Editor(${this.name})`
+		  }
+		}
+
+		class PageInfo {
+			constructor() {
+				this.contents = new Map();
+			}
+
+			set(pageId, anEditorList) {
+				this.contents.set(pageId, anEditorList);
+			}
+
+			showPage(pageId) {
+				let editorList = this.contents.get(pageId);
+				editorList.forEach(anEditor =>{
+					if(!anEditor.hasEditor()) {
+						_makeEditor(anEditor.name, (id,editor) => {
+							editorFor[id] = editor;
+							anEditor.editor = editor;
+                            
+						  });
+					}
+				});
+			}
+		}
+
+		function getPageInfo() {
+		  let list = document.querySelectorAll('.try-page');
+		  let pageInfo = new PageInfo(), allEditors = [];
+		  
+		  list.forEach(p => {
+		    //console.log("Page", p.id);
+		    let content = []
+		    pageInfo.set(p.id,content);
+		    let editors = p.querySelectorAll('.tryit');
+		    editors.forEach(e => {
+		      let id = e.id;
+		      //console.log('   ', e.id);
+		      let anEditorProxy = new EditorProxy(id);
+		      content.push(anEditorProxy);
+		      allEditors.push(anEditorProxy);
+			  __editorsPending.push(id);
+			  __editors.push(id);
+			  editorFor[id] = anEditorProxy;
+              document.querySelector(`#${id}-run`).onclick = execCode;
+              function execCode() { return tryIt(id,anEditorProxy);}
+		    });
+		  });
+		  return {pageInfo, allEditors};
+		}
+
 		function makeEditor() {
-			var elts = document.querySelectorAll("textarea.tryit");
-			let list = Array.prototype.slice.call(elts);
-			list.map( e => e.id).forEach(_makeEditor);
+			// var elts = document.querySelectorAll("textarea.tryit");
+			// let list = Array.prototype.slice.call(elts);
+			// const makeAnEditor = (id) => {
+			// 	_makeEditor(id, (id,editor) => {	
+			// 		__editorsPending.push(id);
+			// 		__editors.push(id);
+			// 		editorFor[id] = editor;
+			// 	});
+			// }
+			// list.map( e => e.id).forEach(makeAnEditor);
+            let pi = getPageInfo();
+            pageInfo = pi.pageInfo;
+            allEditors = pi.allEditors;
 			document.querySelectorAll('div[data-pagevisible="true"]')
 				.forEach(e => setDisplay(e, 'false'));
 			setDisplay(document.querySelector('div[data-pagevisible]'),'true');
@@ -425,6 +520,7 @@
 				let elem = typeof h === 'string' ? $e(h) : h;
 				if(LAST_TARGET === elem.id) return;
 				let [targetSeg, curSeg] = makeSegmentVisible(elem);
+                pageInfo.showPage(targetSeg.id);
 				if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
 				setTimeout(() => {
 						//const lastsScoll = () => elem.scrollIntoView({behavior: "smooth", block: "start"});
@@ -911,7 +1007,7 @@
 		return ({
 				makeEditor: makeEditor,
 				$$:         $$,              // display interface
-				getEditors$:getEditors,
+				// getEditors$:getEditors,
 				jumpTag: _jumpTag,
 				jumpBack: jumpBack,
 				_display: display,

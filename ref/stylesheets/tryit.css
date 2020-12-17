@@ -528,3 +528,13 @@ pre.language-tryit:hover {
   height: auto;
   transform-origin: top left;
 }
+
+.execution.progress {
+  background-color: #f5f0f0; 
+  position: fixed; margin-left: 25rem; 
+  top: 3rem; 
+  width:60%; 
+  border: 3px solid #393977; 
+  padding: 8px;
+  z-index: 5000;
+}
