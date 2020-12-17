@@ -8,9 +8,10 @@
       Plotly.newPlot(dn, data, layout, config);
       return dn;
    } else {
-      dn = genID($$.executeDiv);
-      $$.lastly(true,() => Plotly.newPlot(dn, data, layout,config));
-      return HTML(`<div id="${dn}" />`)
+      let div = genID($$.executeDiv);
+      let [_data, _layout, _config] = [dn, data, layout]; // no dn parameter
+      $$.lastly(true,() => Plotly.newPlot(div, _data, _layout, _config));
+      return HTML(`<div id="${div}" />`)
    }
   }
  </script>
