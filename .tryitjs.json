@@ -62,6 +62,7 @@
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/hint/javascript-hint.min.js",
    // sha1 support  
    "https://unpkg.com/js-sha1/src/sha1.js",
+   "https://unpkg.com/lz-string@1.4.4/libs/lz-string.min.js",
    "https://unpkg.com/tryitjs@VERSION/ref/javascript/prettyprint.js",
    "https://unpkg.com/tryitjs@VERSION/ref/javascript/tryit.js"
   ]

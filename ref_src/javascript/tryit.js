@@ -30,6 +30,7 @@
 		const EMPTY_ELEMENT = { innerText: "" };
 		function isEmptyElement(x) { return x === null || x === EMPTY_ELEMENT; }
 		function $e(name) {
+            if(typeof name !== 'string') return name;
 			var e = document.getElementById(name);
 			if (!e) return EMPTY_ELEMENT;
 			return e;
@@ -82,6 +83,54 @@
 			return ({});
 		})();
 
+        let tocLookup;
+
+        function getTocLookup() {
+                function asArray(arr) {
+                  return Array.prototype.slice.call(arr); 
+                }
+                function pages() { return asArray(document.querySelectorAll('.try-page')); }
+                function hFlatten(e) {
+                  if(e.children && e.children.length === 0) return type(e);
+                  else return [type(e), ...asArray(e.children).map(hFlatten)];
+                }
+              function type(e) {
+                if(!e) return undefined;
+//console.log(e.tagName);
+                if(!e.id) return '';
+                let ty = e.tagName;
+                if(ty.match(/^h\d/i)) return '*'+e.id;
+                if(ty === 'A' ) return ty+":"+e.id;
+                return '';
+              }
+              function mapper() { return pages().map(e => ({page:e.id , children: flatten(asArray(e.children).flatMap(hFlatten)).filter(Identity)})); }
+              function flatten(arr) {
+                if(!Array.isArray(arr)) return arr;
+                if(!arr.some(Array.isArray)) return arr;
+                return [].concat(...arr.map(flatten));
+              }
+
+
+          let lookup = {};
+          let m = mapper();
+          let pageList = m.map( ({page, children}) => [page,children[0]] )
+          let values = flatten(m.map(({children}) => children));
+          let current = '';
+          //return pages;
+          values.forEach(v => {
+            if(v[0] == '*') {
+              current = v.substr(1);
+              lookup[current] = current;
+            } else {
+              let [tag, id] = v.split(':');
+              lookup[id] = current;
+            }
+            });
+
+          pageList.forEach(([p,h1]) => lookup[p] = h1.substr(1))
+          return lookup;
+        }
+            
 		/**
 		 * Save data from all the editors
 		 * @return {undefined} no return vales
@@ -316,7 +365,7 @@
             allEditors = pi.allEditors;
 			document.querySelectorAll('div[data-pagevisible="true"]')
 				.forEach(e => setDisplay(e, 'false'));
-			setDisplay(document.querySelector('div[data-pagevisible]'),'true');
+//			setDisplay(document.querySelector('div[data-pagevisible]'),'true');
 			
 			(document.querySelector('.save_all')||{}).onclick = saveAll;
 			(document.querySelector('.clear_storage')||{}).onclick = clearStorage;
@@ -388,8 +437,8 @@
 			if(next_button) {
 				 let b = $e(next_button);
 				 if(!isEmptyElement(b)) {
-					 asArray(classToRemove).forEach(cls => b.classList.remove(cls));
-					 asArray(classToAdd).forEach(cls => b.classList.add(cls));
+					 if(classToRemove) asArray(classToRemove).forEach(cls => b.classList.remove(cls));
+					 if(classToAdd) asArray(classToAdd).forEach(cls => b.classList.add(cls));
 					 return b;
 				 }
 			}
@@ -515,29 +564,38 @@
 
 		let LAST_TARGET;
 		function jumpTag(h,OFFSET,callback, noPush) {
+                if(!tocLookup) tocLookup = getTocLookup();
 				OFFSET = +(OFFSET||30);
 				callback = callback || Identity;
-				let elem = typeof h === 'string' ? $e(h) : h;
+				let elem = $e(h);
 				if(LAST_TARGET === elem.id) return;
 				let [targetSeg, curSeg] = makeSegmentVisible(elem);
                 pageInfo.showPage(targetSeg.id);
-				if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
+				//if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
 				setTimeout(() => {
 						//const lastsScoll = () => elem.scrollIntoView({behavior: "smooth", block: "start"});
 						const lastsScoll = () => scrollToSmoothly(toHeader(elem).offsetTop-OFFSET, 10);
 						scrollToSmoothly(elem.offsetTop-OFFSET, 10,() => {
 							try {
 								callback(); 
+							    if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
 								lastsScoll(); 
 								LAST_TARGET = elem.id;
 								if(!noPush) history.pushState(null,null,'#'+elem.id);
+                                let tocSel = tocLookup[elem.id];
+                                if(tocSel) {
+                                    let tocElem = $e('toc_'+tocSel);
+                                    let prev = document.querySelector('.toc.select');
+                                    if(prev) _addRemoveCSSclass(prev, ['select'],[]);
+                                    if(tocElem) _addRemoveCSSclass(tocElem, [],['select']);
+                                }
 								
 							 // location.hash = elem.id;
 							} catch (e) {
 								alert("error jumping to: "+h+ "location");
 							}
 						});
-					}, 10)
+					}, 300)
 						
 		}
 
@@ -714,10 +772,13 @@
 				return 5;
 		}
 
-		function scrollToSmoothly(pos, time,callback){
+		function scrollToSmoothly(posFn, time,callback){
 		/*Time is only applicable for scrolling upwards*/
 		/*Code written by hev1*/
 		/*pos is the y-position to scroll to (in pixels)*/
+				 let v = posFn;
+				 if(typeof posFn !== 'function') posFn = () => v;
+				 let pos = posFn();
 				 if(isNaN(pos)){
 					throw "Position must be a number";
 				 }
@@ -734,6 +795,7 @@
 						let v = i;
 						setTimeout(function(){
 							window.scrollTo(0, v);
+							pos = posFn();
 						}, t/2);
 					}
 					if(callback) {
@@ -746,14 +808,17 @@
 					 var i = currentPos;
 					 var x;
 					x = setInterval(function(){
-						 window.scrollTo(0, i);
-						 i -= easeIn(start,i,pos);
-						 if(i<=pos){
-							clearInterval(x);
-							if(callback) callback();
-						 }
-				 }, time);
-					}
+							 window.scrollTo(0, i);
+							 pos = posFn();
+							 let delta = easeIn(start,i,pos);
+							 if(delta < 0) delta = -delta;
+							 i -= delta;
+							 if(i<=pos){
+								clearInterval(x);
+								if(callback) callback();
+							 }
+				 		}, time);
+				}
 		}
 
 		/*******************************************************************************/
@@ -1028,7 +1093,7 @@
 function setDisplay(elem, type) {
 	 if(!elem || !elem.dataset) return;
 	 elem.dataset.pagevisible = type;
-	 elem.style.display = (type==='false')?'none':'block';
+//	 elem.style.display = (type==='false')?'none':'block'; // may nood to enable this
 }
 
 var {$$, jumpTag, jumpBack, _display,H, saveAll} = $tryit;
@@ -1053,8 +1118,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		$q('.page_next').forEach(e => e.onclick = $tryit.pageNext);
 		$('pre:has(code.language-tryit)').addClass('language-tryit')
 		if(location.hash) {
-			setTimeout(() =>jumpTag(location.hash.substr(1),false),  100);
+			setTimeout(() =>jumpTag(location.hash.substr(1),false),  0);
 		}
+        else {
+            setTimeout(() =>jumpTag('page-1',false),  0);
+        }
 
 });
 
@@ -1064,7 +1132,33 @@ document.addEventListener("keydown", function keydown (event) {
         saveAll();
         // ... your code here ...
     }
+   
+    else if( document.activeElement === document.body && 
+            (event.keyCode === 37 /*KeyLeft */ || event.keyCode === 39 /*key right */)) {
+        let keyCode = event.keyCode;
+        let p = document.querySelector('div.try-page[data-pagevisible=true]');
+        let elem =  p && p.querySelector(keyCode==37?'.page_prev':'.page_next');
+        elem && (event.preventDefault(), elem.onclick());
+    } 
+
 })
+
+/*
+           switch (e.keyCode) { 
+                case 37: 
+                    str = 'Left Key pressed!'; 
+                    break; 
+                case 38: 
+                    str = 'Up Key pressed!'; 
+                    break; 
+                case 39: 
+                    str = 'Right Key pressed!'; 
+                    break; 
+                case 40: 
+                    str = 'Down Key pressed!'; 
+                    break; 
+            } 
+ */
 
 function highlightCodeBlock(block) {
 	if(!block || !hljs) return;

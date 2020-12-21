@@ -1,6 +1,6 @@
 {
   "name": "tryitjs",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Generate HTML file with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "local": "node --inspect-brk bin/gen-tryit.js --src try_src --dest try_it --local",
     "test": "echo \"Error: no test specified\" && exit 1",
     "try": "nodemon -w try_src --ext \"try js css\"   bin/gen-tryit.js --src try_src --dest try_it --local",
-    "build": "babel ref_src -d ref && npm pack && npm install -g .\\tryitjs-0.7.3.tgz && npm run tryit",
+    "build": "babel ref_src -d ref && npm pack && npm install -g .\\tryitjs-0.7.4.tgz && npm run tryit",
     "watch": "nodemon -w \"lib ref_src\" --ext \"try js css\" --exec \"npm run build\""
   },
   "bin": {

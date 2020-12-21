@@ -1,26 +1,6 @@
 "use strict";
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
 function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest(); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function (obj) { return typeof obj; }; } else { _typeof = function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -31,6 +11,26 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 var $tryit = function () {
   var CHANGED = false;
@@ -76,6 +76,7 @@ var $tryit = function () {
   }
 
   function $e(name) {
+    if (typeof name !== 'string') return name;
     var e = document.getElementById(name);
     if (!e) return EMPTY_ELEMENT;
     return e;
@@ -130,6 +131,84 @@ var $tryit = function () {
 
     return {};
   }();
+
+  var tocLookup;
+
+  function getTocLookup() {
+    function asArray(arr) {
+      return Array.prototype.slice.call(arr);
+    }
+
+    function pages() {
+      return asArray(document.querySelectorAll('.try-page'));
+    }
+
+    function hFlatten(e) {
+      if (e.children && e.children.length === 0) return type(e);else return [type(e)].concat(_toConsumableArray(asArray(e.children).map(hFlatten)));
+    }
+
+    function type(e) {
+      if (!e) return undefined; //console.log(e.tagName);
+
+      if (!e.id) return '';
+      var ty = e.tagName;
+      if (ty.match(/^h\d/i)) return '*' + e.id;
+      if (ty === 'A') return ty + ":" + e.id;
+      return '';
+    }
+
+    function flatten(arr) {
+      var _ref;
+
+      if (!Array.isArray(arr)) return arr;
+      if (!arr.some(Array.isArray)) return arr;
+      return (_ref = []).concat.apply(_ref, _toConsumableArray(arr.map(flatten)));
+    }
+
+    var lookup = {};
+
+    var m = function () {
+      return pages().map(function (e) {
+        return {
+          page: e.id,
+          children: flatten(asArray(e.children).flatMap(hFlatten)).filter(Identity)
+        };
+      });
+    }();
+
+    var pageList = m.map(function (_ref2) {
+      var page = _ref2.page,
+          children = _ref2.children;
+      return [page, children[0]];
+    });
+    var values = flatten(m.map(function (_ref3) {
+      var children = _ref3.children;
+      return children;
+    }));
+    var current = ''; //return pages;
+
+    values.forEach(function (v) {
+      if (v[0] == '*') {
+        current = v.substr(1);
+        lookup[current] = current;
+      } else {
+        var _v$split = v.split(':'),
+            _v$split2 = _slicedToArray(_v$split, 2),
+            tag = _v$split2[0],
+            id = _v$split2[1];
+
+        lookup[id] = current;
+      }
+    });
+    pageList.forEach(function (_ref4) {
+      var _ref5 = _slicedToArray(_ref4, 2),
+          p = _ref5[0],
+          h1 = _ref5[1];
+
+      return lookup[p] = h1.substr(1);
+    });
+    return lookup;
+  }
   /**
    * Save data from all the editors
    * @return {undefined} no return vales
@@ -413,10 +492,10 @@ var $tryit = function () {
       var b = $e(next_button);
 
       if (!isEmptyElement(b)) {
-        asArray(classToRemove).forEach(function (cls) {
+        if (classToRemove) asArray(classToRemove).forEach(function (cls) {
           return b.classList.remove(cls);
         });
-        asArray(classToAdd).forEach(function (cls) {
+        if (classToAdd) asArray(classToAdd).forEach(function (cls) {
           return b.classList.add(cls);
         });
         return b;
@@ -533,9 +612,10 @@ var $tryit = function () {
   var LAST_TARGET;
 
   function jumpTag(h, OFFSET, callback, noPush) {
+    if (!tocLookup) tocLookup = getTocLookup();
     OFFSET = +(OFFSET || 30);
     callback = callback || Identity;
-    var elem = typeof h === 'string' ? $e(h) : h;
+    var elem = $e(h);
     if (LAST_TARGET === elem.id) return;
 
     var _makeSegmentVisible = makeSegmentVisible(elem),
@@ -543,8 +623,8 @@ var $tryit = function () {
         targetSeg = _makeSegmentVisible2[0],
         curSeg = _makeSegmentVisible2[1];
 
-    pageInfo.showPage(targetSeg.id);
-    if (targetSeg !== curSeg) setDisplay(curSeg, 'false');
+    pageInfo.showPage(targetSeg.id); //if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
+
     setTimeout(function () {
       //const lastsScoll = () => elem.scrollIntoView({behavior: "smooth", block: "start"});
       var lastsScoll = function () {
@@ -554,14 +634,24 @@ var $tryit = function () {
       scrollToSmoothly(elem.offsetTop - OFFSET, 10, function () {
         try {
           callback();
+          if (targetSeg !== curSeg) setDisplay(curSeg, 'false');
           lastsScoll();
           LAST_TARGET = elem.id;
-          if (!noPush) history.pushState(null, null, '#' + elem.id); // location.hash = elem.id;
+          if (!noPush) history.pushState(null, null, '#' + elem.id);
+          var tocSel = tocLookup[elem.id];
+
+          if (tocSel) {
+            var tocElem = $e('toc_' + tocSel);
+            var prev = document.querySelector('.toc.select');
+            if (prev) _addRemoveCSSclass(prev, ['select'], []);
+            if (tocElem) _addRemoveCSSclass(tocElem, [], ['select']);
+          } // location.hash = elem.id;
+
         } catch (e) {
           alert("error jumping to: " + h + "location");
         }
       });
-    }, 10);
+    }, 300);
   }
 
   function jumpback() {
@@ -751,12 +841,18 @@ var $tryit = function () {
     return 5;
   }
 
-  function scrollToSmoothly(pos, time, callback) {
+  function scrollToSmoothly(posFn, time, callback) {
     /*Time is only applicable for scrolling upwards*/
 
     /*Code written by hev1*/
 
     /*pos is the y-position to scroll to (in pixels)*/
+    var v = posFn;
+    if (typeof posFn !== 'function') posFn = function () {
+      return v;
+    };
+    var pos = posFn();
+
     if (isNaN(pos)) {
       throw "Position must be a number";
     }
@@ -776,6 +872,7 @@ var $tryit = function () {
         t += 10;
         setTimeout(function () {
           window.scrollTo(0, _i2);
+          pos = posFn();
         }, t / 2);
       };
 
@@ -793,7 +890,10 @@ var $tryit = function () {
       var i = currentPos;
       var x = setInterval(function () {
         window.scrollTo(0, i);
-        i -= easeIn(start, i, pos);
+        pos = posFn();
+        var delta = easeIn(start, i, pos);
+        if (delta < 0) delta = -delta;
+        i -= delta;
 
         if (i <= pos) {
           clearInterval(x);
@@ -921,18 +1021,18 @@ var $tryit = function () {
   function render(val) {
     if (arguments.length > 0) _show(val);
 
-    var promises = _displayStack.map(function (_ref5) {
-      var _ref6 = _slicedToArray(_ref5, 2),
-          p = _ref6[0],
-          type = _ref6[1];
+    var promises = _displayStack.map(function (_ref10) {
+      var _ref11 = _slicedToArray(_ref10, 2),
+          p = _ref11[0],
+          type = _ref11[1];
 
       return p;
     });
 
-    var types = _displayStack.map(function (_ref7) {
-      var _ref8 = _slicedToArray(_ref7, 2),
-          p = _ref8[0],
-          type = _ref8[1];
+    var types = _displayStack.map(function (_ref12) {
+      var _ref13 = _slicedToArray(_ref12, 2),
+          p = _ref13[0],
+          type = _ref13[1];
 
       return type;
     });
@@ -942,10 +1042,10 @@ var $tryit = function () {
         var res = list.map(function (v, i) {
           return [v, types[i]];
         });
-        return Promise.resolve('<div class="ui accordion">' + '<div class="active title"><i class="dropdown icon"></i>Results ( ' + round2(lastExecTime) + ' ms)</div>' + '<div class="active content">' + res.map(function (_ref9) {
-          var _ref10 = _slicedToArray(_ref9, 2),
-              v = _ref10[0],
-              type = _ref10[1];
+        return Promise.resolve('<div class="ui accordion">' + '<div class="active title"><i class="dropdown icon"></i>Results ( ' + round2(lastExecTime) + ' ms)</div>' + '<div class="active content">' + res.map(function (_ref14) {
+          var _ref15 = _slicedToArray(_ref14, 2),
+              v = _ref15[0],
+              type = _ref15[1];
 
           return type === 'h' ? v : display(v);
         }).join('\n') + '</div></div>');
@@ -1009,11 +1109,11 @@ var $tryit = function () {
     function (_lines) {
       var HL = hljs.highlightAuto;
 
-      var _lines$reduce = _lines.reduce(function (_ref, line) {
-        var _ref2 = _slicedToArray(_ref, 3),
-            list = _ref2[0],
-            type = _ref2[1],
-            content = _ref2[2];
+      var _lines$reduce = _lines.reduce(function (_ref6, line) {
+        var _ref7 = _slicedToArray(_ref6, 3),
+            list = _ref7[0],
+            type = _ref7[1],
+            content = _ref7[2];
 
         if (line.match(/^\s*(![a-z_\-]+|!--)/)) {
           if (content || type.match(/!render-(start|end)/)) list.push([type, content]);
@@ -1032,10 +1132,10 @@ var $tryit = function () {
         list.push([type, content]);
       }
 
-      return list.flatMap(function (_ref3) {
-        var _ref4 = _slicedToArray(_ref3, 2),
-            type = _ref4[0],
-            body = _ref4[1];
+      return list.flatMap(function (_ref8) {
+        var _ref9 = _slicedToArray(_ref8, 2),
+            type = _ref9[0],
+            body = _ref9[1];
 
         return [blueDiv(type), HL(body).value];
       }).join('\n');
@@ -1123,8 +1223,8 @@ var $tryit = function () {
       pi.allEditors;
       document.querySelectorAll('div[data-pagevisible="true"]').forEach(function (e) {
         return setDisplay(e, 'false');
-      });
-      setDisplay(document.querySelector('div[data-pagevisible]'), 'true');
+      }); //			setDisplay(document.querySelector('div[data-pagevisible]'),'true');
+
       (document.querySelector('.save_all') || {}).onclick = saveAll;
       (document.querySelector('.clear_storage') || {}).onclick = clearStorage;
       (document.querySelector('.revert_changes') || {}).onclick = revertChanges;
@@ -1187,8 +1287,7 @@ var $tryit = function () {
 
 function setDisplay(elem, type) {
   if (!elem || !elem.dataset) return;
-  elem.dataset.pagevisible = type;
-  elem.style.display = type === 'false' ? 'none' : 'block';
+  elem.dataset.pagevisible = type; //	 elem.style.display = (type==='false')?'none':'block'; // may nood to enable this
 }
 
 var $$ = $tryit.$$,
@@ -1223,15 +1322,44 @@ document.addEventListener('DOMContentLoaded', function () {
   if (location.hash) {
     setTimeout(function () {
       return jumpTag(location.hash.substr(1), false);
-    }, 100);
+    }, 0);
+  } else {
+    setTimeout(function () {
+      return jumpTag('page-1', false);
+    }, 0);
   }
 });
 document.addEventListener("keydown", function (event) {
   if (navigator.platform === "MacIntel" ? event.metaKey : event.ctrlKey && event.key === "s") {
     event.preventDefault();
     saveAll(); // ... your code here ...
+  } else if (document.activeElement === document.body && (event.keyCode === 37
+  /*KeyLeft */
+  || event.keyCode === 39
+  /*key right */
+  )) {
+    var keyCode = event.keyCode;
+    var p = document.querySelector('div.try-page[data-pagevisible=true]');
+    var elem = p && p.querySelector(keyCode == 37 ? '.page_prev' : '.page_next');
+    elem && (event.preventDefault(), elem.onclick());
   }
 });
+/*
+           switch (e.keyCode) { 
+                case 37: 
+                    str = 'Left Key pressed!'; 
+                    break; 
+                case 38: 
+                    str = 'Up Key pressed!'; 
+                    break; 
+                case 39: 
+                    str = 'Right Key pressed!'; 
+                    break; 
+                case 40: 
+                    str = 'Down Key pressed!'; 
+                    break; 
+            } 
+ */
 
 function highlightCodeBlock(block) {
   if (!block || !hljs) return;

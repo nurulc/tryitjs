@@ -297,6 +297,11 @@ div.D2:nth-child(odd)  {
    opacity: 0.1;
 }
 
+.click_me:hover {
+  color: green;
+  opacity: 0.3;
+}
+
 @media only screen and (max-width: 800px) {
   .click_me {
     font-size: 3rem;
@@ -374,6 +379,15 @@ div.D2:nth-child(odd)  {
   color: #84a1d0;
 }
 
+.toc.select {
+  text-decoration: underline;
+  color: yellow;
+}
+
+.toc.select > a {
+  text-decoration: underline;
+  color: yellow !important;
+}
 
 #toc_container li, #toc_container ul, #toc_container ul li{
     list-style: outside none none !important;
@@ -420,16 +434,26 @@ div.D2:nth-child(odd)  {
 }
 
 .try-page {
-  padding-top: 1rem;
+    padding-top: 1.5rem;
+    background-color: #fafaff;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    overflow: hidden;
+    /*transition: height 2s;*/
+}
+
+.try-page > p {
+    padding-left: 1rem !important;
 }
 
 div.try-page[data-pagevisible="true"] {
   display: block;
-  /*background-color: #ddddff;*/
+  /*height: auto;*/
 }
 
 div.try-page[data-pagevisible="false"] {
   display: none;
+  /*height: 0%;*/
 }
 
 /* helper for include locations */
@@ -530,11 +554,39 @@ pre.language-tryit:hover {
 }
 
 .execution.progress {
-  background-color: #f5f0f0; 
-  position: fixed; margin-left: 25rem; 
-  top: 3rem; 
-  width:60%; 
-  border: 3px solid #393977; 
-  padding: 8px;
-  z-index: 5000;
+    border-radius: 0.7rem;
+    background-color: #d9d8e1;
+    position: fixed;
+    margin-left: 25rem;
+    top: 3rem;
+    width: 60%;
+    border: 1px solid #777777;
+    padding: 8px;
+    box-shadow: 4px 11px 12px 3px #5b545494;
+    z-index: 5000;
 }
+
+.execution.progress .title {
+    font-size: 1.5rem;
+    margin: auto;
+    color: #2d3166;
+    text-align: center;
+    width: 50%;
+    padding-bottom: 0.7rem;
+    font-weight: bold;
+}
+
+.page-change {
+    background-color: #888888;
+    position: fixed;
+    margin: auto;
+    top: 10rem;
+    width: 30%;
+    padding: 8px;
+    z-index: 5000;
+}
+
+.tag-name {
+  text-align: center;
+}
+
