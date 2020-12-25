@@ -145,10 +145,15 @@
 		}
 
 		function setEditorValue(id) {
-			let v = editorFor[id].getValue("\n");
+			let editor = editorFor[id];
+			let v = editor.getValue("\n");
 			let originalContents = $e(id).value;
-			if( v !== originalContents) 
+			if( v !== originalContents) {
 				editorData[id] = { key: id, hash: sha1(originalContents), content: v};
+				let theme = tryit$colors.saved;
+				editor.setOption('theme', theme);
+				editor.tryitState = theme;
+			}
 			return editorData;      
 		}
 
@@ -179,7 +184,11 @@
 		function revertChanges() {
 			Object.keys(editorFor).forEach( id => {
 				let originalText = $e(id).value;
-				editorFor[id].setValue(originalText);
+				let editor = editorFor[id];
+				editor.setValue(originalText);
+				let theme = tryit$colors.original;
+				editor.setOption('theme', theme);
+				editor.tryitState = theme;
 			});
 		}
 
@@ -213,10 +222,12 @@
 
 				let contents = getSavedContent(id);
 				const lines = contents.split('\n').length;
+				const original = textarea.value;
+				const theme = (original === contents)?tryit$colors.original:tryit$colors.saved;
 				const editor = CodeMirror.fromTextArea(textarea, {
 					lineNumbers: true,
 	//        mode: "javascript",
-					theme: "cobalt",
+					theme: theme,//"cobalt",
 					matchBrackets: true,
 					autoCloseBrackets: '()[]{}\'\'""``', 
 					continueComments: "Enter",
@@ -241,13 +252,25 @@
   					mode: {name: "javascript", globalVars: true}
 
 				});
-				if(textarea.value !== contents) editor.setValue(contents);
+				if(original !== contents) {
+					editor.setValue(contents);
+				}
+				editor.tryitState = theme;
+				editor.on('change', editorChanged)
 				// __editorsPending.push(id);
 				// __editors.push(id);
 				// editorFor[id] = editor;
 				setEditorHeight(editor,lines);
 				callback(id, editor);
                 function execCode() { return tryIt(id,editor);}
+                function editorChanged(editor) {
+                	let theme = editor.getOption('theme');
+                	if(editor.isClean())
+                			editor.setOption('theme', editor.tryitState)
+                	else if(theme !== tryit$colors.edited ) 
+                		editor.setOption('theme', tryit$colors.edited);
+                	
+                }
 
 				// document.querySelector(`#${id}-run`).onclick = execCode;
 				// function execCode() { return tryIt(id,editor);}
@@ -271,6 +294,7 @@
 		    this.name = name;
 		    this._editor = undefined;
 		    this.requiredContent = undefined;
+		    this.reqOptions = new Map();
 		  }
 		  hasEditor() {
 		    return this._editor !== undefined;
@@ -282,10 +306,26 @@
 
 		  set editor(anEditor) {
 		  	this._editor = anEditor;
-		  	if(this.requiredContent) anEditor.setValue(this.requiredContent);
-		  	this.requiredContent = undefined;
+		  	if(this.requiredContent) {
+		  		anEditor.setValue(this.requiredContent);
+		  		this.requiredContent = undefined;
+		  	}
+		  	if(this.reqOptions.length) {
+		  		this.reqOptions.forEach((key,value) => anEditor.setOption(key, value));
+		  		this.reqOptions = {};
+		  	}
 		  }
 
+		  getOption(key) {
+		  	if(this.editor) return this.editor.getOption(key);
+		  	return this.reqOptions.get(key);
+		  }
+
+		  setOption(key,value) {
+		  	if(this.editor) return this.editor.setOption(key,value);
+		  	return this.reqOptions.set(key, value);
+		  }
+		  
 		  getValue() {
 		  	if(this._editor) return this._editor.getValue('\n');
 		  	return document.getElementById(this.name).value; 

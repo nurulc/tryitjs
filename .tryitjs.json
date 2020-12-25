@@ -2,15 +2,18 @@
  "headers": {
   "css": [
    "https://unpkg.com/tryitjs@VERSION/ref/stylesheets/tryit.css",
-   "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css",
+   "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.css",
    "https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css",
    "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css",
    "https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css",
 
    /* Codemirror CSS */
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css",
-     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/cobalt.min.css", // cobold theme
-     /* Folding */
+   /* Themes */ 
+   /*  "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/cobalt.min.css", */
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/lesser-dark.min.css", 
+    /*  "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/cobalt-light.min.css", */
+    /* Folding */
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/foldgutter.min.css",
      /* Codemirror linter: */
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/lint/lint.min.css",
@@ -65,7 +68,12 @@
    "https://unpkg.com/lz-string@1.4.4/libs/lz-string.min.js",
    "https://unpkg.com/tryitjs@VERSION/ref/javascript/prettyprint.js",
    "https://unpkg.com/tryitjs@VERSION/ref/javascript/tryit.js"
-  ]
+  ],
+  "colors": {
+        "original": "cobalt-original", // original code
+        "saved": "lesser-dark",  // code that has been edited but not saved
+        "edited": "cobalt-light"  // code that has been save
+    }
  },
  "local": {
   "css": [
