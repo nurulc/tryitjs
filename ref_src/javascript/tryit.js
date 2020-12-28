@@ -181,115 +181,6 @@
 			} 
 		}
 
-		function makePageVisible(newPage,oldPage) {
-			if(pageInfo.compare(oldPage,newPage)>0) {
-				//pageVisible1($.e(oldPage), $.e(newPage))
-			} else {
-				//pageVisible2($.e(oldPage), $.e(newPage))
-			}
-		}
-
-		function pageVisibleBefore(oldPage,newPage) {
-			let o = qs(oldPage), n = qs(newPage);
-			n.style.height = 0+'px';
-			n.style.overflow = 'none';
-			n.dataset.pagevisible = 'true';
-			const step = 10;
-			let start = (window.scrollY||window.screenTop);
-			pageInfo.showPage(n.id);
-			const end = (n.querySelector('.page_prev') || n.querySelector('.page_next')).offsetTop;
-            
-			let pos = step;
-			function doit(resolve, fail) {
-				let doStep = () => {
-					for(let i=0; i< 10 && (pos < end || start>0); i++){
-						if(pos < end) n.style.height = pos+'px';
-						start = Math.max(0, start-step);
-						window.scrollTo(0, start+pos);
-						console.log(pos);
-						if(pos < end) pos += step;
-					}
-					if( pos < end || start > 0) {
-						//pos += step;
-						window.requestAnimationFrame(doStep);
-					}	
-					else {
-						n.style.height = '';
-						n.style.overflow = '';
-						resolve([pos, ])
-					}
-				};
-				window.requestAnimationFrame(doStep);
-			}
-			return new Promise(doit);
-		}
-
-
-		function pageVisibleBeforeY(o,n) {
-			n.style.height = 0+'px';
-			n.style.overflow = 'none';
-			n.dataset.pagevisible = 'true';
-			const step = 10;
-			const start = (window.scrollY||window.screenTop);
-			const end = (n.querySelector('.page_prev') || n.querySelector('.page_next')).offsetTop;
-
-			let pos = step;
-			function doit(resolve, fail) {
-				let doStep = () => {
-					for(let i=0; i< 10 && pos < end; i++){
-						n.style.height = pos+'px';
-						start = Math.max(0, start-step);
-						window.scrollTo(0, start+pos);
-						console.log(pos);
-						pos += step;
-					}
-					if( pos < end) {
-						//pos += step;
-						window.requestAnimationFrame(doStep);
-					}	
-					else {
-						n.style.height = '';
-						n.style.overflow = '';
-						resolve([pos, ])
-					}
-				};
-				window.requestAnimationFrame(doStep);
-			}
-			return new Promise(doit);
-		}
-
-		// function pageVisibleBeforeOld(o,n) {
-		// 	n.style.height = 0+'px';
-		// 	n.style.overflow = 'none';
-		// 	n.dataset.pagevisible = 'true';
-		// 	const step = 10;
-		// 	const start = (window.scrollY||window.screenTop);
-		// 	const end = (n.querySelector('.page_prev') || n.querySelector('.page_next')).offsetTop;
-
-		// 	let pos = step;
-		// 	let doStep = () => {
-		// 		for(let i=0; i< 10 && pos < end; i++){
-		// 			n.style.height = pos+'px';
-		// 			window.scrollTo(0, start);
-		// 			//console.log(pos);
-		// 			pos += step;
-		// 		}
-		// 		if( pos < end) {
-		// 			//pos += step;
-		// 			setTimeout(doStep,0); 
-		// 		}	
-		// 		else { console.log(start+pos);
-		// 			//n.style.height = '';
-		// 			//n.style.overflow = '';
-		// 		}
-		// 	};
-		// 	doStep();
-		// }
-		function pageVisible2(o,n) {
-			n.style.height = 0+'px';
-			n.style.overflow = 'none';
-			n.dataSet.pageVisible = 'true';
-		}		
 
 		function getSavedContent(id) {
 			let saved = editorData[id];
@@ -327,9 +218,6 @@
 				window.localStorage[WINDOW_LOCATION] = JSON.stringify(setEditorValue(id));
 		}
 
-		// function getEditors() {
-		// 	return __editors.jumpback();slice();
-		// }
 
 		function getPendingEditors() {
 			return __editorsPending.slice();
@@ -597,17 +485,13 @@
 		function canExecute(tag) {
 			let ix = __editorsPending.indexOf(tag);
 			if( ix <= 0) return true;
-			showPopup(3,() => false);
+			showPopup(3,'Executing all preceeding code snippet, this may take some time');
 			//showPopup(3,() => jump(__editorsPending[0]));
 			//jump(__editorsPending[0]);
 			return false;
 		}
 
 
-		// function asArray(val) {
-		//   if(Array.isArray(val)) return val;
-		//   return val?[val]:[];
-		// }
 		function _addRemoveCSSclass(next_button,classToRemove,classToAdd) {
 			if(next_button) {
 				 let b = $e(next_button);
@@ -631,28 +515,10 @@
 			let divName = __editorsPending[0];
 			addRemoveCSSclass(divName, "yellow", "green").dataset.tooltip = "Execute Script (Ctrl+Enter)";
 			_addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").dataset.tooltip = "All previous scripts executed";
-			// let next_button = __editorsPending[0];
-			// if(next_button) {
-			//    let b = $e(next_button+'-run');
-			//    if(b) {
-			//      b.classList.remove("disabled");
-			//      b.classList.add("green");
-			//    }
-			// }
 			return true;
 
 		}
 
-
-
-		// function totalOffsetTop (e)
-		// {
-		//     var offset = 0;
-		//     do 
-		//         offset += e.offsetTop;
-		//     while (e = e.offsetParent);
-		//     return offset;
-		// }
 
 		function findSegment(elem) {
 			 if(elem === undefined) {
@@ -690,17 +556,6 @@
 			return children[children.length-1]; 
 		}
 
-		// function makeSegmentVisible(elem, timeout=2000) {
-
-		// 	let [curSeg, segment] = [undefined, elem].map(findSegment); // find
-		// 	if(curSeg !== segment) {
-		// 		setDisplay(segment, 'true');
-		// 		// if(dataset(curSeg) && timeout>=0)
-		// 		//     setTimeout(() => {curSeg.dataset.pagevisible = 'false'},timeout);
-		// 		// }
-		// 	 }
-		// 	 return [segment, curSeg];
-		// }
 		function makeSegmentVisible(elem, timeout=2000) {
             return new Promise(resolve => window.requestAnimationFrame(()=> doit(resolve)));
 
@@ -718,20 +573,6 @@
     			 return setTimeout( () => resolve([segment, curSeg]),10);
     		}
 		}
-
-		// function pagePrevNextOld(elem,forward) {
-		// 	let curPage = findSegment(elem);
-		// 	if(!dataset(curPage).pagevisible ) return;
-		// 	let targetPage = forward?
-		// 									curPage.nextElementSibling:
-		// 									curPage.previousElementSibling; 
-		// 	if(!dataset(targetPage).pagevisible ) 
-		// 		setDisplay(targetPage, 'true');
-		// 	jumpTag(targetPage,60, () => {
-		// 		setDisplay(curPage, 'false');
-		// 	});
-		// 	return [targetPage, curPage];
-		// }
 
 		function pagePrevNext(elem,forward) {
 			let curPage = findSegment(elem);
@@ -951,7 +792,8 @@
 
 		// =======================================================================
 
-		function showPopup(timeout, action,msg,type){
+		function showPopup(timeout, msg,type, action){
+			action = action || Identity;
 			alertify.notify((msg||'Executing all preceeding code snippet, this may take some time'),(type||'error'),timeout, action );
 			//alertify.notify('sample', 'success', 5, function(){  console.log('dismissed'); });
 		}

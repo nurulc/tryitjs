@@ -12,8 +12,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -268,41 +266,6 @@ var $tryit = function () {
     }
   }
 
-  function pageVisibleBefore(oldPage, newPage) {
-    var o = qs(oldPage),
-        n = qs(newPage);
-    n.style.height = 0 + 'px';
-    n.style.overflow = 'none';
-    n.dataset.pagevisible = 'true';
-    var step = 10;
-    var start = window.scrollY || window.screenTop;
-    pageInfo.showPage(n.id);
-    var end = (n.querySelector('.page_prev') || n.querySelector('.page_next')).offsetTop;
-    var pos = step;
-    return new Promise(function (resolve) {
-      var doStep = function () {
-        for (var i = 0; i < 10 && (pos < end || start > 0); i++) {
-          if (pos < end) n.style.height = pos + 'px';
-          start = Math.max(0, start - step);
-          window.scrollTo(0, start + pos);
-          console.log(pos);
-          if (pos < end) pos += step;
-        }
-
-        if (pos < end || start > 0) {
-          //pos += step;
-          window.requestAnimationFrame(doStep);
-        } else {
-          n.style.height = '';
-          n.style.overflow = '';
-          resolve([pos]);
-        }
-      };
-
-      window.requestAnimationFrame(doStep);
-    });
-  }
-
   function getSavedContent(id) {
     var saved = editorData[id];
     var originalContents = $e(id).value;
@@ -339,10 +302,7 @@ var $tryit = function () {
 
   function save(id) {
     window.localStorage[WINDOW_LOCATION] = JSON.stringify(setEditorValue(id));
-  } // function getEditors() {
-  // 	return __editors.jumpback();slice();
-  // }
-
+  }
 
   function getPendingEditors() {
     return __editorsPending.slice();
@@ -587,17 +547,11 @@ var $tryit = function () {
     var ix = __editorsPending.indexOf(tag);
 
     if (ix <= 0) return true;
-    showPopup(3, function () {
-      return false;
-    }); //showPopup(3,() => jump(__editorsPending[0]));
+    showPopup(3, 'Executing all preceeding code snippet, this may take some time'); //showPopup(3,() => jump(__editorsPending[0]));
     //jump(__editorsPending[0]);
 
     return false;
-  } // function asArray(val) {
-  //   if(Array.isArray(val)) return val;
-  //   return val?[val]:[];
-  // }
-
+  }
 
   function _addRemoveCSSclass(next_button, classToRemove, classToAdd) {
     if (next_button) {
@@ -628,25 +582,9 @@ var $tryit = function () {
     __editorsPending = __editorsPending.slice(1);
     var divName = __editorsPending[0];
     addRemoveCSSclass(divName, "yellow", "green").dataset.tooltip = "Execute Script (Ctrl+Enter)";
-    _addRemoveCSSclass('ra_' + getIDNumber(divName), "green", "grey").dataset.tooltip = "All previous scripts executed"; // let next_button = __editorsPending[0];
-    // if(next_button) {
-    //    let b = $e(next_button+'-run');
-    //    if(b) {
-    //      b.classList.remove("disabled");
-    //      b.classList.add("green");
-    //    }
-    // }
-
+    _addRemoveCSSclass('ra_' + getIDNumber(divName), "green", "grey").dataset.tooltip = "All previous scripts executed";
     return true;
-  } // function totalOffsetTop (e)
-  // {
-  //     var offset = 0;
-  //     do 
-  //         offset += e.offsetTop;
-  //     while (e = e.offsetParent);
-  //     return offset;
-  // }
-
+  }
 
   function findSegment(elem) {
     if (elem === undefined) {
@@ -671,16 +609,6 @@ var $tryit = function () {
     return elem.dataset;
   }
 
-  // function makeSegmentVisible(elem, timeout=2000) {
-  // 	let [curSeg, segment] = [undefined, elem].map(findSegment); // find
-  // 	if(curSeg !== segment) {
-  // 		setDisplay(segment, 'true');
-  // 		// if(dataset(curSeg) && timeout>=0)
-  // 		//     setTimeout(() => {curSeg.dataset.pagevisible = 'false'},timeout);
-  // 		// }
-  // 	 }
-  // 	 return [segment, curSeg];
-  // }
   function makeSegmentVisible(elem) {
     arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2000;
     return new Promise(function (resolve) {
@@ -711,20 +639,7 @@ var $tryit = function () {
         return resolve([segment, curSeg]);
       }, 10);
     }
-  } // function pagePrevNextOld(elem,forward) {
-  // 	let curPage = findSegment(elem);
-  // 	if(!dataset(curPage).pagevisible ) return;
-  // 	let targetPage = forward?
-  // 									curPage.nextElementSibling:
-  // 									curPage.previousElementSibling; 
-  // 	if(!dataset(targetPage).pagevisible ) 
-  // 		setDisplay(targetPage, 'true');
-  // 	jumpTag(targetPage,60, () => {
-  // 		setDisplay(curPage, 'false');
-  // 	});
-  // 	return [targetPage, curPage];
-  // }
-
+  }
 
   function pagePrevNext(elem, forward) {
     var curPage = findSegment(elem);
@@ -963,7 +878,8 @@ var $tryit = function () {
   } // =======================================================================
 
 
-  function showPopup(timeout, action, msg, type) {
+  function showPopup(timeout, msg, type, action) {
+    action = action || Identity;
     alertify.notify(msg || 'Executing all preceeding code snippet, this may take some time', type || 'error', timeout, action); //alertify.notify('sample', 'success', 5, function(){  console.log('dismissed'); });
   }
 
