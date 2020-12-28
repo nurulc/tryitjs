@@ -271,6 +271,9 @@ div.D2:nth-child(odd)  {
 
 /* Table of contents TOC */
 
+.toc-area {
+  padding-bottom: 2rem;
+}
 
 #toc_container a:hover {
   color: #ddffff !important;
@@ -575,6 +578,20 @@ pre.language-tryit:hover {
     padding-bottom: 0.7rem;
     font-weight: bold;
 }
+
+@media only screen and (max-width: 800px) {
+  .execution.progress {
+      border-radius: 0.6rem;
+      margin-left: 8rem;
+      width: 60%;
+  }
+  .execution.progress .title {
+    font-size: 1.2rem;
+    width: 50%;
+    padding-bottom: 0.6rem;
+  }
+}
+
 
 .page-change {
     background-color: #888888;

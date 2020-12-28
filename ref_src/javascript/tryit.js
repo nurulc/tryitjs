@@ -11,11 +11,18 @@
 			if(typeof arrayLike === 'string') return [arrayLike];
 			if(Array.isArray(arrayLike)) return arrayLike;
 
-			if( arrayLike instanceof NodeList  || 
-					typeof arrayLike.forEach === 'function') {
-						let res = [];
-						arrayLike.forEach(n => res.push(n));
-						return res;
+			if( arrayLike instanceof NodeList  ) {
+				 return Array.prototype.slice.call(arrayLike,0);
+			}
+			else if( arrayLike instanceof Map) {
+				return Array.from(arrayLike.entries());
+			}
+			else if(arrayLike instanceof Set) {
+				return Array.from(arrayLike);
+			} else if(typeof arrayLike.forEach === 'function') {
+				let res = [];
+				arrayLike.forEach(n => res.push(n));
+				return res;
 			}
 
 			if(!arrayLike || arrayLike.length === undefined ) {
@@ -27,13 +34,22 @@
 			return res;
 		}
 
+
 		const EMPTY_ELEMENT = { innerText: "" };
 		function isEmptyElement(x) { return x === null || x === EMPTY_ELEMENT; }
 		function $e(name) {
-            if(typeof name !== 'string') return name;
+			if(typeof name !== 'string') return name;
 			var e = document.getElementById(name);
 			if (!e) return EMPTY_ELEMENT;
 			return e;
+		}
+
+		function qs(sel,base) {
+			return (typeof sel === 'string')?(base||document).querySelector(sel):sel;
+		}
+
+		function qsA(arg,base) {
+			return (base||document).querySelectorAll(arg);
 		}
 
 		function getIDNumber(aDiv) {
@@ -61,7 +77,7 @@
 		let editorFor = {
 
 		};
-        let pageInfo, allEditors;
+		let pageInfo, allEditors;
 
 		let editorData = ( () => {
 			let data = window.localStorage[WINDOW_LOCATION];
@@ -83,54 +99,54 @@
 			return ({});
 		})();
 
-        let tocLookup;
+		let tocLookup;
 
-        function getTocLookup() {
-                function asArray(arr) {
-                  return Array.prototype.slice.call(arr); 
-                }
-                function pages() { return asArray(document.querySelectorAll('.try-page')); }
-                function hFlatten(e) {
-                  if(e.children && e.children.length === 0) return type(e);
-                  else return [type(e), ...asArray(e.children).map(hFlatten)];
-                }
-              function type(e) {
-                if(!e) return undefined;
+		function getTocLookup() {
+				function asArray(arr) {
+				  return Array.prototype.slice.call(arr); 
+				}
+				function pages() { return asArray(qsA('.try-page')); }
+				function hFlatten(e) {
+				  if(e.children && e.children.length === 0) return type(e);
+				  else return [type(e), ...asArray(e.children).map(hFlatten)];
+				}
+			  function type(e) {
+				if(!e) return undefined;
 //console.log(e.tagName);
-                if(!e.id) return '';
-                let ty = e.tagName;
-                if(ty.match(/^h\d/i)) return '*'+e.id;
-                if(ty === 'A' ) return ty+":"+e.id;
-                return '';
-              }
-              function mapper() { return pages().map(e => ({page:e.id , children: flatten(asArray(e.children).flatMap(hFlatten)).filter(Identity)})); }
-              function flatten(arr) {
-                if(!Array.isArray(arr)) return arr;
-                if(!arr.some(Array.isArray)) return arr;
-                return [].concat(...arr.map(flatten));
-              }
+				if(!e.id) return '';
+				let ty = e.tagName;
+				if(ty.match(/^h\d/i)) return '*'+e.id;
+				if(ty === 'A' ) return ty+":"+e.id;
+				return '';
+			  }
+			  function mapper() { return pages().map(e => ({page:e.id , children: flatten(asArray(e.children).flatMap(hFlatten)).filter(Identity)})); }
+			  function flatten(arr) {
+				if(!Array.isArray(arr)) return arr;
+				if(!arr.some(Array.isArray)) return arr;
+				return [].concat(...arr.map(flatten));
+			  }
 
 
-          let lookup = {};
-          let m = mapper();
-          let pageList = m.map( ({page, children}) => [page,children[0]] )
-          let values = flatten(m.map(({children}) => children));
-          let current = '';
-          //return pages;
-          values.forEach(v => {
-            if(v[0] == '*') {
-              current = v.substr(1);
-              lookup[current] = current;
-            } else {
-              let [tag, id] = v.split(':');
-              lookup[id] = current;
-            }
-            });
+		  let lookup = {};
+		  let m = mapper();
+		  let pageList = m.map( ({page, children}) => [page,children[0]] )
+		  let values = flatten(m.map(({children}) => children));
+		  let current = '';
+		  //return pages;
+		  values.forEach(v => {
+			if(v[0] == '*') {
+			  current = v.substr(1);
+			  lookup[current] = current;
+			} else {
+			  let [tag, id] = v.split(':');
+			  lookup[id] = current;
+			}
+			});
 
-          pageList.forEach(([p,h1]) => lookup[p] = h1.substr(1))
-          return lookup;
-        }
-            
+		  pageList.forEach(([p,h1]) => lookup[p] = h1.substr(1))
+		  return lookup;
+		}
+			
 		/**
 		 * Save data from all the editors
 		 * @return {undefined} no return vales
@@ -164,6 +180,116 @@
 				console.log('All saved edits removed');
 			} 
 		}
+
+		function makePageVisible(newPage,oldPage) {
+			if(pageInfo.compare(oldPage,newPage)>0) {
+				//pageVisible1($.e(oldPage), $.e(newPage))
+			} else {
+				//pageVisible2($.e(oldPage), $.e(newPage))
+			}
+		}
+
+		function pageVisibleBefore(oldPage,newPage) {
+			let o = qs(oldPage), n = qs(newPage);
+			n.style.height = 0+'px';
+			n.style.overflow = 'none';
+			n.dataset.pagevisible = 'true';
+			const step = 10;
+			let start = (window.scrollY||window.screenTop);
+			pageInfo.showPage(n.id);
+			const end = (n.querySelector('.page_prev') || n.querySelector('.page_next')).offsetTop;
+            
+			let pos = step;
+			function doit(resolve, fail) {
+				let doStep = () => {
+					for(let i=0; i< 10 && (pos < end || start>0); i++){
+						if(pos < end) n.style.height = pos+'px';
+						start = Math.max(0, start-step);
+						window.scrollTo(0, start+pos);
+						console.log(pos);
+						if(pos < end) pos += step;
+					}
+					if( pos < end || start > 0) {
+						//pos += step;
+						window.requestAnimationFrame(doStep);
+					}	
+					else {
+						n.style.height = '';
+						n.style.overflow = '';
+						resolve([pos, ])
+					}
+				};
+				window.requestAnimationFrame(doStep);
+			}
+			return new Promise(doit);
+		}
+
+
+		function pageVisibleBeforeY(o,n) {
+			n.style.height = 0+'px';
+			n.style.overflow = 'none';
+			n.dataset.pagevisible = 'true';
+			const step = 10;
+			const start = (window.scrollY||window.screenTop);
+			const end = (n.querySelector('.page_prev') || n.querySelector('.page_next')).offsetTop;
+
+			let pos = step;
+			function doit(resolve, fail) {
+				let doStep = () => {
+					for(let i=0; i< 10 && pos < end; i++){
+						n.style.height = pos+'px';
+						start = Math.max(0, start-step);
+						window.scrollTo(0, start+pos);
+						console.log(pos);
+						pos += step;
+					}
+					if( pos < end) {
+						//pos += step;
+						window.requestAnimationFrame(doStep);
+					}	
+					else {
+						n.style.height = '';
+						n.style.overflow = '';
+						resolve([pos, ])
+					}
+				};
+				window.requestAnimationFrame(doStep);
+			}
+			return new Promise(doit);
+		}
+
+		// function pageVisibleBeforeOld(o,n) {
+		// 	n.style.height = 0+'px';
+		// 	n.style.overflow = 'none';
+		// 	n.dataset.pagevisible = 'true';
+		// 	const step = 10;
+		// 	const start = (window.scrollY||window.screenTop);
+		// 	const end = (n.querySelector('.page_prev') || n.querySelector('.page_next')).offsetTop;
+
+		// 	let pos = step;
+		// 	let doStep = () => {
+		// 		for(let i=0; i< 10 && pos < end; i++){
+		// 			n.style.height = pos+'px';
+		// 			window.scrollTo(0, start);
+		// 			//console.log(pos);
+		// 			pos += step;
+		// 		}
+		// 		if( pos < end) {
+		// 			//pos += step;
+		// 			setTimeout(doStep,0); 
+		// 		}	
+		// 		else { console.log(start+pos);
+		// 			//n.style.height = '';
+		// 			//n.style.overflow = '';
+		// 		}
+		// 	};
+		// 	doStep();
+		// }
+		function pageVisible2(o,n) {
+			n.style.height = 0+'px';
+			n.style.overflow = 'none';
+			n.dataSet.pageVisible = 'true';
+		}		
 
 		function getSavedContent(id) {
 			let saved = editorData[id];
@@ -236,7 +362,7 @@
 									"Cmd-Enter": execCode,
 									"Ctrl-/": "toggleComment",
 									"Ctrl-F": "search",
-					                "Ctrl-Space": "autocomplete",
+									"Ctrl-Space": "autocomplete",
 
 					},
 					tabSize: 2,
@@ -249,7 +375,7 @@
 					gutters: ["CodeMirror-lint-markers","CodeMirror-linenumbers", "CodeMirror-foldgutter"],
 					tabSize: 2,
 					indentUnit: 2,
-  					mode: {name: "javascript", globalVars: true}
+					mode: {name: "javascript", globalVars: true}
 
 				});
 				if(original !== contents) {
@@ -262,17 +388,17 @@
 				// editorFor[id] = editor;
 				setEditorHeight(editor,lines);
 				callback(id, editor);
-                function execCode() { return tryIt(id,editor);}
-                function editorChanged(editor) {
-                	let theme = editor.getOption('theme');
-                	if(editor.isClean())
-                			editor.setOption('theme', editor.tryitState)
-                	else if(theme !== tryit$colors.edited ) 
-                		editor.setOption('theme', tryit$colors.edited);
-                	
-                }
+				function execCode() { return tryIt(id,editor);}
+				function editorChanged(editor) {
+					let theme = editor.getOption('theme');
+					if(editor.isClean())
+							editor.setOption('theme', editor.tryitState)
+					else if(theme !== tryit$colors.edited ) 
+						editor.setOption('theme', tryit$colors.edited);
+					
+				}
 
-				// document.querySelector(`#${id}-run`).onclick = execCode;
+				// qs(`#${id}-run`).onclick = execCode;
 				// function execCode() { return tryIt(id,editor);}
 			}
 			catch(err) {
@@ -291,63 +417,72 @@
 
 		class EditorProxy {
 		  constructor(name) {
-		    this.name = name;
-		    this._editor = undefined;
-		    this.requiredContent = undefined;
-		    this.reqOptions = new Map();
+			this.name = name;
+			this._editor = undefined;
+			this.requiredContent = undefined;
+			this.reqOptions = new Map();
 		  }
 		  hasEditor() {
-		    return this._editor !== undefined;
+			return this._editor !== undefined;
 		  }
 
 		  get editor() {
-		  	return this._editor;
+			return this._editor;
 		  }
 
 		  set editor(anEditor) {
-		  	this._editor = anEditor;
-		  	if(this.requiredContent) {
-		  		anEditor.setValue(this.requiredContent);
-		  		this.requiredContent = undefined;
-		  	}
-		  	if(this.reqOptions.length) {
-		  		this.reqOptions.forEach((key,value) => anEditor.setOption(key, value));
-		  		this.reqOptions = {};
-		  	}
+			this._editor = anEditor;
+			if(this.requiredContent) {
+				anEditor.setValue(this.requiredContent);
+				this.requiredContent = undefined;
+			}
+			if(this.reqOptions.length) {
+				this.reqOptions.forEach((key,value) => anEditor.setOption(key, value));
+				this.reqOptions = {};
+			}
 		  }
 
 		  getOption(key) {
-		  	if(this.editor) return this.editor.getOption(key);
-		  	return this.reqOptions.get(key);
+			if(this.editor) return this.editor.getOption(key);
+			return this.reqOptions.get(key);
 		  }
 
 		  setOption(key,value) {
-		  	if(this.editor) return this.editor.setOption(key,value);
-		  	return this.reqOptions.set(key, value);
+			if(this.editor) return this.editor.setOption(key,value);
+			return this.reqOptions.set(key, value);
 		  }
-		  
+
 		  getValue() {
-		  	if(this._editor) return this._editor.getValue('\n');
-		  	return document.getElementById(this.name).value; 
+			if(this._editor) return this._editor.getValue('\n');
+			return document.getElementById(this.name).value; 
 		  }
 
 		  setValue(content) {
-		  	if(this._editor) this._editor.setValue(content);
-		  	else this.requiredContent = content; 
+			if(this._editor) this._editor.setValue(content);
+			else this.requiredContent = content; 
 		  }
 		  
 		  toString() {
-		    return `Editor(${this.name})`
+			return `Editor(${this.name})`
 		  }
 		}
 
 		class PageInfo {
-			constructor() {
+			constructor(pageList) {
+				this.pageMap = new Map(asArray(pageList).map((e,ix) => [e.id, ix]))
 				this.contents = new Map();
 			}
 
 			set(pageId, anEditorList) {
 				this.contents.set(pageId, anEditorList);
+			}
+
+			pageIx(aPageName) {
+				let ix = this.pageMap.get(aPageName);
+				return ix === undefined ?-1:ix;
+			}
+			compare(page1,page2) {
+				return this.pageIx(page1) - this.pageIx(page2);
 			}
 
 			showPage(pageId) {
@@ -357,7 +492,7 @@
 						_makeEditor(anEditor.name, (id,editor) => {
 							editorFor[id] = editor;
 							anEditor.editor = editor;
-                            
+							
 						  });
 					}
 				});
@@ -365,32 +500,32 @@
 		}
 
 		function getPageInfo() {
-		  let list = document.querySelectorAll('.try-page');
-		  let pageInfo = new PageInfo(), allEditors = [];
+		  let list = qsA('.try-page');
+		  let pageInfo = new PageInfo(list), allEditors = [];
 		  
 		  list.forEach(p => {
-		    //console.log("Page", p.id);
-		    let content = []
-		    pageInfo.set(p.id,content);
-		    let editors = p.querySelectorAll('.tryit');
-		    editors.forEach(e => {
-		      let id = e.id;
-		      //console.log('   ', e.id);
-		      let anEditorProxy = new EditorProxy(id);
-		      content.push(anEditorProxy);
-		      allEditors.push(anEditorProxy);
+			//console.log("Page", p.id);
+			let content = []
+			pageInfo.set(p.id,content);
+			let editors = qsA('.tryit',p);
+			editors.forEach(e => {
+			  let id = e.id;
+			  //console.log('   ', e.id);
+			  let anEditorProxy = new EditorProxy(id);
+			  content.push(anEditorProxy);
+			  allEditors.push(anEditorProxy);
 			  __editorsPending.push(id);
 			  __editors.push(id);
 			  editorFor[id] = anEditorProxy;
-              document.querySelector(`#${id}-run`).onclick = execCode;
-              function execCode() { return tryIt(id,anEditorProxy);}
-		    });
+			  qs(`#${id}-run`).onclick = execCode;
+			  function execCode() { return tryIt(id,anEditorProxy);}
+			});
 		  });
 		  return {pageInfo, allEditors};
 		}
 
 		function makeEditor() {
-			// var elts = document.querySelectorAll("textarea.tryit");
+			// var elts = qsA("textarea.tryit");
 			// let list = Array.prototype.slice.call(elts);
 			// const makeAnEditor = (id) => {
 			// 	_makeEditor(id, (id,editor) => {	
@@ -400,35 +535,35 @@
 			// 	});
 			// }
 			// list.map( e => e.id).forEach(makeAnEditor);
-            let pi = getPageInfo();
-            pageInfo = pi.pageInfo;
-            allEditors = pi.allEditors;
-			document.querySelectorAll('div[data-pagevisible="true"]')
+			let pi = getPageInfo();
+			pageInfo = pi.pageInfo;
+			allEditors = pi.allEditors;
+			qsA('div[data-pagevisible="true"]')
 				.forEach(e => setDisplay(e, 'false'));
-//			setDisplay(document.querySelector('div[data-pagevisible]'),'true');
+//			setDisplay(qs('div[data-pagevisible]'),'true');
 			
-			(document.querySelector('.save_all')||{}).onclick = saveAll;
-			(document.querySelector('.clear_storage')||{}).onclick = clearStorage;
-			(document.querySelector('.revert_changes')||{}).onclick = revertChanges;
+			(qs('.save_all')||{}).onclick = saveAll;
+			(qs('.clear_storage')||{}).onclick = clearStorage;
+			(qs('.revert_changes')||{}).onclick = revertChanges;
 
-			document.querySelectorAll(".jump_next")
+			qsA(".jump_next")
 				.forEach(n => {
 					let id = n.id.substr(5); 
 					n.onclick=(()=>jump(id));
 				}
 			);
-			document.querySelectorAll(".jump_back")
+			qsA(".jump_back")
 				.forEach(n => {
 					n.onclick=jumpback;
 				}
 			);
-			document.querySelectorAll(".run_all")
+			qsA(".run_all")
 				.forEach(n => {
 					let id = n.id.substr(3); 
 					n.onclick=() => _runAll(__editorsPending, 'tryit'+id, true);
 				}
 			);
-			document.querySelectorAll(".save_data")
+			qsA(".save_data")
 				.forEach(n => {
 					let id = n.id.substr(5); 
 					n.onclick=() => save('tryit'+id);
@@ -521,7 +656,7 @@
 
 		function findSegment(elem) {
 			 if(elem === undefined) {
-				 let segment =document.querySelector('div[data-pagevisible="true"]'); 
+				 let segment =qs('div[data-pagevisible="true"]'); 
 				return (segment||{});
 			 }
 			 
@@ -550,20 +685,39 @@
 			if(!elem || !elem.dataset) return ({});
 			return elem.dataset;
 		}
-
-
-		function makeSegmentVisible(elem, timeout=2000) {
-
-			let [curSeg, segment] = [undefined, elem].map(findSegment); // find
-			if(curSeg !== segment) {
-				setDisplay(segment, 'true');
-				// if(dataset(curSeg) && timeout>=0)
-				//     setTimeout(() => {curSeg.dataset.pagevisible = 'false'},timeout);
-				// }
-			 }
-			 return [segment, curSeg];
+		function lastElem(anElem) { 
+			let children = anElem.children; 
+			return children[children.length-1]; 
 		}
 
+		// function makeSegmentVisible(elem, timeout=2000) {
+
+		// 	let [curSeg, segment] = [undefined, elem].map(findSegment); // find
+		// 	if(curSeg !== segment) {
+		// 		setDisplay(segment, 'true');
+		// 		// if(dataset(curSeg) && timeout>=0)
+		// 		//     setTimeout(() => {curSeg.dataset.pagevisible = 'false'},timeout);
+		// 		// }
+		// 	 }
+		// 	 return [segment, curSeg];
+		// }
+		function makeSegmentVisible(elem, timeout=2000) {
+            return new Promise(resolve => window.requestAnimationFrame(()=> doit(resolve)));
+
+            function doit(resolve) {
+    			let [curSeg, segment] = [undefined, elem].map(findSegment); // find
+    			if(curSeg !== segment) {
+    				let pos = window.scrollY||window.screenTop;
+    				setDisplay(segment, 'true');
+    				pageInfo.showPage(segment.id);
+    				if(pageInfo.compare(segment.id,curSeg.id)<0) {
+    					let height = segment.offsetHeight;
+    					window.scrollTo(0,pos+height);
+    				}
+    			 }
+    			 return setTimeout( () => resolve([segment, curSeg]),10);
+    		}
+		}
 
 		// function pagePrevNextOld(elem,forward) {
 		// 	let curPage = findSegment(elem);
@@ -582,8 +736,8 @@
 		function pagePrevNext(elem,forward) {
 			let curPage = findSegment(elem);
 			let targetPage = forward?
-											curPage.nextElementSibling:
-											curPage.previousElementSibling; 
+						curPage.nextElementSibling:
+						curPage.previousElementSibling; 
 			jumpTag(targetPage,60);
 			return [targetPage, curPage];
 		}
@@ -604,31 +758,32 @@
 
 		let LAST_TARGET;
 		function jumpTag(h,OFFSET,callback, noPush) {
-                if(!tocLookup) tocLookup = getTocLookup();
+				if(!tocLookup) tocLookup = getTocLookup();
 				OFFSET = +(OFFSET||30);
 				callback = callback || Identity;
 				let elem = $e(h);
 				if(LAST_TARGET === elem.id) return;
-				let [targetSeg, curSeg] = makeSegmentVisible(elem);
-                pageInfo.showPage(targetSeg.id);
+				//let [targetSeg, curSeg] = makeSegmentVisible(elem);
+				let displayPromise = makeSegmentVisible(elem,OFFSET);
+				//pageInfo.showPage(targetSeg.id);
 				//if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
-				setTimeout(() => {
+				displayPromise.then(([targetSeg, curSeg]) => {
 						//const lastsScoll = () => elem.scrollIntoView({behavior: "smooth", block: "start"});
 						const lastsScoll = () => scrollToSmoothly(toHeader(elem).offsetTop-OFFSET, 10);
 						scrollToSmoothly(elem.offsetTop-OFFSET, 10,() => {
 							try {
 								callback(); 
-							    if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
+								if(targetSeg !== curSeg) setDisplay(curSeg, 'false',targetSeg);
 								lastsScoll(); 
 								LAST_TARGET = elem.id;
 								if(!noPush) history.pushState(null,null,'#'+elem.id);
-                                let tocSel = tocLookup[elem.id];
-                                if(tocSel) {
-                                    let tocElem = $e('toc_'+tocSel);
-                                    let prev = document.querySelector('.toc.select');
-                                    if(prev) _addRemoveCSSclass(prev, ['select'],[]);
-                                    if(tocElem) _addRemoveCSSclass(tocElem, [],['select']);
-                                }
+								let tocSel = tocLookup[elem.id];
+								if(tocSel) {
+									let tocElem = $e('toc_'+tocSel);
+									let prev = qs('.toc.select');
+									if(prev) _addRemoveCSSclass(prev, ['select'],[]);
+									if(tocElem) _addRemoveCSSclass(tocElem, [],['select']);
+								}
 								
 							 // location.hash = elem.id;
 							} catch (e) {
@@ -666,16 +821,16 @@
 		}
 
 		function progress(action, maxV) {
-			    const $progress       = $('.execution.progress .ui.progress');
-			     
-			    switch(action) {
-			    	case 'init' : {
-			    		    //alert('init '+maxV);
+				const $progress       = $('.execution.progress .ui.progress');
+				 
+				switch(action) {
+					case 'init' : {
+							//alert('init '+maxV);
 							$progress.progress({
-							    total    : maxV,
-							    text     : {
-							      active: '{value} of {total} done'
-							    }
+								total    : maxV,
+								text     : {
+								  active: '{value} of {total} done'
+								}
 							});
 							$progress.progress('reset');
 							$progress.data('value', 1);
@@ -683,17 +838,17 @@
 							$progress.data('tryitdelay', maxV>5 ? 1500: 500);
 							$('.execution.progress').css("display","block")
 							break;
-			    	}
-			    	case 'step': {
-			    		//alert('step');
-			    		$progress.progress('increment');
-			    		break;
-			    	}
-			    	case 'done': {
-			    		let delay = $progress.data('tryitdelay');
-			    		setTimeout(() => $('.execution.progress').css("display","none"), delay);
-			    	}
-			    }
+					}
+					case 'step': {
+						//alert('step');
+						$progress.progress('increment');
+						break;
+					}
+					case 'done': {
+						let delay = $progress.data('tryitdelay');
+						setTimeout(() => $('.execution.progress').css("display","none"), delay);
+					}
+				}
 		}
 
 
@@ -826,10 +981,10 @@
 				 //throw "Position can not be negative";
 					 pos = 0;
 				 }
-				var start = (window.scrollY||window.screenTop);
-				var currentPos = start;
+				let start = (window.scrollY||window.screenTop);
+				let currentPos = start;
 				if(currentPos<pos){
-					 var t = 10;
+					 let t = 10;
 					 for(let i = currentPos; i <= pos+15; i+=10){
 						t+=10;
 						let v = i;
@@ -857,7 +1012,7 @@
 								clearInterval(x);
 								if(callback) callback();
 							 }
-				 		}, time);
+						}, time);
 				}
 		}
 
@@ -911,7 +1066,7 @@
 		  return `<div class="tryit-section">${content}</div>\n`; 
 		}
 								
-		// var lines = document.querySelector('.language-tryit').innerText.split('\n');
+		// var lines = qs('.language-tryit').innerText.split('\n');
 		// $$.HTML('<pre>'+sections(lines)+'</pre>');
 
 
@@ -1110,18 +1265,20 @@
 		}
 
 		return ({
-				makeEditor: makeEditor,
-				$$:         $$,              // display interface
-				// getEditors$:getEditors,
+				makeEditor,
+				$$,              //display interface
 				jumpTag: _jumpTag,
-				jumpBack: jumpBack,
-				_display: display,
-				getPendingEditors: getPendingEditors,
-				pagePrev:pagePrev,
-				pageNext: pageNext,
-				asArray:asArray,
-				saveAll: saveAll,
-				H: H
+				jumpBack,
+				_display,
+				getPendingEditors,
+				pagePrev,
+				pageNext,
+				asArray,
+				saveAll,
+				qs,
+				qsA,
+				pageVisibleBefore,
+				H 
 
 		});
 	}
@@ -1130,22 +1287,27 @@
 //====================================================
 //
 //  
-function setDisplay(elem, type) {
+function setDisplay(elem, type, otherElem) {
 	 if(!elem || !elem.dataset) return;
+	 if(otherElem && type == "false") {
+	 	if(otherElem.offsetTop > elem.offsetTop) {
+	 		let pos = window.scrollY || window.screenTop; 
+	 		window.scrollTo(0, pos-elem.offsetHeight)
+	 	}
+	 }
 	 elem.dataset.pagevisible = type;
 //	 elem.style.display = (type==='false')?'none':'block'; // may nood to enable this
 }
 
-var {$$, jumpTag, jumpBack, _display,H, saveAll} = $tryit;
-var objInfo = $$.objInfo; 
+const {$$, jumpTag, jumpBack, _display,H, saveAll, pageVisibleBefore, qs, qsA} = $tryit;
+const objInfo = $$.objInfo; 
 document.addEventListener('DOMContentLoaded', (event) => {
-		const $q = (arg1,arg2) => $tryit.asArray(document.querySelectorAll(arg1,arg2));
+		//const $q = (arg1,arg2) => $tryit.asArray(qsA(arg1,arg2));
 		if(hljs) { 
-			 document.querySelectorAll('pre code')
-				.forEach(highlightCodeBlock);
+			 qsA('pre code').forEach(highlightCodeBlock);
 		}
 		$tryit.makeEditor();
-		let allPages =$q('div[data-pagevisible]')
+		let allPages = qsA('div[data-pagevisible]');
 		allPages.forEach(
 			(elem,i) => 
 				i!==0?
@@ -1154,50 +1316,50 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		);
 
 
-		$q('.page_prev').forEach(e => e.onclick = $tryit.pagePrev);
-		$q('.page_next').forEach(e => e.onclick = $tryit.pageNext);
+		qsA('.page_prev').forEach(e => e.onclick = $tryit.pagePrev);
+		qsA('.page_next').forEach(e => e.onclick = $tryit.pageNext);
 		$('pre:has(code.language-tryit)').addClass('language-tryit')
 		if(location.hash) {
 			setTimeout(() =>jumpTag(location.hash.substr(1),false),  0);
 		}
-        else {
-            setTimeout(() =>jumpTag('page-1',false),  0);
-        }
+		else {
+			setTimeout(() =>jumpTag('page-1',false),  0);
+		}
 
 });
 
 document.addEventListener("keydown", function keydown (event) {
-    if (navigator.platform === "MacIntel" ? event.metaKey : event.ctrlKey && event.key === "s") {
-        event.preventDefault()
-        saveAll();
-        // ... your code here ...
-    }
+	if (navigator.platform === "MacIntel" ? event.metaKey : event.ctrlKey && event.key === "s") {
+		event.preventDefault()
+		saveAll();
+		// ... your code here ...
+	}
    
-    else if( document.activeElement === document.body && 
-            (event.keyCode === 37 /*KeyLeft */ || event.keyCode === 39 /*key right */)) {
-        let keyCode = event.keyCode;
-        let p = document.querySelector('div.try-page[data-pagevisible=true]');
-        let elem =  p && p.querySelector(keyCode==37?'.page_prev':'.page_next');
-        elem && (event.preventDefault(), elem.onclick());
-    } 
+	else if( document.activeElement === document.body && 
+			(event.keyCode === 37 /*KeyLeft */ || event.keyCode === 39 /*key right */)) {
+		let keyCode = event.keyCode;
+		let p = qs('div.try-page[data-pagevisible=true]');
+		let elem =  p && p.querySelector(keyCode==37?'.page_prev':'.page_next');
+		elem && (event.preventDefault(), elem.onclick());
+	} 
 
 })
 
 /*
-           switch (e.keyCode) { 
-                case 37: 
-                    str = 'Left Key pressed!'; 
-                    break; 
-                case 38: 
-                    str = 'Up Key pressed!'; 
-                    break; 
-                case 39: 
-                    str = 'Right Key pressed!'; 
-                    break; 
-                case 40: 
-                    str = 'Down Key pressed!'; 
-                    break; 
-            } 
+		   switch (e.keyCode) { 
+				case 37: 
+					str = 'Left Key pressed!'; 
+					break; 
+				case 38: 
+					str = 'Up Key pressed!'; 
+					break; 
+				case 39: 
+					str = 'Right Key pressed!'; 
+					break; 
+				case 40: 
+					str = 'Down Key pressed!'; 
+					break; 
+			} 
  */
 
 function highlightCodeBlock(block) {

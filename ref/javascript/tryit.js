@@ -12,6 +12,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -46,7 +48,13 @@ var $tryit = function () {
     if (typeof arrayLike === 'string') return [arrayLike];
     if (Array.isArray(arrayLike)) return arrayLike;
 
-    if (arrayLike instanceof NodeList || typeof arrayLike.forEach === 'function') {
+    if (arrayLike instanceof NodeList) {
+      return Array.prototype.slice.call(arrayLike, 0);
+    } else if (arrayLike instanceof Map) {
+      return Array.from(arrayLike.entries());
+    } else if (arrayLike instanceof Set) {
+      return Array.from(arrayLike);
+    } else if (typeof arrayLike.forEach === 'function') {
       var _res = [];
       arrayLike.forEach(function (n) {
         return _res.push(n);
@@ -80,6 +88,14 @@ var $tryit = function () {
     var e = document.getElementById(name);
     if (!e) return EMPTY_ELEMENT;
     return e;
+  }
+
+  function qs(sel, base) {
+    return typeof sel === 'string' ? (base || document).querySelector(sel) : sel;
+  }
+
+  function qsA(arg, base) {
+    return (base || document).querySelectorAll(arg);
   }
 
   function getIDNumber(aDiv) {
@@ -140,7 +156,7 @@ var $tryit = function () {
     }
 
     function pages() {
-      return asArray(document.querySelectorAll('.try-page'));
+      return asArray(qsA('.try-page'));
     }
 
     function hFlatten(e) {
@@ -252,6 +268,41 @@ var $tryit = function () {
     }
   }
 
+  function pageVisibleBefore(oldPage, newPage) {
+    var o = qs(oldPage),
+        n = qs(newPage);
+    n.style.height = 0 + 'px';
+    n.style.overflow = 'none';
+    n.dataset.pagevisible = 'true';
+    var step = 10;
+    var start = window.scrollY || window.screenTop;
+    pageInfo.showPage(n.id);
+    var end = (n.querySelector('.page_prev') || n.querySelector('.page_next')).offsetTop;
+    var pos = step;
+    return new Promise(function (resolve) {
+      var doStep = function () {
+        for (var i = 0; i < 10 && (pos < end || start > 0); i++) {
+          if (pos < end) n.style.height = pos + 'px';
+          start = Math.max(0, start - step);
+          window.scrollTo(0, start + pos);
+          console.log(pos);
+          if (pos < end) pos += step;
+        }
+
+        if (pos < end || start > 0) {
+          //pos += step;
+          window.requestAnimationFrame(doStep);
+        } else {
+          n.style.height = '';
+          n.style.overflow = '';
+          resolve([pos]);
+        }
+      };
+
+      window.requestAnimationFrame(doStep);
+    });
+  }
+
   function getSavedContent(id) {
     var saved = editorData[id];
     var originalContents = $e(id).value;
@@ -350,7 +401,7 @@ var $tryit = function () {
       editor.on('change', function (editor) {
         var theme = editor.getOption('theme');
         if (editor.isClean()) editor.setOption('theme', editor.tryitState);else if (theme !== tryit$colors.edited) editor.setOption('theme', tryit$colors.edited);
-      } // document.querySelector(`#${id}-run`).onclick = execCode;
+      } // qs(`#${id}-run`).onclick = execCode;
       // function execCode() { return tryIt(id,editor);}
       ); // __editorsPending.push(id);
       // __editors.push(id);
@@ -443,9 +494,12 @@ var $tryit = function () {
   }();
 
   var PageInfo = /*#__PURE__*/function () {
-    function PageInfo() {
+    function PageInfo(pageList) {
       _classCallCheck(this, PageInfo);
 
+      this.pageMap = new Map(asArray(pageList).map(function (e, ix) {
+        return [e.id, ix];
+      }));
       this.contents = new Map();
     }
 
@@ -453,6 +507,17 @@ var $tryit = function () {
       key: "set",
       value: function set(pageId, anEditorList) {
         this.contents.set(pageId, anEditorList);
+      }
+    }, {
+      key: "pageIx",
+      value: function pageIx(aPageName) {
+        var ix = this.pageMap.get(aPageName);
+        return ix === undefined ? -1 : ix;
+      }
+    }, {
+      key: "compare",
+      value: function compare(page1, page2) {
+        return this.pageIx(page1) - this.pageIx(page2);
       }
     }, {
       key: "showPage",
@@ -473,14 +538,14 @@ var $tryit = function () {
   }();
 
   function getPageInfo() {
-    var list = document.querySelectorAll('.try-page');
-    var pageInfo = new PageInfo(),
+    var list = qsA('.try-page');
+    var pageInfo = new PageInfo(list),
         allEditors = [];
     list.forEach(function (p) {
       //console.log("Page", p.id);
       var content = [];
       pageInfo.set(p.id, content);
-      var editors = p.querySelectorAll('.tryit');
+      var editors = qsA('.tryit', p);
       editors.forEach(function (e) {
         var id = e.id; //console.log('   ', e.id);
 
@@ -494,7 +559,7 @@ var $tryit = function () {
 
         editorFor[id] = anEditorProxy;
 
-        document.querySelector("#".concat(id, "-run")).onclick = function () {
+        qs("#".concat(id, "-run")).onclick = function () {
           return tryIt(id, anEditorProxy);
         };
       });
@@ -585,7 +650,7 @@ var $tryit = function () {
 
   function findSegment(elem) {
     if (elem === undefined) {
-      var _segment = document.querySelector('div[data-pagevisible="true"]');
+      var _segment = qs('div[data-pagevisible="true"]');
 
       return _segment || {};
     }
@@ -606,22 +671,46 @@ var $tryit = function () {
     return elem.dataset;
   }
 
+  // function makeSegmentVisible(elem, timeout=2000) {
+  // 	let [curSeg, segment] = [undefined, elem].map(findSegment); // find
+  // 	if(curSeg !== segment) {
+  // 		setDisplay(segment, 'true');
+  // 		// if(dataset(curSeg) && timeout>=0)
+  // 		//     setTimeout(() => {curSeg.dataset.pagevisible = 'false'},timeout);
+  // 		// }
+  // 	 }
+  // 	 return [segment, curSeg];
+  // }
   function makeSegmentVisible(elem) {
     arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2000;
+    return new Promise(function (resolve) {
+      return window.requestAnimationFrame(function () {
+        return doit(resolve);
+      });
+    });
 
-    var _map = [undefined, elem].map(findSegment),
-        _map2 = _slicedToArray(_map, 2),
-        curSeg = _map2[0],
-        segment = _map2[1]; // find
+    function doit(resolve) {
+      var _map = [undefined, elem].map(findSegment),
+          _map2 = _slicedToArray(_map, 2),
+          curSeg = _map2[0],
+          segment = _map2[1]; // find
 
 
-    if (curSeg !== segment) {
-      setDisplay(segment, 'true'); // if(dataset(curSeg) && timeout>=0)
-      //     setTimeout(() => {curSeg.dataset.pagevisible = 'false'},timeout);
-      // }
+      if (curSeg !== segment) {
+        var pos = window.scrollY || window.screenTop;
+        setDisplay(segment, 'true');
+        pageInfo.showPage(segment.id);
+
+        if (pageInfo.compare(segment.id, curSeg.id) < 0) {
+          var height = segment.offsetHeight;
+          window.scrollTo(0, pos + height);
+        }
+      }
+
+      return setTimeout(function () {
+        return resolve([segment, curSeg]);
+      }, 10);
     }
-
-    return [segment, curSeg];
   } // function pagePrevNextOld(elem,forward) {
   // 	let curPage = findSegment(elem);
   // 	if(!dataset(curPage).pagevisible ) return;
@@ -663,16 +752,16 @@ var $tryit = function () {
     OFFSET = +(OFFSET || 30);
     callback = callback || Identity;
     var elem = $e(h);
-    if (LAST_TARGET === elem.id) return;
+    if (LAST_TARGET === elem.id) return; //let [targetSeg, curSeg] = makeSegmentVisible(elem);
 
-    var _makeSegmentVisible = makeSegmentVisible(elem),
-        _makeSegmentVisible2 = _slicedToArray(_makeSegmentVisible, 2),
-        targetSeg = _makeSegmentVisible2[0],
-        curSeg = _makeSegmentVisible2[1];
+    var displayPromise = makeSegmentVisible(elem, OFFSET); //pageInfo.showPage(targetSeg.id);
+    //if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
 
-    pageInfo.showPage(targetSeg.id); //if(targetSeg !== curSeg) setDisplay(curSeg, 'false');
+    displayPromise.then(function (_ref6) {
+      var _ref7 = _slicedToArray(_ref6, 2),
+          targetSeg = _ref7[0],
+          curSeg = _ref7[1];
 
-    setTimeout(function () {
       //const lastsScoll = () => elem.scrollIntoView({behavior: "smooth", block: "start"});
       var lastsScoll = function () {
         return scrollToSmoothly(toHeader(elem).offsetTop - OFFSET, 10);
@@ -681,7 +770,7 @@ var $tryit = function () {
       scrollToSmoothly(elem.offsetTop - OFFSET, 10, function () {
         try {
           callback();
-          if (targetSeg !== curSeg) setDisplay(curSeg, 'false');
+          if (targetSeg !== curSeg) setDisplay(curSeg, 'false', targetSeg);
           lastsScoll();
           LAST_TARGET = elem.id;
           if (!noPush) history.pushState(null, null, '#' + elem.id);
@@ -689,7 +778,7 @@ var $tryit = function () {
 
           if (tocSel) {
             var tocElem = $e('toc_' + tocSel);
-            var prev = document.querySelector('.toc.select');
+            var prev = qs('.toc.select');
             if (prev) _addRemoveCSSclass(prev, ['select'], []);
             if (tocElem) _addRemoveCSSclass(tocElem, [], ['select']);
           } // location.hash = elem.id;
@@ -970,7 +1059,7 @@ var $tryit = function () {
 
   function blueDiv(content) {
     return "<div class=\"tryit-section\">".concat(content, "</div>\n");
-  } // var lines = document.querySelector('.language-tryit').innerText.split('\n');
+  } // var lines = qs('.language-tryit').innerText.split('\n');
   // $$.HTML('<pre>'+sections(lines)+'</pre>');
 
 
@@ -1068,18 +1157,18 @@ var $tryit = function () {
   function render(val) {
     if (arguments.length > 0) _show(val);
 
-    var promises = _displayStack.map(function (_ref10) {
-      var _ref11 = _slicedToArray(_ref10, 2),
-          p = _ref11[0],
-          type = _ref11[1];
+    var promises = _displayStack.map(function (_ref12) {
+      var _ref13 = _slicedToArray(_ref12, 2),
+          p = _ref13[0],
+          type = _ref13[1];
 
       return p;
     });
 
-    var types = _displayStack.map(function (_ref12) {
-      var _ref13 = _slicedToArray(_ref12, 2),
-          p = _ref13[0],
-          type = _ref13[1];
+    var types = _displayStack.map(function (_ref14) {
+      var _ref15 = _slicedToArray(_ref14, 2),
+          p = _ref15[0],
+          type = _ref15[1];
 
       return type;
     });
@@ -1089,10 +1178,10 @@ var $tryit = function () {
         var res = list.map(function (v, i) {
           return [v, types[i]];
         });
-        return Promise.resolve('<div class="ui accordion">' + '<div class="active title"><i class="dropdown icon"></i>Results ( ' + round2(lastExecTime) + ' ms)</div>' + '<div class="active content">' + res.map(function (_ref14) {
-          var _ref15 = _slicedToArray(_ref14, 2),
-              v = _ref15[0],
-              type = _ref15[1];
+        return Promise.resolve('<div class="ui accordion">' + '<div class="active title"><i class="dropdown icon"></i>Results ( ' + round2(lastExecTime) + ' ms)</div>' + '<div class="active content">' + res.map(function (_ref16) {
+          var _ref17 = _slicedToArray(_ref16, 2),
+              v = _ref17[0],
+              type = _ref17[1];
 
           return type === 'h' ? v : display(v);
         }).join('\n') + '</div></div>');
@@ -1156,11 +1245,11 @@ var $tryit = function () {
     function (_lines) {
       var HL = hljs.highlightAuto;
 
-      var _lines$reduce = _lines.reduce(function (_ref6, line) {
-        var _ref7 = _slicedToArray(_ref6, 3),
-            list = _ref7[0],
-            type = _ref7[1],
-            content = _ref7[2];
+      var _lines$reduce = _lines.reduce(function (_ref8, line) {
+        var _ref9 = _slicedToArray(_ref8, 3),
+            list = _ref9[0],
+            type = _ref9[1],
+            content = _ref9[2];
 
         if (line.match(/^\s*(![a-z_\-]+|!--)/)) {
           if (content || type.match(/!render-(start|end)/)) list.push([type, content]);
@@ -1179,10 +1268,10 @@ var $tryit = function () {
         list.push([type, content]);
       }
 
-      return list.flatMap(function (_ref8) {
-        var _ref9 = _slicedToArray(_ref8, 2),
-            type = _ref9[0],
-            body = _ref9[1];
+      return list.flatMap(function (_ref10) {
+        var _ref11 = _slicedToArray(_ref10, 2),
+            type = _ref11[0],
+            body = _ref11[1];
 
         return [blueDiv(type), HL(body).value];
       }).join('\n');
@@ -1255,7 +1344,7 @@ var $tryit = function () {
 
   return {
     makeEditor: function () {
-      // var elts = document.querySelectorAll("textarea.tryit");
+      // var elts = qsA("textarea.tryit");
       // let list = Array.prototype.slice.call(elts);
       // const makeAnEditor = (id) => {
       // 	_makeEditor(id, (id,editor) => {	
@@ -1268,31 +1357,31 @@ var $tryit = function () {
       var pi = getPageInfo();
       pageInfo = pi.pageInfo;
       pi.allEditors;
-      document.querySelectorAll('div[data-pagevisible="true"]').forEach(function (e) {
+      qsA('div[data-pagevisible="true"]').forEach(function (e) {
         return setDisplay(e, 'false');
-      }); //			setDisplay(document.querySelector('div[data-pagevisible]'),'true');
+      }); //			setDisplay(qs('div[data-pagevisible]'),'true');
 
-      (document.querySelector('.save_all') || {}).onclick = saveAll;
-      (document.querySelector('.clear_storage') || {}).onclick = clearStorage;
-      (document.querySelector('.revert_changes') || {}).onclick = revertChanges;
-      document.querySelectorAll(".jump_next").forEach(function (n) {
+      (qs('.save_all') || {}).onclick = saveAll;
+      (qs('.clear_storage') || {}).onclick = clearStorage;
+      (qs('.revert_changes') || {}).onclick = revertChanges;
+      qsA(".jump_next").forEach(function (n) {
         var id = n.id.substr(5);
 
         n.onclick = function () {
           return jump(id);
         };
       });
-      document.querySelectorAll(".jump_back").forEach(function (n) {
+      qsA(".jump_back").forEach(function (n) {
         n.onclick = jumpback;
       });
-      document.querySelectorAll(".run_all").forEach(function (n) {
+      qsA(".run_all").forEach(function (n) {
         var id = n.id.substr(3);
 
         n.onclick = function () {
           return _runAll(__editorsPending, 'tryit' + id, true);
         };
       });
-      document.querySelectorAll(".save_data").forEach(function (n) {
+      qsA(".save_data").forEach(function (n) {
         var id = n.id.substr(5);
 
         n.onclick = function () {
@@ -1304,18 +1393,13 @@ var $tryit = function () {
       _addRemoveCSSclass('ra_1', "green", "grey").style = "display: none";
     },
     $$: $$,
-    // display interface
-    // getEditors$:getEditors,
-    jumpTag: function (aTag) {
-      var toToggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-      jumpTag(aTag);
-      toToggle && toggle();
-    },
+    //display interface
+    jumpTag: jumpTag,
     jumpBack: function () {
       jumpback();
       toggle();
     },
-    _display: display,
+    _display: _display,
     getPendingEditors: getPendingEditors,
     pagePrev: function () {
       pagePrevNext(this, false);
@@ -1325,6 +1409,9 @@ var $tryit = function () {
     },
     asArray: asArray,
     saveAll: saveAll,
+    qs: qs,
+    qsA: qsA,
+    pageVisibleBefore: pageVisibleBefore,
     H: H
   };
 }(); //====================================================
@@ -1332,8 +1419,16 @@ var $tryit = function () {
 //  
 
 
-function setDisplay(elem, type) {
+function setDisplay(elem, type, otherElem) {
   if (!elem || !elem.dataset) return;
+
+  if (otherElem && type == "false") {
+    if (otherElem.offsetTop > elem.offsetTop) {
+      var pos = window.scrollY || window.screenTop;
+      window.scrollTo(0, pos - elem.offsetHeight);
+    }
+  }
+
   elem.dataset.pagevisible = type; //	 elem.style.display = (type==='false')?'none':'block'; // may nood to enable this
 }
 
@@ -1342,26 +1437,26 @@ var $$ = $tryit.$$,
     jumpBack = $tryit.jumpBack,
     _display = $tryit._display,
     H = $tryit.H,
-    saveAll = $tryit.saveAll;
+    saveAll = $tryit.saveAll,
+    pageVisibleBefore = $tryit.pageVisibleBefore,
+    qs = $tryit.qs,
+    qsA = $tryit.qsA;
 var objInfo = $$.objInfo;
 document.addEventListener('DOMContentLoaded', function () {
-  var $q = function (arg1, arg2) {
-    return $tryit.asArray(document.querySelectorAll(arg1, arg2));
-  };
-
+  //const $q = (arg1,arg2) => $tryit.asArray(qsA(arg1,arg2));
   if (hljs) {
-    document.querySelectorAll('pre code').forEach(highlightCodeBlock);
+    qsA('pre code').forEach(highlightCodeBlock);
   }
 
   $tryit.makeEditor();
-  var allPages = $q('div[data-pagevisible]');
+  var allPages = qsA('div[data-pagevisible]');
   allPages.forEach(function (elem, i) {
     return i !== 0 ? setDisplay(elem, "false") : '';
   });
-  $q('.page_prev').forEach(function (e) {
+  qsA('.page_prev').forEach(function (e) {
     return e.onclick = $tryit.pagePrev;
   });
-  $q('.page_next').forEach(function (e) {
+  qsA('.page_next').forEach(function (e) {
     return e.onclick = $tryit.pageNext;
   });
   $('pre:has(code.language-tryit)').addClass('language-tryit');
@@ -1386,26 +1481,26 @@ document.addEventListener("keydown", function (event) {
   /*key right */
   )) {
     var keyCode = event.keyCode;
-    var p = document.querySelector('div.try-page[data-pagevisible=true]');
+    var p = qs('div.try-page[data-pagevisible=true]');
     var elem = p && p.querySelector(keyCode == 37 ? '.page_prev' : '.page_next');
     elem && (event.preventDefault(), elem.onclick());
   }
 });
 /*
-           switch (e.keyCode) { 
-                case 37: 
-                    str = 'Left Key pressed!'; 
-                    break; 
-                case 38: 
-                    str = 'Up Key pressed!'; 
-                    break; 
-                case 39: 
-                    str = 'Right Key pressed!'; 
-                    break; 
-                case 40: 
-                    str = 'Down Key pressed!'; 
-                    break; 
-            } 
+		   switch (e.keyCode) { 
+				case 37: 
+					str = 'Left Key pressed!'; 
+					break; 
+				case 38: 
+					str = 'Up Key pressed!'; 
+					break; 
+				case 39: 
+					str = 'Right Key pressed!'; 
+					break; 
+				case 40: 
+					str = 'Down Key pressed!'; 
+					break; 
+			} 
  */
 
 function highlightCodeBlock(block) {
