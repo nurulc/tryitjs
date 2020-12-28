@@ -1394,7 +1394,11 @@ var $tryit = function () {
     },
     $$: $$,
     //display interface
-    jumpTag: jumpTag,
+    jumpTag: function (aTag) {
+      var toToggle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+      jumpTag(aTag);
+      toToggle && toggle();
+    },
     jumpBack: function () {
       jumpback();
       toggle();
