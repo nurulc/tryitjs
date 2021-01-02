@@ -98,7 +98,7 @@
   \!end --- end of the file
         ... HTML ot add to the bottom of the page goes here...  
   
-  ```
+```
 
 !tryit
 5
@@ -107,7 +107,7 @@
 
 ## Simple API Project
 
-## [Lodash Tutorial](./lodash.html)
+## [Lodash Tutorial](./lodash_tutorial/index.html)
   
 
 !end

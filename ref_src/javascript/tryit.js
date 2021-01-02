@@ -397,16 +397,16 @@
 			pageInfo.set(p.id,content);
 			let editors = qsA('.tryit',p);
 			editors.forEach(e => {
-			  let id = e.id;
-			  //console.log('   ', e.id);
-			  let anEditorProxy = new EditorProxy(id);
-			  content.push(anEditorProxy);
-			  allEditors.push(anEditorProxy);
-			  __editorsPending.push(id);
-			  __editors.push(id);
-			  editorFor[id] = anEditorProxy;
-			  qs(`#${id}-run`).onclick = execCode;
-			  function execCode() { return tryIt(id,anEditorProxy);}
+				let id = e.id;
+				if(id) {
+					let anEditorProxy = new EditorProxy(id);
+					content.push(anEditorProxy);
+					allEditors.push(anEditorProxy);
+					__editorsPending.push(id);
+					__editors.push(id);
+					editorFor[id] = anEditorProxy;
+					qs(`#${id}-run`).onclick = ( ()=>tryIt(id,anEditorProxy) );
+	  			}
 			});
 		  });
 		  return {pageInfo, allEditors};
@@ -438,11 +438,13 @@
 				.forEach(n => {
 					let id = n.id.substr(5); 
 					n.onclick=(()=>jump(id));
+					n.dataset.tooltip="Jump to next script";
 				}
 			);
 			qsA(".jump_back")
 				.forEach(n => {
 					n.onclick=jumpback;
+					n.dataset.tooltip="Jump to ready to execute script";
 				}
 			);
 			qsA(".run_all")
@@ -455,7 +457,7 @@
 				.forEach(n => {
 					let id = n.id.substr(5); 
 					n.onclick=() => save('tryit'+id);
-					n.title = "Save this script";
+					n.dataset.tooltip = "Save this script";
 				}
 			);
 			_addRemoveCSSclass('ra_1',"green", "grey").style ="display: none";
@@ -569,6 +571,9 @@
     					let height = segment.offsetHeight;
     					window.scrollTo(0,pos+height);
     				}
+    				else if(segment.offsetHeight < window.innerHeight-5){
+    					segment.style.height = Math.round(window.innerHeight+5)+'px';
+    				}
     			 }
     			 return setTimeout( () => resolve([segment, curSeg]),10);
     		}
@@ -579,6 +584,7 @@
 			let targetPage = forward?
 						curPage.nextElementSibling:
 						curPage.previousElementSibling; 
+			
 			jumpTag(targetPage,60);
 			return [targetPage, curPage];
 		}
@@ -699,11 +705,13 @@
 						CHANGED = true;
 						let t0 = performance.now();
 						beforeExecute(divName);
-						var val = (1,eval)(editor.getValue("\n"));
+						
+						var val = (1,eval)(editor.getValue("\n")); // execute script in global context
+						
 						lastExecTime = performance.now()-t0;
-						let show = val => {
-							($e(divName + "-display").innerHTML = val);
-						};
+						let displaySeg = $e(divName + "-display");
+						let show = val => displaySeg.innerHTML = val;
+						displaySeg.style.display = "block";
 
 						render(val).then(res => {
 							if(res !== undefined) show(res);
@@ -1120,6 +1128,7 @@
 				qs,
 				qsA,
 				pageVisibleBefore,
+				showPopup,
 				H 
 
 		});
@@ -1132,6 +1141,7 @@
 function setDisplay(elem, type, otherElem) {
 	 if(!elem || !elem.dataset) return;
 	 if(otherElem && type == "false") {
+	 	delete otherElem.style.height;
 	 	if(otherElem.offsetTop > elem.offsetTop) {
 	 		let pos = window.scrollY || window.screenTop; 
 	 		window.scrollTo(0, pos-elem.offsetHeight)
@@ -1141,15 +1151,18 @@ function setDisplay(elem, type, otherElem) {
 //	 elem.style.display = (type==='false')?'none':'block'; // may nood to enable this
 }
 
-const {$$, jumpTag, jumpBack, _display,H, saveAll, pageVisibleBefore, qs, qsA} = $tryit;
+const {$$, jumpTag, jumpBack, _display,H, saveAll, pageVisibleBefore, qs, qsA, showPopup} = $tryit;
 const objInfo = $$.objInfo; 
 document.addEventListener('DOMContentLoaded', (event) => {
-		//const $q = (arg1,arg2) => $tryit.asArray(qsA(arg1,arg2));
+
+		// check if we have highlightings then highlight TryitJS code snippets	
 		if(hljs) { 
-			 qsA('pre code').forEach(highlightCodeBlock);
+			 qsA('pre code.language-tryit').forEach(highlightCodeBlock);
 		}
 		$tryit.makeEditor();
 		let allPages = qsA('div[data-pagevisible]');
+
+		// show only the first page
 		allPages.forEach(
 			(elem,i) => 
 				i!==0?
@@ -1158,8 +1171,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		);
 
 
-		qsA('.page_prev').forEach(e => e.onclick = $tryit.pagePrev);
-		qsA('.page_next').forEach(e => e.onclick = $tryit.pageNext);
+		qsA('.page_prev').forEach(e => { e.onclick = $tryit.pagePrev; e.dataset.tooltip="Go to previous page (Key: 🡄)"} );
+		qsA('.page_next').forEach(e => { e.onclick = $tryit.pageNext; e.dataset.tooltip="Go to next page (Key: 🡆)"} ); 
+
 		$('pre:has(code.language-tryit)').addClass('language-tryit')
 		if(location.hash) {
 			setTimeout(() =>jumpTag(location.hash.substr(1),false),  0);
@@ -1170,23 +1184,35 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 });
 
-document.addEventListener("keydown", function keydown (event) {
+document.addEventListener("keydown", keydown)
+qsA('button').forEach(el => el.addEventListener("keydown", keydown));
+
+function keydown(event) {
+	const LeftArrow = 37, RightArrow = 39;
+	const activeElement = document.activeElement;
 	if (navigator.platform === "MacIntel" ? event.metaKey : event.ctrlKey && event.key === "s") {
 		event.preventDefault()
 		saveAll();
 		// ... your code here ...
 	}
    
-	else if( document.activeElement === document.body && 
-			(event.keyCode === 37 /*KeyLeft */ || event.keyCode === 39 /*key right */)) {
+	else if( (activeElement === document.body || isTag(activeElement, 'button')  ) && 
+			(event.keyCode === LeftArrow /*KeyLeft */ || event.keyCode === RightArrow /*key right */)) {
 		let keyCode = event.keyCode;
 		let p = qs('div.try-page[data-pagevisible=true]');
-		let elem =  p && p.querySelector(keyCode==37?'.page_prev':'.page_next');
+		let elem =  p && p.querySelector(keyCode==LeftArrow?'.page_prev':'.page_next');
+		if(!elem) {
+				showPopup(1, keyCode==RightArrow?"Last Page":"First Page",'success');	
+		}
 		elem && (event.preventDefault(), elem.onclick());
 	} 
 
-})
+}
 
+function isTag(elem, tagName) {
+	if(!elem || !elem.tagName ) return false;
+	return elem.tagName.toLowerCase() === tagName.toLowerCase();
+}
 /*
 		   switch (e.keyCode) { 
 				case 37: 
@@ -1204,6 +1230,10 @@ document.addEventListener("keydown", function keydown (event) {
 			} 
  */
 
+
+/*
+   Perform custom highlighting for TryitJS code
+ */
 function highlightCodeBlock(block) {
 	if(!block || !hljs) return;
 

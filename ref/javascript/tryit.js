@@ -507,21 +507,23 @@ var $tryit = function () {
       pageInfo.set(p.id, content);
       var editors = qsA('.tryit', p);
       editors.forEach(function (e) {
-        var id = e.id; //console.log('   ', e.id);
+        var id = e.id;
 
-        var anEditorProxy = new EditorProxy(id);
-        content.push(anEditorProxy);
-        allEditors.push(anEditorProxy);
+        if (id) {
+          var anEditorProxy = new EditorProxy(id);
+          content.push(anEditorProxy);
+          allEditors.push(anEditorProxy);
 
-        __editorsPending.push(id);
+          __editorsPending.push(id);
 
-        __editors.push(id);
+          __editors.push(id);
 
-        editorFor[id] = anEditorProxy;
+          editorFor[id] = anEditorProxy;
 
-        qs("#".concat(id, "-run")).onclick = function () {
-          return tryIt(id, anEditorProxy);
-        };
+          qs("#".concat(id, "-run")).onclick = function () {
+            return tryIt(id, anEditorProxy);
+          };
+        }
       });
     });
     return {
@@ -632,6 +634,8 @@ var $tryit = function () {
         if (pageInfo.compare(segment.id, curSeg.id) < 0) {
           var height = segment.offsetHeight;
           window.scrollTo(0, pos + height);
+        } else if (segment.offsetHeight < window.innerHeight - 5) {
+          segment.style.height = Math.round(window.innerHeight + 5) + 'px';
         }
       }
 
@@ -767,13 +771,16 @@ var $tryit = function () {
       CHANGED = true;
       var t0 = performance.now();
       beforeExecute(divName);
-      var val = (1, eval)(editor.getValue("\n"));
+      var val = (1, eval)(editor.getValue("\n")); // execute script in global context
+
       lastExecTime = performance.now() - t0;
+      var displaySeg = $e(divName + "-display");
 
       var show = function (val) {
-        $e(divName + "-display").innerHTML = val;
+        return displaySeg.innerHTML = val;
       };
 
+      displaySeg.style.display = "block";
       render(val).then(function (res) {
         if (res !== undefined) show(res);
         if (toUpdateUI) updateUI(divName);
@@ -1286,9 +1293,12 @@ var $tryit = function () {
         n.onclick = function () {
           return jump(id);
         };
+
+        n.dataset.tooltip = "Jump to next script";
       });
       qsA(".jump_back").forEach(function (n) {
         n.onclick = jumpback;
+        n.dataset.tooltip = "Jump to ready to execute script";
       });
       qsA(".run_all").forEach(function (n) {
         var id = n.id.substr(3);
@@ -1304,7 +1314,7 @@ var $tryit = function () {
           return save('tryit' + id);
         };
 
-        n.title = "Save this script";
+        n.dataset.tooltip = "Save this script";
       });
       _addRemoveCSSclass('ra_1', "green", "grey").style = "display: none";
     },
@@ -1332,6 +1342,7 @@ var $tryit = function () {
     qs: qs,
     qsA: qsA,
     pageVisibleBefore: pageVisibleBefore,
+    showPopup: showPopup,
     H: H
   };
 }(); //====================================================
@@ -1343,6 +1354,8 @@ function setDisplay(elem, type, otherElem) {
   if (!elem || !elem.dataset) return;
 
   if (otherElem && type == "false") {
+    delete otherElem.style.height;
+
     if (otherElem.offsetTop > elem.offsetTop) {
       var pos = window.scrollY || window.screenTop;
       window.scrollTo(0, pos - elem.offsetHeight);
@@ -1360,24 +1373,28 @@ var $$ = $tryit.$$,
     saveAll = $tryit.saveAll,
     pageVisibleBefore = $tryit.pageVisibleBefore,
     qs = $tryit.qs,
-    qsA = $tryit.qsA;
+    qsA = $tryit.qsA,
+    showPopup = $tryit.showPopup;
 var objInfo = $$.objInfo;
 document.addEventListener('DOMContentLoaded', function () {
-  //const $q = (arg1,arg2) => $tryit.asArray(qsA(arg1,arg2));
+  // check if we have highlightings then highlight TryitJS code snippets	
   if (hljs) {
-    qsA('pre code').forEach(highlightCodeBlock);
+    qsA('pre code.language-tryit').forEach(highlightCodeBlock);
   }
 
   $tryit.makeEditor();
-  var allPages = qsA('div[data-pagevisible]');
+  var allPages = qsA('div[data-pagevisible]'); // show only the first page
+
   allPages.forEach(function (elem, i) {
     return i !== 0 ? setDisplay(elem, "false") : '';
   });
   qsA('.page_prev').forEach(function (e) {
-    return e.onclick = $tryit.pagePrev;
+    e.onclick = $tryit.pagePrev;
+    e.dataset.tooltip = "Go to previous page (Key: 🡄)";
   });
   qsA('.page_next').forEach(function (e) {
-    return e.onclick = $tryit.pageNext;
+    e.onclick = $tryit.pageNext;
+    e.dataset.tooltip = "Go to next page (Key: 🡆)";
   });
   $('pre:has(code.language-tryit)').addClass('language-tryit');
 
@@ -1391,21 +1408,40 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 0);
   }
 });
-document.addEventListener("keydown", function (event) {
+document.addEventListener("keydown", keydown);
+qsA('button').forEach(function (el) {
+  return el.addEventListener("keydown", keydown);
+});
+
+function keydown(event) {
+  var LeftArrow = 37,
+      RightArrow = 39;
+  var activeElement = document.activeElement;
+
   if (navigator.platform === "MacIntel" ? event.metaKey : event.ctrlKey && event.key === "s") {
     event.preventDefault();
     saveAll(); // ... your code here ...
-  } else if (document.activeElement === document.body && (event.keyCode === 37
+  } else if ((activeElement === document.body || isTag(activeElement, 'button')) && (event.keyCode === LeftArrow
   /*KeyLeft */
-  || event.keyCode === 39
+  || event.keyCode === RightArrow
   /*key right */
   )) {
     var keyCode = event.keyCode;
     var p = qs('div.try-page[data-pagevisible=true]');
-    var elem = p && p.querySelector(keyCode == 37 ? '.page_prev' : '.page_next');
+    var elem = p && p.querySelector(keyCode == LeftArrow ? '.page_prev' : '.page_next');
+
+    if (!elem) {
+      showPopup(1, keyCode == RightArrow ? "Last Page" : "First Page", 'success');
+    }
+
     elem && (event.preventDefault(), elem.onclick());
   }
-});
+}
+
+function isTag(elem, tagName) {
+  if (!elem || !elem.tagName) return false;
+  return elem.tagName.toLowerCase() === tagName.toLowerCase();
+}
 /*
 		   switch (e.keyCode) { 
 				case 37: 
@@ -1422,6 +1458,11 @@ document.addEventListener("keydown", function (event) {
 					break; 
 			} 
  */
+
+/*
+   Perform custom highlighting for TryitJS code
+ */
+
 
 function highlightCodeBlock(block) {
   if (!block || !hljs) return;
