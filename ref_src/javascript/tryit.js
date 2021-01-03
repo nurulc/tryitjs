@@ -79,6 +79,14 @@
 		};
 		let pageInfo, allEditors;
 
+		function unsavedChanges() {
+			try {
+				return allEditors.some(e => !e.isClean());
+			} catch(e) {
+				return true;
+			}
+		}
+
 		let editorData = ( () => {
 			let data = window.localStorage[WINDOW_LOCATION];
 			if(data) {
@@ -156,7 +164,9 @@
 			Object.keys(editorFor).forEach( id => {
 				setEditorValue(id)
 			});
+
 			window.localStorage[WINDOW_LOCATION] = JSON.stringify(editorData);
+
 			alert('Save All');
 		}
 
@@ -169,6 +179,7 @@
 				let theme = tryit$colors.saved;
 				editor.setOption('theme', theme);
 				editor.tryitState = theme;
+				CHANGED===0 || CHANGED--;
 			}
 			return editorData;      
 		}
@@ -268,6 +279,7 @@
 				});
 				if(original !== contents) {
 					editor.setValue(contents);
+					editor.markClean();
 				}
 				editor.tryitState = theme;
 				editor.on('change', editorChanged)
@@ -281,8 +293,10 @@
 					let theme = editor.getOption('theme');
 					if(editor.isClean())
 							editor.setOption('theme', editor.tryitState)
-					else if(theme !== tryit$colors.edited ) 
+					else if(theme !== tryit$colors.edited ) {
 						editor.setOption('theme', tryit$colors.edited);
+						CHANGED++;
+					}
 					
 				}
 
@@ -348,6 +362,10 @@
 		  setValue(content) {
 			if(this._editor) this._editor.setValue(content);
 			else this.requiredContent = content; 
+		  }
+
+		  isClean(val) {
+		  	return this._editor === undefined || this._editor.isClean(val);
 		  }
 		  
 		  toString() {
@@ -702,7 +720,7 @@
 		let lastExecTime = 0.0;
 		function execute(divName, editor, toUpdateUI, toJump, callback) {
 					try { 
-						CHANGED = true;
+						//CHANGED = true;
 						let t0 = performance.now();
 						beforeExecute(divName);
 						let displaySeg = $e(divName + "-display");
@@ -1087,7 +1105,7 @@
 		});
 
 		window.onbeforeunload = function() { 
-				if( CHANGED )
+				if(unsavedChanges())
 					return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
 		}
 
@@ -1134,6 +1152,7 @@
 				qsA,
 				pageVisibleBefore,
 				showPopup,
+				unsavedChanges,
 				H 
 
 		});
@@ -1156,7 +1175,7 @@ function setDisplay(elem, type, otherElem) {
 //	 elem.style.display = (type==='false')?'none':'block'; // may nood to enable this
 }
 
-const {$$, jumpTag, jumpBack, _display,H, saveAll, pageVisibleBefore, qs, qsA, showPopup} = $tryit;
+const {$$, jumpTag, jumpBack, _display,H, saveAll, pageVisibleBefore, qs, qsA, showPopup, unsavedChanges} = $tryit;
 const objInfo = $$.objInfo; 
 document.addEventListener('DOMContentLoaded', (event) => {
 

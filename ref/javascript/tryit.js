@@ -112,7 +112,17 @@ var $tryit = function () {
   var __editors = [];
   var __editorsPending = [];
   var editorFor = {};
-  var pageInfo;
+  var pageInfo, allEditors;
+
+  function unsavedChanges() {
+    try {
+      return allEditors.some(function (e) {
+        return !e.isClean();
+      });
+    } catch (e) {
+      return true;
+    }
+  }
 
   var editorData = function () {
     var data = window.localStorage[WINDOW_LOCATION];
@@ -248,6 +258,7 @@ var $tryit = function () {
       var theme = tryit$colors.saved;
       editor.setOption('theme', theme);
       editor.tryitState = theme;
+      CHANGED === 0 || CHANGED--;
     }
 
     return editorData;
@@ -353,12 +364,7 @@ var $tryit = function () {
       }
 
       editor.tryitState = theme;
-      editor.on('change', function (editor) {
-        var theme = editor.getOption('theme');
-        if (editor.isClean()) editor.setOption('theme', editor.tryitState);else if (theme !== tryit$colors.edited) editor.setOption('theme', tryit$colors.edited);
-      } // qs(`#${id}-run`).onclick = execCode;
-      // function execCode() { return tryIt(id,editor);}
-      ); // __editorsPending.push(id);
+      editor.on('change', editorChanged); // __editorsPending.push(id);
       // __editors.push(id);
       // editorFor[id] = editor;
 
@@ -368,6 +374,16 @@ var $tryit = function () {
       function execCode() {
         return tryIt(id, editor);
       }
+
+      function editorChanged(editor) {
+        var theme = editor.getOption('theme');
+        if (editor.isClean()) editor.setOption('theme', editor.tryitState);else if (theme !== tryit$colors.edited) {
+          editor.setOption('theme', tryit$colors.edited);
+          CHANGED++;
+        }
+      } // qs(`#${id}-run`).onclick = execCode;
+      // function execCode() { return tryIt(id,editor);}
+
     } catch (err) {
       alert("Error creating editor " + id + ' ' + err.toString());
     }
@@ -417,6 +433,11 @@ var $tryit = function () {
       key: "setValue",
       value: function setValue(content) {
         if (this._editor) this._editor.setValue(content);else this.requiredContent = content;
+      }
+    }, {
+      key: "isClean",
+      value: function isClean(val) {
+        return this._editor === undefined || this._editor.isClean(val);
       }
     }, {
       key: "toString",
@@ -763,7 +784,7 @@ var $tryit = function () {
 
   function execute(divName, editor, toUpdateUI, toJump, callback) {
     try {
-      CHANGED = true;
+      //CHANGED = true;
       var t0 = performance.now();
       beforeExecute(divName);
       var displaySeg = $e(divName + "-display");
@@ -1159,7 +1180,7 @@ var $tryit = function () {
   });
 
   window.onbeforeunload = function () {
-    if (CHANGED) return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
+    if (unsavedChanges()) return "You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes";
   };
 
   var $$ = {
@@ -1278,7 +1299,7 @@ var $tryit = function () {
       // list.map( e => e.id).forEach(makeAnEditor);
       var pi = getPageInfo();
       pageInfo = pi.pageInfo;
-      pi.allEditors;
+      allEditors = pi.allEditors;
       qsA('div[data-pagevisible="true"]').forEach(function (e) {
         return setDisplay(e, 'false');
       }); //			setDisplay(qs('div[data-pagevisible]'),'true');
@@ -1341,6 +1362,7 @@ var $tryit = function () {
     qsA: qsA,
     pageVisibleBefore: pageVisibleBefore,
     showPopup: showPopup,
+    unsavedChanges: unsavedChanges,
     H: H
   };
 }(); //====================================================
@@ -1372,7 +1394,8 @@ var $$ = $tryit.$$,
     pageVisibleBefore = $tryit.pageVisibleBefore,
     qs = $tryit.qs,
     qsA = $tryit.qsA,
-    showPopup = $tryit.showPopup;
+    showPopup = $tryit.showPopup,
+    unsavedChanges = $tryit.unsavedChanges;
 var objInfo = $$.objInfo;
 document.addEventListener('DOMContentLoaded', function () {
   // check if we have highlightings then highlight TryitJS code snippets	
