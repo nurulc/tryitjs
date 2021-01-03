@@ -96,10 +96,7 @@ var $tryit = function () {
     return (base || document).querySelectorAll(arg);
   }
 
-  function getIDNumber(aDiv) {
-    var num = aDiv.replace(/[^0-9]*/, '');
-    return num;
-  } // class Text {
+  // class Text {
   //     constructor(s) {
   //       s = s || '';
   //       if(s.length > 20000) s = s.substr(0,20000)+ '...more('+(s.length-20000)+')';
@@ -112,8 +109,6 @@ var $tryit = function () {
   // ----------------------------------------
   // Render
   // ----------------------------------------
-
-
   var __editors = [];
   var __editorsPending = [];
   var editorFor = {};
@@ -583,8 +578,8 @@ var $tryit = function () {
     if (ix !== 0) return false;
     __editorsPending = __editorsPending.slice(1);
     var divName = __editorsPending[0];
-    addRemoveCSSclass(divName, "yellow", "green").dataset.tooltip = "Execute Script (Ctrl+Enter)";
-    _addRemoveCSSclass('ra_' + getIDNumber(divName), "green", "grey").dataset.tooltip = "All previous scripts executed";
+    addRemoveCSSclass(divName, "yellow", "green").dataset.tooltip = "Execute Script (Ctrl+Enter)"; //_addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").dataset.tooltip = "All previous scripts executed";
+
     return true;
   }
 
@@ -718,8 +713,8 @@ var $tryit = function () {
     //(divName);
     //addRemoveCSSclass(divName, "blue", "green");
     //console.log('UpdateUI', divName);
-    replaceCSSClass(divName);
-    _addRemoveCSSclass('ra_' + getIDNumber(divName), "green", "grey").dataset.tooltip = "All previous scripts executed";
+    replaceCSSClass(divName); //_addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").dataset.tooltip = "All previous scripts executed";
+
     _addRemoveCSSclass(divName + "-run", ["green", "yellow"], "blue").dataset.tooltip = "Re-Execute Script (Ctrl+Enter)";
     if (toJump) setTimeout(function () {
       return jump(divName);
@@ -771,10 +766,14 @@ var $tryit = function () {
       CHANGED = true;
       var t0 = performance.now();
       beforeExecute(divName);
+      var displaySeg = $e(divName + "-display");
+      var output = $e(divName + "-output");
+      var boundingSeg = output.closest('.tryit-inner');
+      boundingSeg.closest('.tryit-inner').style.setProperty('margin-bottom', '-1.9rem');
+      output.style.display = "block";
       var val = (1, eval)(editor.getValue("\n")); // execute script in global context
 
       lastExecTime = performance.now() - t0;
-      var displaySeg = $e(divName + "-display");
 
       var show = function (val) {
         return displaySeg.innerHTML = val;
@@ -1315,8 +1314,7 @@ var $tryit = function () {
         };
 
         n.dataset.tooltip = "Save this script";
-      });
-      _addRemoveCSSclass('ra_1', "green", "grey").style = "display: none";
+      }); //_addRemoveCSSclass('ra_1',"green", "grey").style ="display: none";
     },
     $$: $$,
     //display interface

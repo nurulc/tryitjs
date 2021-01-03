@@ -460,7 +460,7 @@
 					n.dataset.tooltip = "Save this script";
 				}
 			);
-			_addRemoveCSSclass('ra_1',"green", "grey").style ="display: none";
+			//_addRemoveCSSclass('ra_1',"green", "grey").style ="display: none";
 		}
 
 		function isPrimitive(v) {
@@ -516,7 +516,7 @@
 			__editorsPending = __editorsPending.slice(1);
 			let divName = __editorsPending[0];
 			addRemoveCSSclass(divName, "yellow", "green").dataset.tooltip = "Execute Script (Ctrl+Enter)";
-			_addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").dataset.tooltip = "All previous scripts executed";
+			//_addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").dataset.tooltip = "All previous scripts executed";
 			return true;
 
 		}
@@ -662,7 +662,7 @@
 			//addRemoveCSSclass(divName, "blue", "green");
 			//console.log('UpdateUI', divName);
 			replaceCSSClass(divName);
-			_addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").dataset.tooltip = "All previous scripts executed";
+			//_addRemoveCSSclass('ra_'+getIDNumber(divName),"green", "grey").dataset.tooltip = "All previous scripts executed";
 			_addRemoveCSSclass(divName+"-run",["green", "yellow"], "blue").dataset.tooltip = "Re-Execute Script (Ctrl+Enter)";
 			if(toJump) setTimeout( () => jump(divName),0);
 		}
@@ -705,11 +705,16 @@
 						CHANGED = true;
 						let t0 = performance.now();
 						beforeExecute(divName);
-						
+						let displaySeg = $e(divName + "-display");
+						let output = $e(divName + "-output");
+						let boundingSeg = output.closest('.tryit-inner');
+						boundingSeg.closest('.tryit-inner').style.setProperty('margin-bottom', '-1.9rem');
+
+						output.style.display = "block";
 						var val = (1,eval)(editor.getValue("\n")); // execute script in global context
 						
 						lastExecTime = performance.now()-t0;
-						let displaySeg = $e(divName + "-display");
+						
 						let show = val => displaySeg.innerHTML = val;
 						displaySeg.style.display = "block";
 

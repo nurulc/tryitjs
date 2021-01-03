@@ -532,6 +532,18 @@ p.html {
   padding-bottom: 0.5rem;
 }
 
+.tryit-anchor {
+  height: 0.1rem;
+  overflow: hidden;
+}
+
+.tryit-inner {
+  /*font-size: 1rem;*/
+  /*padding-top: 2.2rem;*/
+  border-bottom: none !important;
+  /*margin-bottom: -3.5rem !important;*/
+}
+
 
 .tryit-section {
   background-color: #919199;
