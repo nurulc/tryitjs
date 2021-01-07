@@ -1,4 +1,55 @@
-.hljs-comment,.hljs-quote{color:#7d7a68}.hljs-attribute,.hljs-link,.hljs-name,.hljs-regexp,.hljs-selector-class,.hljs-selector-id,.hljs-tag,.hljs-template-variable,.hljs-variable{color:#d73737}.hljs-built_in,.hljs-builtin-name,.hljs-literal,.hljs-meta,.hljs-number,.hljs-params,.hljs-type{color:#b65611}.hljs-bullet,.hljs-string,.hljs-symbol{color:#60ac39}.hljs-section,.hljs-title{color:#6684e1}.hljs-keyword,.hljs-selector-tag{color:#b854d4}.hljs{display:block;overflow-x:auto;background:#fefbec;color:#6e6b5e;padding:.5em}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+/*.hljs-comment,.hljs-quote{color:#7d7a68}.hljs-attribute,.hljs-link,.hljs-name,.hljs-regexp,.hljs-selector-class,.hljs-selector-id,.hljs-tag,.hljs-template-variable,.hljs-variable{color:#d73737}.hljs-built_in,.hljs-builtin-name,.hljs-literal,.hljs-meta,.hljs-number,.hljs-params,.hljs-type{color:#b65611}.hljs-bullet,.hljs-string,.hljs-symbol{color:#60ac39}.hljs-section,.hljs-title{color:#6684e1}.hljs-keyword,.hljs-selector-tag{color:#b854d4}.hljs{display:block;overflow-x:auto;background:#fefbec;color:#6e6b5e;padding:.5em}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}*/
+
+.hljs-selector-id,
+.hljs-tag,
+.hljs-template-variable,
+.hljs-variable {
+    color: #d73737
+}
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-params,
+.hljs-type {
+    color: #b65611
+}
+.hljs-bullet,
+.hljs-string,
+.hljs-symbol {
+    color: #60ac39
+}
+.hljs-section,
+.hljs-title {
+    color: #6684e1
+}
+.hljs-keyword,
+.hljs-selector-tag {
+    color: #b854d4
+}
+.hljs {
+    display: block;
+    overflow-x: auto;
+    background: #fefbec;
+    color: #6e6b5e;
+    padding: .5em
+}
+.hljs-emphasis {
+    font-style: italic
+}
+.hljs-strong {
+    font-weight: 700
+}
+.hljs-function {
+  color: #a70303;
+}
+
+code.hljs {
+    margin-left: 4rem;
+}
+
+
 .rendered_html tr,
 .rendered_html th,
 .rendered_html td {
@@ -82,13 +133,22 @@
  font-family: sans-serif !important;
  font-size: 10.3pt !important;
  background: #27313d;
- color: #bbc2e1;
  border-bottom: 1px solid #27313d;
  vertical-align: bottom;
 }
-.ftable tbody tr:nth-child(odd) {
- background: #3f495a;
+
+.ftable thead tr th {
+  color: #ccd0f3;
 }
+
+.ftable tbody > tr:nth-child(odd) {
+ background: #3f495a !important;
+}
+
+table.ftable tr.even, table.ftable tr.alt, table.ftable tbody tr:nth-of-type(even)
+    background: #5f5d5d;
+}
+
 .ftable tbody tr {
  background: #394251;
 }
@@ -101,6 +161,73 @@
 .ftable * + table {
  margin-top: .05em;
 }
+/* ========================================================= */
+/*           Markdown support                                */
+
+table.dataTable {
+    border-collapse:  collapse;  
+}
+
+table {
+    border-collapse:  separate;
+    text-indent: initial;
+    border-spacing: 2px;
+    margin-left: 4rem;
+    border: solid #e0e4f1;
+    padding: 0.5rem 1rem;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+table thead {
+    background: #F5F5F5;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+table thead tr th, table tfoot tr th, table tfoot tr td, table tbody tr th, table tbody tr td, table tr td {
+    display: table-cell;
+    line-height: 1.125rem;
+    padding-left: 1rem;
+}
+
+
+table.dataTable tr.even, table tr.alt, table tr:nth-of-type(even) {
+    background: #21202091;
+}
+
+table tr.even, table tr.alt, table tr:nth-of-type(even) {
+    background: #f5f5f5;
+}
+
+
+
+
+table thead tr th, table thead tr td {
+    color: #222;
+    font-size: 0.875rem;
+    font-weight: bold;
+    padding: 0.5rem 0.625rem 0.625rem;
+    padding-left: 1rem;
+}
+
+table.dataTable thead tr th, table thead tr td {
+  color: #ccd0f3;
+}
+
+
+
+
+
+/* ========================================================= */
 
 
 
@@ -680,7 +807,7 @@ pre.language-tryit:hover {
 /* cobolt-light */
 
 /*.cm-s-cobalt-light.CodeMirror { background: #004280; color: white; } #71b7fa*/
-.cm-s-cobalt-light.CodeMirror { background: #e3f2ff; color: #5f3535; } 
+.cm-s-cobalt-light.CodeMirror { background: #d3d2ef; color: #5f3535; } 
 
 .cm-s-cobalt-light div.CodeMirror-selected { background: #ffffff88/*#b36539*/; }
 /*

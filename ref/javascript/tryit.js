@@ -361,6 +361,7 @@ var $tryit = function () {
 
       if (original !== contents) {
         editor.setValue(contents);
+        editor.markClean();
       }
 
       editor.tryitState = theme;
@@ -1401,6 +1402,8 @@ document.addEventListener('DOMContentLoaded', function () {
   // check if we have highlightings then highlight TryitJS code snippets	
   if (hljs) {
     qsA('pre code.language-tryit').forEach(highlightCodeBlock);
+    qsA('pre code.language-js').forEach(highlightCodeBlock);
+    qsA('pre code.language-javascript').forEach(highlightCodeBlock);
   }
 
   $tryit.makeEditor();
@@ -1486,7 +1489,7 @@ function isTag(elem, tagName) {
 
 
 function highlightCodeBlock(block) {
-  if (!block || !hljs) return;
+  if (!block | highlightCodeBlock | !hljs) return;
 
   if (block.classList.contains('language-tryit')) {
     var _lines = (block.innerText || '').split('\n');

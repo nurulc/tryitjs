@@ -1182,6 +1182,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		// check if we have highlightings then highlight TryitJS code snippets	
 		if(hljs) { 
 			 qsA('pre code.language-tryit').forEach(highlightCodeBlock);
+			 qsA('pre code.language-js').forEach(highlightCodeBlock);
+			 qsA('pre code.language-javascript').forEach(highlightCodeBlock);
 		}
 		$tryit.makeEditor();
 		let allPages = qsA('div[data-pagevisible]');
@@ -1259,7 +1261,7 @@ function isTag(elem, tagName) {
    Perform custom highlighting for TryitJS code
  */
 function highlightCodeBlock(block) {
-	if(!block || !hljs) return;
+	if(!block |highlightCodeBlock| !hljs) return;
 
 	if(block.classList.contains('language-tryit')) {
 		let _lines = (block.innerText || '').split('\n')

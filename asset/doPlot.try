@@ -11,7 +11,7 @@
       let div = genID($$.executeDiv);
       let [_data, _layout, _config] = [dn, data, layout]; // no dn parameter
       $$.lastly(true,() => Plotly.newPlot(div, _data, _layout, _config));
-      return HTML(`<div id="${div}" />`)
+      return HTML(`<div><div id="${div}" /></div>`)
    }
   }
  </script>
