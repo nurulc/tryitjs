@@ -42,7 +42,9 @@
     "babel-plugin-loop-optimizer": "^1.4.1",
     "babel-plugin-minify-dead-code-elimination": "^0.5.1",
     "babel-preset-minify": "^0.2.0",
+    "edit-package-json": "^0.2.3",
     "glob": "^7.1.6",
+    "json-to-ast": "^2.1.0",
     "nodemon": "^2.0.4",
     "reload": "^3.1.0"
   },
