@@ -1,5 +1,16 @@
-//gen-sample.js
+//genSampleFiles.js
 //
+//const {saveData} = require('../lib/fileio');
+
+function saveData([location, text], mayOverwrite=false, doNotChange=false) {
+	if(fs.existsSync(location)) {
+		console.log("file already exists");
+	}
+	console.log('saveToFile:', location, {mayOverwrite, doNotChange});
+	console.log('content:', text);
+}
+
+
 function genSampleFiles(baseDir, packageName){
 saveData([`${baseDir}/index.try`,`!head
     <title>TryIT ${packageName}</title>

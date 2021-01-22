@@ -1,7 +1,14 @@
 #!/usr/bin/env node
+
+const DEBUG_INIT = true;
+
+const DEFAULT_SRC = DEBUG_INIT?'try_src1':'try_src';
+const DEFAULT_TARGET = DEBUG_INIT?'try_it1':'try_it';
+
 const fs = require('fs'); 
 const path = require('path');
 const {genHTML} = require('../index');
+const {genProject} = require('./gen-template');
 const SCRIPT_DIR = __dirname;
 const {
   readLines,
@@ -14,6 +21,7 @@ const {
   log
  } = require('../lib/fileio');
 
+  
  const {normalize} = require('../lib/path-utils');
 
 //let baseConfig = require('../.tryit').default;
@@ -23,9 +31,9 @@ let userConfig = {...baseConfig}, outFile,inFile, srcDir, targetDir, debug, user
 
 function readTryConfig() {
   let configName = path.join(SCRIPT_DIR,'..', '.tryitjs.json');
-  console.log("try reading", configName);
+  //console.log("try reading", configName);
   if(fileExists(configName)) {
-    console.log("reading", configName);
+    //console.log("reading", configName);
     let bc = readJson(configName);
     if(!bc) {
       console.log(".tryitjs.json not found");
@@ -143,6 +151,7 @@ function fileItem(inFile, outFile, srcDir, targetDir) {
   return ({inFile, outFile, srcDir, targetDir})
 }
 
+
 /**
  * Process the progrm arguments looking for options
  * 
@@ -152,12 +161,22 @@ function fileItem(inFile, outFile, srcDir, targetDir) {
 function ARGS(args) {
     let argSkip = 2; 
     let inFiles = [];
-    let outFile, srcDir, targetDir;
+    let outFile, srcDir, targetDir, isInit, initTarget;
     //let userConfig, isLocal; // get rid of this line only for testing
     
     while( args.length) {
         argSkip = 2;
         switch(args[0]) {
+            case '--init': {
+                isInit = true;
+                if( !(args[1] && args[1].startsWith('-')) ) {
+                  initTarget = args[1];
+                }
+                targetDir = targetDir || DEFAULT_TARGET;
+                srcDir = srcDir || DEFAULT_SRC;
+              break;  
+            }
+
             case '-c': 
             case '--config': userConfigFile = args[1]; break;
             case '--outfile': 
@@ -172,6 +191,13 @@ function ARGS(args) {
                 
         }
         args = args.slice(argSkip);
+    }
+
+    const DO_NOTHING = Promise.resolve(undefined);
+
+    if(isInit) {
+      genProject(initTarget, srcDir, targetDir);
+      return DO_NOTHING;
     }
 
 
@@ -206,6 +232,8 @@ function ARGS(args) {
       if(inFiles.length===0) inFiles.push("<possibly multiple input files>");
       throw new Error("Invalid input - several input file does not support outfile: input("+ inFiles.join(', ')+ ") outFile: ("+outFile+")");
     }
+
+    return DO_NOTHING;
 }
 
 
@@ -213,6 +241,7 @@ function ARGS(args) {
 // Process files
 
 ARGS(process.argv.slice(2)).then( inFiles => {
+  if(!inFiles) return undefined; 
   let refDirBase = path.join(SCRIPT_DIR,'..');
   const readLinesFrom = includeFileOrUrl; //readLines
   inFiles.forEach( ({inFile, outFile, srcDir, targetDir}) => {
