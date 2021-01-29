@@ -16,7 +16,7 @@ function search(arr, fn) {
 }
 
 
-class PackageAST {
+const PackageAST = class {
     constructor(pkg, offset=0) {
         this.pkg = pkg;
         this.offset = offset;
