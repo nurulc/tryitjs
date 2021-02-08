@@ -52,7 +52,7 @@ saveData([`${baseDir}/index.try`,`!head
 !md
     ## Creating a UI example
 
-    This will demonstrate how to create a 'user interface' (UI) for same code:
+    This will demonstrate how to create a 'user interface' (UI) for same code (using Semantic-UI - _The default for Tryitjs):
 
 !html
     <form class="ui form">
@@ -62,14 +62,28 @@ saveData([`${baseDir}/index.try`,`!head
       </div>
       <div class="field">
         <label>Value to find</label>
-        <input type="text" id="val_value" placeholder="not">
+        <input type="text" id="val_search" placeholder="not">
       </div>
       <div class="field">
           <input type="text" id="val_result">
           <label>Index of Value</label>
       </div>
-      <button class="ui button" >Execute</button>
+      <button class="ui button" id="val_exec">Execute</button>
     </form>
+!md
+    ### Note abou UI
+
+    Note the UI above does not do anything, we need to wire this up. We can do the wiring using the code in the given in the script below. As
+    stated earlier, Tryitjs using Semantic-UI and jQuery to provide functionality. We can take advantage of this to wire up the form above. After
+    you have executed that script the form will acquire the necessary functionality.
+
+!tryit
+    // Non wire up the form above
+    $('#val_exec').on('submit', () => {
+        let list = $('#val_array').val().split(/ *,/);
+        let search = list.indexOf($('#val_search').val());
+        $('#val_resuly').val(''+search);
+
 
 
 !md

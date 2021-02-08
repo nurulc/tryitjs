@@ -49,6 +49,21 @@ code.hljs {
     margin-left: 4rem;
 }
 
+code {
+  color: #e83e8c;
+}
+
+code.htmlx {
+  color: #2b27b4;  
+}
+
+code.S {
+  color: #40861e;
+}
+
+code.V {
+  color: #2b27b4;
+}
 
 .rendered_html tr,
 .rendered_html th,
@@ -202,6 +217,10 @@ table thead tr th, table tfoot tr th, table tfoot tr td, table tbody tr th, tabl
 
 table.dataTable tr.even, table tr.alt, table tr:nth-of-type(even) {
     background: #21202091;
+}
+
+table.ftable tr:nth-of-type(even) {
+  background: #544949;
 }
 
 table tr.even, table tr.alt, table tr:nth-of-type(even) {
