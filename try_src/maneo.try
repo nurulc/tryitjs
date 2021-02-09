@@ -1,8 +1,0 @@
-!head
-  <title>Intro to TryITjs</title>
-!md .
-
-    @@include ./intro.md
-
-
-!end

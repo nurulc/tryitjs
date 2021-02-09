@@ -1,0 +1,25 @@
+!head
+  <title>First Tryit</title>
+  @@include tools/head.try
+
+!md 
+	# Introduction
+	This a very simple **TryITjs** file. It has only one page.
+
+	## Code example
+
+	This is a simple code example to create a javascript array and display it.
+
+	Press the RUN button to execute the code (you can eddit the code and run again if you like)
+
+!tryit
+	var array = [ 'a String', 1 , { name: 'tryit'} ]; // array with a `string`, `number`, and an `object`
+	array
+
+
+!md
+	**What just happened**, if you execute the code above it will display the array just created. 
+
+	__Note: the last expression `array` is displayed.
+
+	<a href="some-more.html">More Example</a>

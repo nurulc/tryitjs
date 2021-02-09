@@ -1,6 +1,7 @@
 # ![](tryit-small.png)
 
-CLI (command line) application to generate HTML file containing editable Javascript code snippets that can be edited and executed in the browser. This is designed to help npm module developers to publish pages to that other developers can try out ther library with the minimum of effort.
+CLI (command line) application to generate HTML file to write tutorials for Javascript librarries. The HTML tutorial file (a try file) that
+requires no backend server, and totally self contained. This containing editable Javascript code snippets that can be edited and executed in the browser. This is designed to help npm module developers to publish pages to that other developers can try out ther library with the minimum of effort.
 
 <a href="https://unpkg.com/tryitjs/try_it/index.html">Demo of a TryITjs</a><br />
 <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html">A more extensive example</a><br />
@@ -11,7 +12,7 @@ CLI (command line) application to generate HTML file containing editable Javascr
 ```sh
 npm install -g  tryitjs
 ```
-### Create a tyyit file
+### Create a tryit file
 
 * test.try
 ```
@@ -20,6 +21,8 @@ npm install -g  tryitjs
 ### Simplest usage
 
 The processor takes as input a file with the extension _&lt;filename&gt;.try_ and generates _&lt;filename&gt;.html_ 
+
+```try
 
 further is creates two extra directories (in --local mode):
 

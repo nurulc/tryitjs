@@ -1,113 +1,25 @@
-!head  /* TOP LEVEL .try file*/
-
-  <!-- add a title -->
-  <title>Introducing TryitJS</title>
-
+!head
+  <title>TryitJS Examples</title>
+  @@include tools/head.try 
 !md
-    @@include intro.md
-!md
-    # TryItJs Tutorial
+	# TryITJs Tutorials
+	## [Basic Example](basic.html)
 
-    This is an interactive tutorial on how TryItJS can be use to document a API. 
-!html
-    <div class="ui stackable padded grid">
-      <div class="eight wide column">
+	The code below is the **.try** file for the exaple
 
-!md /* Add some markdown */
-    ## Introduction
+	```tryit
+	@@include ESCAPE basic.try
+	@@include ESCAPE tools/head.try
+	```
 
-    Simple tool to help JavaScript module developers to provide tutorials for the library. It generates a standalone HTML file that behaves like a 
-    [Jypyter Notebook](https://www.dataquest.io/blog/jupyter-notebook-tutorial/)
+	## [Two Page Example](some-more.html)
 
-    ## An example of a tryit block
-
-    You can edit and run the code below and display the result.
-
-!tryit
-    let arr = [ 1, 2, 3];
-    //
-    arr.map( x => x*2 )
-
-!html
-    </div>
-      <div class="eight wide bottom column">
-        <iframe width="560" height="315" 
-          src="https://www.youtube.com/embed/0pcOxoPJ7-U" frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-!md
-    ### Jupyter Notebook
-    Jupyter is a great way of playing with javascript libraries (or any other langeage supported). You can build well crafted tutorials
-    with code examples that can play with all in the browser. The real downside is that the jupyter environment has to be setup locally.
-    It takes substantial knowledge and effort to setup a Jupyter environment. Further, it takes yet more effort to setup everything required 
-    to test a library.
-!html
-      </div>
-    </div>
-!md
-    ## [Why TryITJs](./why_tryit/index.html)
-    ## [Lets Begin](./lets-begin/index.html)
-    ## Simple API Project
-    ## [Lodash Tutorial](./lodash_tutorial/index.html)
-
-
-
-
-## Another block
-
-```tryit
-
-  \!head --- to be a page this must be at the top of the page
-      <!-- add a title -->;
-      <title>Test Tryit</title>
-      <!-- add some custon scripts, in this case the lodash library -->
-
-      <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/solarized-light.min.css">
-      <!-- some in-line script -->
-
-      <script>
-      let words = ['sky', 'wood', 'forest', 'falcon', 
-          'pear', 'ocean', 'universe'];
-      </script>
-      <!-- end of the inline script -->
-
-  \!md
-    \## Simple API Project
-
-    \## [Lodash Tutorial](./lodash.html)
-  \!html
-       </div>
-        <div class="eight wide bottom column">
-          <iframe width="560" height="315" 
-            src="https://www.youtube.com/embed/0pcOxoPJ7-U" frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-          </iframe>
-        </div>
-        </div>
-
-  
-        \@@include xxx.try  --- this includes the body of the file 'xxx.tyy' here (a page fragment)
-
-  \!tryit 
-    var x = 5; // var decl (full file scope)
-    let y = '10'; // scope of this code snippet    
-  
-  \!end --- end of the file
-        ... HTML ot add to the bottom of the page goes here...  
-  
-```
-
-!tryit
-5
-
-!md
-
-## Simple API Project
-
-## [Lodash Tutorial](./lodash_tutorial/index.html)
-  
-
+	The following is the **.try** file used for this example
+	```tryit
+	@@include ESCAPE some-more.try
+	```
+	## [Creating UI](ui.html)
+	```tryit
+	@@include ESCAPE ui.try
+	```
 !end

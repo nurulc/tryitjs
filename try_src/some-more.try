@@ -1,0 +1,31 @@
+!head
+  <title>Sligltly More elaborate example</title>
+!md 
+	# Introduction
+	This is a slightly more elaborate example
+
+	## Code example
+
+	This is a simple code example to create a javascript array and display it.
+
+!tryit
+	var array = [ 'a String', 1 , { name: 'tryit'} ]; // array with a `string`, `number`, and an `object`
+	array
+
+
+!md
+	**What just happened**, if you execute the code above it will display the array just created. 
+
+	_Note: the last expression `array` is displayed._
+
+	## Some simple notes
+
+	* You can edit the example above and runit as may time as you want
+	* The code changes its theme once you edit it to show you
+	A variable created within a **!tryit** snippet  usin a ``let`` only exists in the snipped
+
+!md
+    # Another Page
+
+    This is one more example in a new page. The is it my test.
+!end
