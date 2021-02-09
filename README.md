@@ -30,15 +30,11 @@ npm run build
 npm start
 ```
 
-* test.try
-```
-```
-
 ### Simplest usage
 
 The processor takes as input a file with the extension _&lt;filename&gt;.try_ and generates _&lt;filename&gt;.html_ 
 
-```try
+
 
 further is creates two extra directories (in --local mode):
 
@@ -59,7 +55,7 @@ The init action will do several things:
 
 * Optional create .tryit.json 
 	* this is done with the option `tyritjs --init`
-```
+```json
 {
  headers: {
     "css": ["https://...", ...],
