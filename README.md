@@ -55,22 +55,22 @@ The init action will do several things:
 
 * Optional create .tryit.json 
 	* this is done with the option `tyritjs --init`
-```json
+```javascript 
 {
- headers: {
+ "headers": {
     "css": ["https://...", ...],
     "scripts": ["https://...js",...] 
   },
-  local: {
-    css: [
+  "local": {
+    "css": [
         "/stylesheets/tryit.css"
     ],
-    scripts: [
+    "scripts": [
     "/javascript/prettyprint.js", 
     "/javascript/tryit.js"
     ]
   },
-   onend: ` <!-- HTML to ADD at the bottom of the html file, just before </body> -->
+   "onend": ` <!-- HTML to ADD at the bottom of the html file, just before </body> -->
           <script
           src="https://code.jquery.com/jquery-3.1.1.min.js"
           integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
