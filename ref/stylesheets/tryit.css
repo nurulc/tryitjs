@@ -226,7 +226,7 @@ table.dataTable tr.even, table tr.alt, table tr:nth-of-type(even) {
 }
 
 table.ftable tr:nth-of-type(even) {
-  background: #544949;
+  background: #544949 !important;
 }
 
 table.frame_row_table tbody tr:nth-of-type(even) {

@@ -251,7 +251,8 @@
 				const theme = (original === contents)?tryit$colors.original:tryit$colors.saved;
 				const editor = CodeMirror.fromTextArea(textarea, {
 					lineNumbers: true,
-	//        mode: "javascript",
+	       			// mode: "javascript",
+	       			mode: "jsx",
 					theme: theme,//"cobalt",
 					matchBrackets: true,
 					autoCloseBrackets: '()[]{}\'\'""``', 
@@ -729,7 +730,8 @@
 						boundingSeg.closest('.tryit-inner').style.setProperty('margin-bottom', '-1.9rem');
 
 						output.style.display = "block";
-						var val = (1,eval)(editor.getValue("\n")); // execute script in global context
+						jsxLoader.compiler.addUseStrict = false;
+						var val = (1,eval)(jsxLoader.compiler.compile(editor.getValue("\n"))); // execute script in global context
 						
 						lastExecTime = performance.now()-t0;
 						
@@ -797,8 +799,10 @@
 				}
 
 				beforeExecute(divName);
+				jsxLoader.compiler.addUseStrict = false;
+	
 				_code = editor.getValue("\n");
-				var val = (1,eval)(_code);
+				var val = (1,eval)(jsxLoader.compiler.compile(_code)); // execute script in global context(_code);
 
 				render(val).then(res => {
 						//replaceCSSClass(divName, false);
@@ -956,9 +960,24 @@
 			return ({_toHtml: () => '<br/><p><b>' + asHTML(s) + '</b></p>'});
 		}
 
+		function isReactNode(d) {
+			if(typeof d !== 'object' || typeof window.React === undefined || typeof window.ReactUI === undefined) return false;
+			return d.$$typeof && d.$$typeof.toString() === "Symbol(react.element)" && !!d.type;
+		}
+
 		function display(d) {
 			if(d && d._toHtml ) {
 				 return d._toHtml();
+			}
+			else if(isReactNode(d)) {
+				let genID = 'RX'+Math.trunc(Math.random()*10000);
+				_lastly(() => window.ReactDOM.render(d, document.getElementById(genID)));
+				return `<div id="${genID}">ReactNode</div>`;
+			}
+			else if( d instanceof Set) {
+				let setArrStr = Array.from(d).join(', ');
+
+				return `<pre>Set{${asHTML(setArrStr)}}</pre>`;
 			}
 			else if( typeof d === "string") {
 				if( d && d.length > 20000) {

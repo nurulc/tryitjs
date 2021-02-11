@@ -29,6 +29,7 @@
      /* Codemirror JS */
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js",
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/javascript/javascript.min.js",
+     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/jsx/jsx.min.js",
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/edit/matchbrackets.min.js",
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/edit/closebrackets.min.js",
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/continuecomment.min.js",
@@ -66,6 +67,7 @@
    // sha1 support  
    "https://unpkg.com/js-sha1/src/sha1.js",
    "https://unpkg.com/lz-string@1.4.4/libs/lz-string.min.js",
+   "https://cdn.jsdelivr.net/npm/dataformsjs/js/react/jsxLoader.min.js",
    "https://unpkg.com/tryitjs@VERSION/ref/javascript/prettyprint.js",
    "https://unpkg.com/tryitjs@VERSION/ref/javascript/tryit.js"
   ],
