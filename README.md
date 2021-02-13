@@ -3,7 +3,8 @@
 CLI (command line) application to generate HTML file to write tutorials for Javascript librarries. The HTML tutorial file (a try file) that
 requires no backend server, and totally self contained. This containing editable Javascript code snippets that can be edited and executed in the browser. This is designed to help npm module developers to publish pages to that other developers can try out ther library with the minimum of effort.
 
-<a href="https://unpkg.com/tryitjs/try_it/index.html">Demo of a TryITjs</a><br />
+<a href="https://unpkg.com/tryitjs/try_it/index.html">TryITjs Tutorial</a><br />
+<a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html">Overview of TryitJS</a><br />
 <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html">A more extensive example</a><br />
 
 ## Instalation
@@ -12,17 +13,28 @@ requires no backend server, and totally self contained. This containing editable
 ```sh
 npm install -g  tryitjs
 ```
-### Create a tryit file
+### Quickly try it out
 
-* test.try
+* Start a command prompt (bash on Linux, cmd on Windows,...)
+* Navigate to an empty directory (or you outer level projects directory)
+```sh
+tryitjs --init my-try-playpen
 ```
+You will see that a new directory has been created __my-try-playpen__
+
+Switch to the the playpen directory as follows:
+```sh
+cd my-try-playpen
+npm install
+npm run build
+npm start
 ```
 
 ### Simplest usage
 
 The processor takes as input a file with the extension _&lt;filename&gt;.try_ and generates _&lt;filename&gt;.html_ 
 
-```try
+
 
 further is creates two extra directories (in --local mode):
 
@@ -43,22 +55,22 @@ The init action will do several things:
 
 * Optional create .tryit.json 
 	* this is done with the option `tyritjs --init`
-```
+```javascript 
 {
- headers: {
+ "headers": {
     "css": ["https://...", ...],
     "scripts": ["https://...js",...] 
   },
-  local: {
-    css: [
+  "local": {
+    "css": [
         "/stylesheets/tryit.css"
     ],
-    scripts: [
+    "scripts": [
     "/javascript/prettyprint.js", 
     "/javascript/tryit.js"
     ]
   },
-   onend: ` <!-- HTML to ADD at the bottom of the html file, just before </body> -->
+   "onend": ` <!-- HTML to ADD at the bottom of the html file, just before </body> -->
           <script
           src="https://code.jquery.com/jquery-3.1.1.min.js"
           integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
