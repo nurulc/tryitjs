@@ -9,17 +9,21 @@
 
 	```tryit
 	@@include ESCAPE basic.try
-	@@include ESCAPE tools/head.try
 	```
+	* [See result](basic.html)
 
+!md
 	## [Two Page Example](some-more.html)
 
 	The following is the **.try** file used for this example
 	```tryit
 	@@include ESCAPE some-more.try
 	```
+	* [See result](some-more.html)
+!md
 	## [Creating UI](ui.html)
 	```tryit
 	@@include ESCAPE ui.try
 	```
+	* [See result](ui.html)
 !end

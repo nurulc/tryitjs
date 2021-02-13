@@ -1,11 +1,45 @@
 !head
-
+<script src="https://unpkg.com/react@16.12.0/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js" ></script>
+<script src="https://unpkg.com/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script>
 !md
    # Create UI
 
 
 !tryit
+	// React exanple
 
+	<h1><b>Hello World</b> {(new Date()).toLocaleDateString()}</h1>
 
+!md
+	## A simple clock
 
+	Using React to render a simple clock
+
+!tryit
+    // React JSX
+    function Clock() {
+        const clock = () => ReactDOM.render(<div style={{fontSize: "2rem"}}><b>Time:</b> {(new Date()).toLocaleTimeString()} </div>, document.getElementById('clock-id'));
+        $$.lastly( () => setInterval(clock, 1000)); // execute after all rendering of output
+
+        $$.HTML('<div id="clock-id" /><br /><br /><br /><br />---------------'); // render some HTML
+    }	
+
+    Clock();
+
+!md
+    ## Semantic-UI example
+
+!tryit
+	// JSX
+    <div className="ui stackable padded grid">
+      <div className="ten wide column">
+          <p style={{background: "grey"}}>.ten.wide.column</p>
+          <div className="ui stackable grid">
+            <div className="eight wide column"><p style={{background: "grey"}}>.eight.wide.column</p></div>
+            <div className="eight wide column"><p style={{background: "grey"}}>.eight.wide.column</p></div>
+          </div>
+        </div>
+        <div className="six wide column"><p  style={{background: "grey"}}>.six.wide.column</p></div>
+    </div>
 !end

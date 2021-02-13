@@ -252,7 +252,7 @@
 				const editor = CodeMirror.fromTextArea(textarea, {
 					lineNumbers: true,
 	       			// mode: "javascript",
-	       			mode: "jsx",
+	       			//mode: "jsx",
 					theme: theme,//"cobalt",
 					matchBrackets: true,
 					autoCloseBrackets: '()[]{}\'\'""``', 
@@ -907,7 +907,16 @@
 			 return x.replace(/&/g, '~AMP~').replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/~AMP~/g,"&amp;")
 		}
 
-		5;
+		function hljsLang(name) {
+			switch(name) {
+				case '!md' :  return ['markdown', 'html'];
+				case '!head':
+				case '!tail':
+				case '!html' :  return ['html', 'javascript', 'css'];
+				case '!js' :  return ['javascript', 'xml'];
+				default :  return undefined;
+			}
+		}
 
 	//hljs.highlightAuto('<span>Hello World!</span>').value
 
@@ -915,10 +924,11 @@
 			var HL = hljs.highlightAuto; 
 			var [list, type, content] = 
 				_lines.reduce( ([list, type, content], line) =>{
-					if(line.match(/^\s*(![a-z_\-]+|!--)/)) {
+					let mat = line.match(/^\s*(![a-z_\-]+|!--)/)
+					if(mat) {
 						if(content || type.match(/!render-(start|end)/)) 
 							list.push([type, content]);
-						return [list, line, ''];
+						return [list, mat[1], ''];
 					}
 
 					line = (content?'\n':'')+line;
@@ -933,7 +943,7 @@
 			}
 			
 			return list.flatMap( 
-			  ([type, body]) =>  [blueDiv(type),HL(body).value]
+			  ([type, body]) =>  [blueDiv(type),HL(body, hljsLang(type)).value]
 		  ).join('\n');
 		}
 
@@ -1279,13 +1289,23 @@ function isTag(elem, tagName) {
 /*
    Perform custom highlighting for TryitJS code
  */
-function highlightCodeBlock(block) {
-	if(!block |highlightCodeBlock| !hljs) return;
+function unescape(s) {
+  return s.replace(/~~lt%%|~~gt%%|~~amp%%/g, c => {
+    switch(c) {
+      case "~~lt%%": return '<';
+      case "~~gt%%": return '>';
+      case "~~amp%%": return '&';
+    }
+  });
+}
 
-	if(block.classList.contains('language-tryit')) {
-		let _lines = (block.innerText || '').split('\n')
-		block.innerHTML = $$.codeHighlight(_lines);
-	}
-	else hljs.highlightBlock(block);
+function highlightCodeBlock(block) {
+  if (!block | highlightCodeBlock | !hljs) return;
+
+  if (block.classList.contains('language-tryit')) {
+    var _lines = (unescape(block.innerText) || '').split('\n');
+
+    block.innerHTML = $$.codeHighlight(_lines);
+  } else hljs.highlightBlock(block);
 }
 

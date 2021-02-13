@@ -335,7 +335,7 @@ var $tryit = function () {
       var editor = CodeMirror.fromTextArea(textarea, (_CodeMirror$fromTextA = {
         lineNumbers: true,
         // mode: "javascript",
-        mode: "jsx",
+        //mode: "jsx",
         theme: theme,
         //"cobalt",
         matchBrackets: true,
@@ -1005,6 +1005,25 @@ var $tryit = function () {
     return x.replace(/&/g, '~AMP~').replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/~AMP~/g, "&amp;");
   }
 
+  function hljsLang(name) {
+    switch (name) {
+      case '!md':
+        return ['markdown', 'html'];
+
+      case '!head':
+      case '!tail':
+      case '!html':
+        return ['html', 'javascript', 'css'];
+
+      case '!js':
+        return ['javascript', 'xml'];
+
+      default:
+        return undefined;
+    }
+  } //hljs.highlightAuto('<span>Hello World!</span>').value
+
+
   function blueDiv(content) {
     return "<div class=\"tryit-section\">".concat(content, "</div>\n");
   } // var lines = qs('.language-tryit').innerText.split('\n');
@@ -1205,8 +1224,7 @@ var $tryit = function () {
   };
 
   var $$ = {
-    codeHighlight: //hljs.highlightAuto('<span>Hello World!</span>').value
-    function (_lines) {
+    codeHighlight: function (_lines) {
       var HL = hljs.highlightAuto;
 
       var _lines$reduce = _lines.reduce(function (_ref8, line) {
@@ -1215,9 +1233,11 @@ var $tryit = function () {
             type = _ref9[1],
             content = _ref9[2];
 
-        if (line.match(/^\s*(![a-z_\-]+|!--)/)) {
+        var mat = line.match(/^\s*(![a-z_\-]+|!--)/);
+
+        if (mat) {
           if (content || type.match(/!render-(start|end)/)) list.push([type, content]);
-          return [list, line, ''];
+          return [list, mat[1], ''];
         }
 
         line = (content ? '\n' : '') + line;
@@ -1237,7 +1257,7 @@ var $tryit = function () {
             type = _ref11[0],
             body = _ref11[1];
 
-        return [blueDiv(type), HL(body).value];
+        return [blueDiv(type), HL(body, hljsLang(type)).value];
       }).join('\n');
     },
     D: _show,
@@ -1508,11 +1528,26 @@ function isTag(elem, tagName) {
  */
 
 
+function unescape(s) {
+  return s.replace(/~~lt%%|~~gt%%|~~amp%%/g, function (c) {
+    switch (c) {
+      case "~~lt%%":
+        return '<';
+
+      case "~~gt%%":
+        return '>';
+
+      case "~~amp%%":
+        return '&';
+    }
+  });
+}
+
 function highlightCodeBlock(block) {
   if (!block | highlightCodeBlock | !hljs) return;
 
   if (block.classList.contains('language-tryit')) {
-    var _lines = (block.innerText || '').split('\n');
+    var _lines = (unescape(block.innerText) || '').split('\n');
 
     block.innerHTML = $$.codeHighlight(_lines);
   } else hljs.highlightBlock(block);
