@@ -88,7 +88,7 @@ code.V {
  border: none;
  border-collapse: collapse;
  border-spacing: 0;
- color: #e2e5f2;
+ color: #181c2b; /*#e2e5f2;*/
  table-layout: fixed;
 }
 .rendered_html thead {
@@ -714,12 +714,12 @@ pre.language-tryit {
   background-color: #f0f0f0;
   margin-left: 2rem;
   height: 15rem;
-  width: 75%;
+  width: 60%;
   transform: scale(0.8); 
   transform-origin: top center;
   overflow: hidden;
-  transition: width 1s ease-in-out;
-  transition: height 1s ease-in-out;
+  transition-delay: 1s;
+  transition: width 1s ease-in-out, height 1s ease-in-out, top 2s, left 2s ;
 }
 
 pre.language-tryit::before {

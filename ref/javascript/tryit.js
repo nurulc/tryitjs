@@ -782,6 +782,12 @@ var $tryit = function () {
     }
   }
 
+  function jsxCompiler(s) {
+    if (!s) return '';
+    if (s.match(/<\/|\/>/)) return jsxLoader.compiler.compile(s);
+    return s;
+  }
+
   var lastExecTime = 0.0;
 
   function execute(divName, editor, toUpdateUI, toJump, callback) {
@@ -795,7 +801,7 @@ var $tryit = function () {
       boundingSeg.closest('.tryit-inner').style.setProperty('margin-bottom', '-1.9rem');
       output.style.display = "block";
       jsxLoader.compiler.addUseStrict = false;
-      var val = (1, eval)(jsxLoader.compiler.compile(editor.getValue("\n"))); // execute script in global context
+      var val = (1, eval)(jsxCompiler(editor.getValue("\n"))); // execute script in global context
 
       lastExecTime = performance.now() - t0;
 
@@ -883,7 +889,7 @@ var $tryit = function () {
       beforeExecute(divName);
       jsxLoader.compiler.addUseStrict = false;
       _code = _editor.getValue("\n");
-      var val = (1, eval)(jsxLoader.compiler.compile(_code)); // execute script in global context(_code);
+      var val = (1, eval)(jsxCompiler(_code)); // execute script in global context(_code);
 
       render(val).then(function () {
         //replaceCSSClass(divName, false);
@@ -1529,7 +1535,7 @@ function isTag(elem, tagName) {
 
 
 function unescape(s) {
-  return s.replace(/~~lt%%|~~gt%%|~~amp%%/g, function (c) {
+  return s.replace(/~~lt%%|~~gt%%|~~amp%%|"~~code%%"/g, function (c) {
     switch (c) {
       case "~~lt%%":
         return '<';
@@ -1539,6 +1545,9 @@ function unescape(s) {
 
       case "~~amp%%":
         return '&';
+
+      case "~~code%%":
+        return '```';
     }
   });
 }

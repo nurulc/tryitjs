@@ -717,6 +717,12 @@
 				}
 		}
 
+		function jsxCompiler(s) {
+			if(!s) return '';
+			if(s.match(/<\/|\/>/)) return jsxLoader.compiler.compile(s);
+			return s;
+		}
+
 
 		let lastExecTime = 0.0;
 		function execute(divName, editor, toUpdateUI, toJump, callback) {
@@ -731,7 +737,7 @@
 
 						output.style.display = "block";
 						jsxLoader.compiler.addUseStrict = false;
-						var val = (1,eval)(jsxLoader.compiler.compile(editor.getValue("\n"))); // execute script in global context
+						var val = (1,eval)(jsxCompiler(editor.getValue("\n"))); // execute script in global context
 						
 						lastExecTime = performance.now()-t0;
 						
@@ -802,7 +808,7 @@
 				jsxLoader.compiler.addUseStrict = false;
 	
 				_code = editor.getValue("\n");
-				var val = (1,eval)(jsxLoader.compiler.compile(_code)); // execute script in global context(_code);
+				var val = (1,eval)(jsxCompiler(_code)); // execute script in global context(_code);
 
 				render(val).then(res => {
 						//replaceCSSClass(divName, false);
@@ -1290,11 +1296,12 @@ function isTag(elem, tagName) {
    Perform custom highlighting for TryitJS code
  */
 function unescape(s) {
-  return s.replace(/~~lt%%|~~gt%%|~~amp%%/g, c => {
+  return s.replace(/~~lt%%|~~gt%%|~~amp%%|"~~code%%"/g, c => {
     switch(c) {
       case "~~lt%%": return '<';
       case "~~gt%%": return '>';
       case "~~amp%%": return '&';
+      case "~~code%%": return '```';
     }
   });
 }
