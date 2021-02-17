@@ -1,4 +1,7 @@
 { // JSON5 - requires JSON5 to parse this file
+ "stdIncludes": {
+    "ASSETS": "https://raw.githubusercontent.com/nurulc/tryitjs/master/asset"
+ },
  "headers": {
   "css": [
    "https://unpkg.com/tryitjs@VERSION/ref/stylesheets/tryit.css",

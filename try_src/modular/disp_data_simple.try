@@ -1,0 +1,40 @@
+!md
+	## Displying data
+
+	The simplest way of displaying data is to end the script with a expression that
+	returns a value that is not __undefined__.
+
+!tryit
+	let arr = [0, 1, 2, 3, 4, 'hello'];
+	arr.slice(2, 5);
+
+!md
+	## Displaying and may values
+
+	If we need to display display and other points of the script at ponts other than at the end, we need a display function, for example __console.log__
+
+	* $$.D(exp1,exp2...) __Display Javascript expression results __
+	* $$.HTML(str)  __Display string as HTML__
+	* $$.json(expr) __Display data as JSON string__
+
+	### Displaying Javascript Data $$.D
+
+	First we will use the __$$.D__ to display Javascript expressions. This function is
+	very similar to __console.log(expr1, expr2)__
+
+!tryit
+    let name = "TryITjs"
+	$$.D('Name: ', name); // display the naame and give it a description
+	
+	let jobTitle = "Developer";
+	$$.D('Job Title', jobTitle);
+
+	let arr = [0, 1, 2, 3, 4, 'hello'];
+	$$.D(arr);
+
+!md
+	\
+	### Displaying HTML from string
+
+	Here we will show how to render some HTML. In order to support remdering, TryITjs uses 
+	<a href="https://semantic-ui.com/introduction/getting-started.html" target="_blank">Semantic-UI</a>

@@ -20,7 +20,8 @@ const {
   includeFileOrUrl,
   log
  } = require('../lib/fileio');
-
+const {flatten} = require('../lib/func-utils');
+const dirTree = require('directory-tree');
   
  const {normalize} = require('../lib/path-utils');
 
@@ -28,6 +29,42 @@ const {
 let baseConfig = readTryConfig();
 let userConfig = {...baseConfig}, outFile,inFile, srcDir, targetDir, debug, userConfigFile, isLocal = false;
 
+function posixPath(aPath) {
+  if(!aPath) return undefined;
+  return aPath.replace(/\\/g,'/').replace(/\/$/,'');
+}
+
+function changePath(aPath, src,dest) {
+  if(aPath.startsWith(src)) {
+    if(aPath[src.length] !== '/') dest = dest+'/';
+    aPath = dest+aPath.substr(src.length);
+  }
+  else aPath = dest+'/'+aPath;
+  return aPath;
+}
+
+function createFileList(srcDir, targetDir) {
+  const tree = dirTree(srcDir, {extensions:/\.(js|try|css|jpg|css|md|json|gif|png|svg|csv|html)$/i});
+  let jsonStr = JSON.stringify(tree).replace(/\\\\/g,'/');
+  let copyList = flattenFileList(posixPath(srcDir),posixPath(targetDir))(tree);
+  console.log(JSON.stringify(copyList,null, ' '));
+  return ({dir: jsonStr, copyList});
+}
+
+
+function flattenFileList(src,dest) {
+  return function fileList(obj) {
+    if(obj === undefined) return [];
+    
+    let pth = posixPath(obj.path);
+    let ret = ({name: obj.name, path: pth,  target: changePath(pth,src,dest), type: obj.type, ext: obj.extension});
+//    console.log("***",src, dest, JSON.stringify(ret));
+    let children = [];
+    if( obj.children && obj.children.length > 0) children = obj.children.flatMap(fileList);
+    if( ret.ext === '.try' || ret.type !== 'file' || ret.ext === '.md' ) return children;
+    return [ret].concat(flatten(children));
+  };
+}
 
 function readTryConfig() {
   let configName = path.join(SCRIPT_DIR,'..', '.tryitjs.json');
@@ -161,7 +198,7 @@ function fileItem(inFile, outFile, srcDir, targetDir) {
 function ARGS(args) {
     let argSkip = 2; 
     let inFiles = [];
-    let outFile, srcDir, targetDir, isInit, initTarget;
+    let outFile, srcDir, targetDir, isInit, initTarget, toCreateFileList, toCopyFiles=true;
     //let userConfig, isLocal; // get rid of this line only for testing
     
     while( args.length) {
@@ -187,6 +224,8 @@ function ARGS(args) {
             case '--src': srcDir = args[1]; break;
             case '--local': isLocal = true; argSkip = 1; break;
             case '--debug': isLocal = true; argSkip = 1; break;
+            case '--filelist': toCreateFileList = true; argSkip = 1; break;
+            case '--nocopy': toCopyFiles = false; argSkip = 1; break;
             default: inFiles.push(args[0]); argSkip = 1;
                 
         }
@@ -221,6 +260,20 @@ function ARGS(args) {
 
     if(inFiles.length === 0 && !outFile ) {
       if(!srcDir) srcDir = 'try_src';
+      console.log('Create File List', toCreateFileList );
+      if(toCreateFileList || toCopyfiles) {
+        targetDir = targetDir || 'tryit';
+        let {dir, copyList} = createFileList(srcDir,targetDir);
+        
+        if(toCreateFileList) writeOut(path.join(targetDir, "filelist.json"), dir);
+        if(toCopyFiles) {
+          copyList.forEach( desc => {
+            let targetDir = path.dirname(desc.target);
+            fs.mkdirSync(targetDir, { recursive: true });
+            fs.copyFileSync(desc.path, desc.target, (err) => console.error(`Copying ${desc.path} to ${desc.target} ${err}`));
+          })
+        }
+      }
       let fileListPromise = tryFilesPromise(srcDir, 'try');
       return fileListPromise.then(list => {
           let files = list.map(inFile => fileItem(inFile, outFile, srcDir, targetDir));

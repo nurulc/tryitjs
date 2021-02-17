@@ -1,8 +1,23 @@
 !head
   <title>TryitJS Examples</title>
   @@include tools/head.try 
+  @@include ASSETS/file-tree.try 
+
 !md
 	# TryITJs Tutorials
+	## Introduction To TryITjs Tutorial
+
+	## Directory Structure
+
+	<img src="/images/dir-structure.png" style="margin-left: 7rem">
+
+	## What is a .try file
+
+	### Top level files
+
+
+
+
 	## [Basic Example](basic.html)
 
 	The code below is the **.try** file for the exaple
@@ -10,18 +25,51 @@
 	```tryit
 	@@include ESCAPE basic.try
 	```
-	* [See result](basic.html)
+
+	* The tryit file will generate [this result](basic.html)
+
+	<a href="basic.html"><img src="/images/basic.png" class="screenshot" title="Click to see page"></a>
+
 
 !md
 	## [Two Page Example](some-more.html)
+
+	In this example we show you how to create a multi page  try file. The way to create a new page is to use '#' heading h1 to create a new page.
 
 	The following is the **.try** file used for this example
 	```tryit
 	@@include ESCAPE some-more.try
 	```
-	* [See result](some-more.html)
+
+	* The tryit file will generate [this result](some-more.html)
+
+	<a href="some-more.html"><img src="/images/two_pages.png" class="screenshot" title="Click to see page"></a>
+
+
 !md
-	## [Creating UI](ui.html)
+	# Modularizing a try file
+
+	Once you start creating a significant tutorial file it can start to become large and unwieldy. The tool that supports modularization is __@@include **file_name.try**__.
+	### Try Fragments
+	
+	This the file we are using to implement the page
+	```tryit
+	@@include ESCAPE modularize.try
+	```
+!md 
+	## Internal file 1
+
+	The internal file is the following:
+
+	```tryit
+	@@include ESCAPE modular/disp_data_simple.try
+	```
+	* The tryit file will generate [this result](modularize.html)
+
+	<a href="modularize.html"><img src="/images/modularize.png" class="screenshot" title="Click to see page"></a>
+
+!md
+	# [Creating UI](ui.html)
 	```tryit
 	@@include ESCAPE ui.try
 	```

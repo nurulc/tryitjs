@@ -1,0 +1,12 @@
+!head
+	<title>Modular Tryit</title>
+	@@include tools/head.try
+
+!md
+	# Example of Modularizaion
+
+	I am going to see how to modularize a try example into multiple files.
+
+	While we are here we can demonstrate how to display data, amd show how to incorporate into a new file (in a sub directory __modular__)
+
+	@@include modular/disp_data_simple.try
