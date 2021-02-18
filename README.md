@@ -45,9 +45,9 @@ further is creates two extra directories (in --local mode):
 The init action will do several things:
 1. By default all javascripts and css are pulled from the internat
 1. In --local mode, create, if it does not already exist, the following
-   * _&lt;target dir&gt;_:/javascripts   _directory_
-   * _&lt;target dir&gt;_:/javascript/tryit.js _core tryit helper script_
-   * _lt;target dir&gt;_:/javascript/prettyprint.js _display utility_
+   * _&lt;target dir&gt;_: /javascripts   _directory_
+   * _&lt;target dir&gt;_ : /javascript/tryit.js _core tryit helper script_
+   * _&lt;target dir&gt;_ :  /javascript/prettyprint.js _display utility_
    * _&lt;target dir&gt;_:/stylesheet/tryit.css _core stylesheet_
    
 
@@ -92,7 +92,7 @@ The following command can be used to generate a __.HTML__ file from a __.try__ f
 <a href="https://github.com/nurulc/tryitjs/blob/master/try_src/index.try">Sample .try file</a>
 
 The command above generates and <a href="index.html">index.html</a>
-![](ttryitjs-demo.PNG)
+![](../images/two_pages.png)
 
 ### What is a .try file
 
