@@ -1,177 +1,243 @@
 @@once
+@@include d3-v3.try
 
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 <style>
-    .selected{
-        color: orange;
-    }
-    .node {
-        position: absolute;
-        list-style: none;
-        cursor: default;
-    }
-    .node span {
-        margin-right: 3px;
-    }
-    
-    .node .caret {
-        font-size: 10px;
-    }
+  .selected{
+      color: orange;
+  }
+  .node {
+     position: relative; 
+      list-style: none;
+      cursor: default;
+  }
+  .node span {
+      margin-right: 3px;
+  }
+  
+  .node .caret {
+      font-size: 10px;
+  }
+
+  .file-tree {
+    margin-top: -1rem;
+  }
+
+  .treelist {
+     margin-left: -2rem;
+  }
 </style>
 <script>
-/**
- * Implements a simple layout for rendering trees in a list style view as seen in file system browsers
- * @author Patrick Oladimeji
- * @date 5/24/14 12:21:50 PM
- */
-/*jshint unused: true, undef: true*/
-/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global d3*/
-(function (d3) {
-    d3.layout.treelist = function () {
-        "use strict";
-        var hierarchy = d3.layout.hierarchy().sort(null).value(null),
-            nodeHeight = 20,
-            childIndent = 20,
-            size;
+    /**
+    * Implements a simple layout for rendering trees in a list style view as seen in file system browsers
+    * @author Patrick Oladimeji
+    * @date 5/24/14 12:21:50 PM
+    *
+    * Updated: Nurul Choudhury for TryITjs file rendering,
+    *
+    *  Modified to use Semanric-UI instead of bootstrap 
+    */
+    /*jshint unused: true, undef: true*/
+    /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
+    /*global d3*/
+    (function (d3) {
+      d3.layout.treelist = function () {
+          "use strict";
+          var hierarchy = d3.layout.hierarchy().sort(null).value(null),
+              nodeHeight = 20,
+              childIndent = 20,
+              size;
 
-        var treelist = function (d, i) {
-            var nodes = hierarchy.call(this, d, i),
-                root = nodes[0];
+          var treelist = function (d, i) {
+              var nodes = hierarchy.call(this, d, i),
+                  root = nodes[0];
 
-            function visit(f, t, index, parent) {
-                if (t) {
-                    f(t, index, parent);
-                }
-                var children = t.children;
-                if (children && children.length) {
-                    children.forEach(function (child, ci) {
-                        visit(f, child, ci, t);
-                    });
-                }
-            }
+              function visit(f, t, index, parent) {
+                  if (t) {
+                      f(t, index, parent);
+                  }
+                  var children = t.children;
+                  if (children && children.length) {
+                      children.forEach(function (child, ci) {
+                          visit(f, child, ci, t);
+                      });
+                  }
+              }
 
-            /**
-             visit all nodes in the tree and set the x, y positions
-            */
-            function layout(node) {
-                //all children of the same parent are rendered on the same  x level
-                //y increases every time a child is added to the list 
-                var x = 0, y = 0;
-                visit(function (n, index, parent) {
-                    x = parent ? parent.x + childIndent : 0;
-                    y = y + nodeHeight;
-                    n.y = y;
-                    n.x = x;
+              /**
+               visit all nodes in the tree and set the x, y positions
+              */
+              function layout(node) {
+                  //all children of the same parent are rendered on the same  x level
+                  //y increases every time a child is added to the list 
+                  var x = 0, y = 0;
+                  visit(function (n, index, parent) {
+                      x = parent ? parent.x + childIndent : 0;
+                      y = y + nodeHeight;
+                      n.y = y;
+                      n.x = x;
 
-                }, node);
-                //update size after visiting
-                size = [x, y];
-            }
+                  }, node);
+                  //update size after visiting
+                  size = [x, y];
+              }
 
-            layout(root);
-            return nodes;
-        };
+              layout(root);
+              return nodes;
+          };
 
-        treelist.size = function () {
-            return size;
-        };
+          treelist.size = function () {
+              return size;
+          };
 
-        treelist.nodeHeight = function (d) {
-            if (arguments.length) {
-                nodeHeight = d;
-                return treelist;
-            }
-            return nodeHeight;
-        };
+          treelist.nodeHeight = function (d) {
+              if (arguments.length) {
+                  nodeHeight = d;
+                  return treelist;
+              }
+              return nodeHeight;
+          };
 
-        treelist.childIndent = function (d) {
-            if (arguments.length) {
-                childIndent = d;
-                return treelist;
-            }
-            return childIndent;
-        };
+          treelist.childIndent = function (d) {
+              if (arguments.length) {
+                  childIndent = d;
+                  return treelist;
+              }
+              return childIndent;
+          };
 
-        treelist.nodes = treelist;
+          treelist.nodes = treelist;
 
-        return treelist;
-    };
+          return treelist;
+      };
 
-}(d3));
-
-function showTree(aPathToJson, id) {
-          d3.json(aPathToJson, function (err, data) {
-                var tree = d3.layout.treelist()
-                    .childIndent(10)
-                    .nodeHeight(30);
-                var ul = (id?d3.select('#"=id):d3.select("body")).append("ul").classed("treelist", "true");
-
-                function render(data, parent) {
-                    var nodes = tree.nodes(data),
-                        duration = 250;
-                    function toggleChildren(d) {
-                        if (d.children) {
-                            d._children = d.children;
-                            d.children = null;
-                        } else if (d._children) {
-                            d.children = d._children;
-                            d._children = null;
-                        }
-                    }
-
-                    var nodeEls = ul.selectAll("li.node").data(nodes, function (d) {
-                        d.id = d.id || ++id;
-                        return d.id;
-                    });
-                    //entered nodes
-                    var entered = nodeEls.enter().append("li").classed("node", true)
-                        .style("top", parent.y +"px")
-                        .style("opacity", 0)
-                        .style("height", tree.nodeHeight() + "px")
-                        .on("click", function (d) {
-                            toggleChildren(d);
-                            console.log(JSON.stri)
-                            render(data, d);
-                        })
-                        .on("mouseover", function (d) {
-                            d3.select(this).classed("selected", true);
-                        })
-                        .on("mouseout", function (d) {
-                            d3.selectAll(".selected").classed("selected", false);
-                        });
-                    //add arrows if it is a folder
-                    entered.append("span").attr("class", function (d) {
-                        var icon = d.children ? " glyphicon-chevron-down"
-                            : d._children ? "glyphicon-chevron-right" : "";
-                        return "caret glyphicon " + icon;
-                    });
-                    //add icons for folder for file
-                    entered.append("span").attr("class", function (d) {
-                        var icon = d.children || d._children ? "glyphicon-folder-close"
-                            : "glyphicon-file";
-                        return "glyphicon " + icon;
-                    });
-                    //add text
-                    entered.append("span").attr("class", "filename")
-                        .html(function (d) { return d.name; });
-                    //update caret direction
-                    nodeEls.select("span.caret").attr("class", function (d) {
-                        var icon = d.children ? " glyphicon-chevron-down"
-                            : d._children ? "glyphicon-chevron-right" : "";
-                        return "caret glyphicon " + icon;
-                    });
-                    //update position with transition
-                    nodeEls.transition().duration(duration)
-                        .style("top", function (d) { return (d.y - tree.nodeHeight()) + "px";})
-                        .style("left", function (d) { return d.x + "px"; })
-                        .style("opacity", 1);
-                    nodeEls.exit().remove();
-                }
-
-                render(data, data);
-
-            });	
-}
-
+    }(d3)); 
 </script>
+
+
+<style>
+    .file-tree {
+        height: 80rem;
+        border: 1px solid black;
+        background-color: white;
+        padding: 0.5rem 1rem 1.5rem 0.5rem;
+        overflow: auto;
+    }
+    .code-view {
+        border: 1px solid black;
+        background-color: #eeffff;
+        padding: 1.5rem 1rem 1.5rem 2rem;
+
+    }
+    #file-path {
+        font-weight: bold; 
+        padding-bottom: 0.25rem; 
+        padding-left: 0.5rem; 
+        background-color: #cccccc; 
+        margin: -0.25rem -1rem 1rem -1rem;
+    }
+</style>
+
+<script>
+    function showTree(aPathToJson, divID, onClick=(()=>false) ) {
+        var id = 0;
+        d3.json(aPathToJson, function (err, data) {
+            var tree = d3.layout.treelist()
+                .childIndent(25)
+                .nodeHeight(10);
+
+            var div = document.getElementById(divID);
+            if(div) div.innerHTML = "";
+
+            var ul = (divID?d3.select('#'+divID):d3.select("body"))
+                    .append("ul")
+                    .classed("treelist", "true");
+
+            function render(data, parent) {
+                var nodes = tree.nodes(data),
+                    duration = 400;
+
+                function toggleChildren(d) {
+                    if (d.children) {
+                        d._children = d.children;
+                        d.children = null;
+                    } else if (d._children) {
+                        d.children = d._children;
+                        d._children = null;
+                    }
+                }
+
+                var nodeEls = ul.selectAll("li.node").data(nodes, d => {
+                    d.id = d.id || ++id;
+                    return d.id;
+                });
+
+                //entered nodes
+                var entered = nodeEls.enter().append("li")
+                    .classed("node", true)
+                    .style("top", parent.y +"px")
+                    .style("opacity", 0)
+                    .style("height", tree.nodeHeight() + "px")
+                    .on("click", d => {
+                        if(d.type === "directory"){
+                            toggleChildren(d);
+                            render(data, d);
+                        }
+                        else onClick(d);
+                    })
+                    .on("mouseover", function(d) { return d3.select(this).classed("selected", true);} ) // note 'this' refers to dom element
+                    .on("mouseout", d => d3.selectAll(".selected").classed("selected", false));          
+                
+                //add arrows if it is a folder
+                entered.append("i").attr("class", function (d) {
+                   var icon = d.children ? "hand point down icon"
+                        : d._children ? "hand point right icon" : "";
+                    return icon;
+                });
+
+                //add icons for folder for file
+                entered.append("i").attr("class", function (d) {
+                    if(d.children) return "folder open outline icon";
+                    if(d._children) return "folder outline icon"
+                    return "file alternate icon"
+                }).style('color', d=> d.type==='file'?'lightgrey':'darkblue');
+                
+                //add text
+                entered.append("i")
+                    .attr("class", "filename")
+                    .html( d => d.name);
+
+                nodeEls.order(); // make sure the elements are in the right order
+                
+                //update caret direction
+                nodeEls.select("i.hand").attr("class", function (d) {
+                    var icon = d.children ? "hand point down icon"
+                        : d._children ? "hand point right icon" : "";
+                    return icon;
+                });
+
+                //update position with transition
+                nodeEls.transition().duration(duration)
+                    .style("top", d => (d.y - tree.nodeHeight()) + "px" )
+                    .style("left", d => d.x + "px" )
+                    .style("opacity", 1);
+
+                nodeEls.exit().remove();
+            }
+
+            render(data, data);
+
+        });
+    }
+
+
+    function showFile({path, ext}) {
+      (fetch(`../../${path}`)
+        .then(d => d.text()))
+        .then(txt => {
+            document.getElementById('disp-file-content').innerHTML = `<pre>\n${escapeHTML(txt)}\n</pre>`;
+            } );
+      document.getElementById('file-path').innerText = path;
+    }
+    
+</script>
+

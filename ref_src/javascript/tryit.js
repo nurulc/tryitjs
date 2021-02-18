@@ -1188,7 +1188,8 @@
 				pageVisibleBefore,
 				showPopup,
 				unsavedChanges,
-				H 
+				H,
+				escapeHTML: asHTML
 
 		});
 	}
@@ -1210,7 +1211,7 @@ function setDisplay(elem, type, otherElem) {
 //	 elem.style.display = (type==='false')?'none':'block'; // may nood to enable this
 }
 
-const {$$, jumpTag, jumpBack, _display,H, saveAll, pageVisibleBefore, qs, qsA, showPopup, unsavedChanges} = $tryit;
+const {$$, jumpTag, jumpBack, _display,H, saveAll, pageVisibleBefore, qs, qsA, showPopup, unsavedChanges, escapeHTML} = $tryit;
 const objInfo = $$.objInfo; 
 document.addEventListener('DOMContentLoaded', (event) => {
 

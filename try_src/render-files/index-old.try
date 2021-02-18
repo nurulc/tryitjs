@@ -1,0 +1,156 @@
+!head
+  <title>Render Try Files</title>
+  @@include ../../asset/d3-v3.try
+  @@include ../tools/file-tree.try
+  <style>
+    .file-tree {
+        height: 80rem;
+        border: 1px solid black;
+        background-color: white;
+        padding: 0.5rem 1rem 1.5rem 0.5rem;
+        overflow: auto;
+    }
+    .code-view {
+        border: 1px solid black;
+        background-color: #eeffff;
+        padding: 1.5rem 1rem 1.5rem 2rem;
+
+    }
+    #file-path {
+        font-weight: bold; 
+        padding-bottom: 0.25rem; 
+        padding-left: 0.5rem; 
+        background-color: #cccccc; 
+        margin: -0.25rem -1rem 1rem -1rem;
+    }
+  </style>
+!md
+	# Files Used In This Project
+
+	This section will allow you to explore files In this project
+
+!--tryit
+      
+
+!html
+    <script>
+        function showTree(aPathToJson, divID, onClick=(()=>false) ) {
+            var id = 0;
+            d3.json(aPathToJson, function (err, data) {
+                var tree = d3.layout.treelist()
+                    .childIndent(25)
+                    .nodeHeight(10);
+
+                var div = document.getElementById(divID);
+                if(div) div.innerHTML = "";
+
+                var ul = (divID?d3.select('#'+divID):d3.select("body"))
+                        .append("ul")
+                        .classed("treelist", "true");
+
+                function render(data, parent) {
+                    var nodes = tree.nodes(data),
+                        duration = 400;
+
+                    function toggleChildren(d) {
+                        if (d.children) {
+                            d._children = d.children;
+                            d.children = null;
+                        } else if (d._children) {
+                            d.children = d._children;
+                            d._children = null;
+                        }
+                    }
+
+                    var nodeEls = ul.selectAll("li.node").data(nodes, d => {
+                        d.id = d.id || ++id;
+                        return d.id;
+                    });
+
+                    //entered nodes
+                    var entered = nodeEls.enter().append("li")
+                        .classed("node", true)
+                        .style("top", parent.y +"px")
+                        .style("opacity", 0)
+                        .style("height", tree.nodeHeight() + "px")
+                        .on("click", d => {
+                            if(d.type === "directory"){
+                                toggleChildren(d);
+                                render(data, d);
+                            }
+                            else onClick(d);
+                        })
+                        .on("mouseover", function(d) { return d3.select(this).classed("selected", true);} ) // note 'this' refers to dom element
+                        .on("mouseout", d => d3.selectAll(".selected").classed("selected", false));          
+                    
+                    //add arrows if it is a folder
+                    entered.append("i").attr("class", function (d) {
+                       var icon = d.children ? "hand point down icon"
+                            : d._children ? "hand point right icon" : "";
+                        return icon;
+                    });
+
+                    //add icons for folder for file
+                    entered.append("i").attr("class", function (d) {
+                        if(d.children) return "folder open outline icon";
+                        if(d._children) return "folder outline icon"
+                        return "file alternate icon"
+                    }).style('color', d=> d.type==='file'?'lightgrey':'darkblue');
+                    
+                    //add text
+                    entered.append("i")
+                        .attr("class", "filename")
+                        .html( d => d.name);
+
+                    nodeEls.order(); // make sure the elements are in the right order
+                    
+                    //update caret direction
+                    nodeEls.select("i.hand").attr("class", function (d) {
+                        var icon = d.children ? "hand point down icon"
+                            : d._children ? "hand point right icon" : "";
+                        return icon;
+                    });
+
+                    //update position with transition
+                    nodeEls.transition().duration(duration)
+                        .style("top", d => (d.y - tree.nodeHeight()) + "px" )
+                        .style("left", d => d.x + "px" )
+                        .style("opacity", 1);
+
+                    nodeEls.exit().remove();
+                }
+
+                render(data, data);
+
+            });
+        }
+
+
+        function showFile({path, ext}) {
+          (fetch(`../../${path}`)
+            .then(d => d.text()))
+            .then(txt => {
+                document.getElementById('disp-file-content').innerHTML = `<pre>\n${escapeHTML(txt)}\n</pre>`;
+                } );
+          document.getElementById('file-path').innerText = path;
+        }
+        
+    </script>
+
+    <div id="file_viewer" class="ui grid">
+        <div class="four wide column bordered" >
+            <div class="file-tree" id="tree" >
+             </div>   
+        </div>
+        <div class="twelve wide column code-view" style="padding-top: 0.25rem;" >
+            <div id="file-path" >&nbsp;</div>
+               <code id="disp-file-content" style="color: #444444" />
+            </div>
+        </div>
+    </div> 
+    
+
+!end
+<script>
+setTimeout(() => showTree('../filelist.json', 'tree', showFile), 100);
+</script>

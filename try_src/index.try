@@ -9,7 +9,7 @@
 
 	## Directory Structure
 
-	<img src="/images/dir-structure.png" style="margin-left: 7rem">
+	<a href="render-files/index.html" target="file-list"><img src="/images/dir-structure.png" style="margin-left: 7rem" title="Click File Browser"></a>
 
 	## What is a .try file
 
@@ -20,7 +20,7 @@
 
 	## [Basic Example](basic.html)
 
-	The code below is the **.try** file for the exaple
+	The code below is the **basic.try** file for the example
 
 	```tryit
 	@@include ESCAPE basic.try

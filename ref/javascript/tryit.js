@@ -1410,7 +1410,8 @@ var $tryit = function () {
     pageVisibleBefore: pageVisibleBefore,
     showPopup: showPopup,
     unsavedChanges: unsavedChanges,
-    H: H
+    H: H,
+    escapeHTML: asHTML
   };
 }(); //====================================================
 //
@@ -1442,7 +1443,8 @@ var $$ = $tryit.$$,
     qs = $tryit.qs,
     qsA = $tryit.qsA,
     showPopup = $tryit.showPopup,
-    unsavedChanges = $tryit.unsavedChanges;
+    unsavedChanges = $tryit.unsavedChanges,
+    escapeHTML = $tryit.escapeHTML;
 var objInfo = $$.objInfo;
 document.addEventListener('DOMContentLoaded', function () {
   // check if we have highlightings then highlight TryitJS code snippets	

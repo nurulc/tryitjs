@@ -1,4 +1,4 @@
-@@include  https://raw.githubusercontent.com/nurulc/tryitjs/master/asset/all-tools.try
+@@include  ASSETS/all-tools.try
 @@import intro.try
 
 !md
