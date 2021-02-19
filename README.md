@@ -92,7 +92,7 @@ The following command can be used to generate a __.HTML__ file from a __.try__ f
 <a href="https://github.com/nurulc/tryitjs/blob/master/try_src/basic.try">Sample .try file</a>
 
 The command above generates and <a href="https://unpkg.com/tryitjs/try_it/basic.html">basic.html</a>
-![](../images/two_pages.png)
+![](images/two_pages.png)
 
 ### What is a .try file
 
