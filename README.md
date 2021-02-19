@@ -87,11 +87,11 @@ The init action will do several things:
 
 The following command can be used to generate a __.HTML__ file from a __.try__ file 
 ```bash
- > tryitjs index.try
+ > tryitjs basic.try
 ```
-<a href="https://github.com/nurulc/tryitjs/blob/master/try_src/index.try">Sample .try file</a>
+<a href="https://github.com/nurulc/tryitjs/blob/master/try_src/basic.try">Sample .try file</a>
 
-The command above generates and <a href="index.html">index.html</a>
+The command above generates and <a href="https://unpkg.com/tryitjs/try_it/basic.html">basic.html</a>
 ![](../images/two_pages.png)
 
 ### What is a .try file
