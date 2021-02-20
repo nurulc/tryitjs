@@ -1,5 +1,5 @@
 @@include  ASSETS/all-tools.try
-@@import intro.try
+@@include intro.md
 
 !md
 # Array
@@ -8,14 +8,13 @@
 so 
 
 !tryit
-
-var y = [2, "hello", 123.45];
-y
+	var y = [2, "hello", 123.45];
+	y
 
 !md
-## Customize your display
+	## Customize your display
 
-For this test me are just going to convert to JSON string
+	For this test me are just going to convert to JSON string
 
 !tryit
 $$.json(y); // force JSON output

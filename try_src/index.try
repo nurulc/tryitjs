@@ -9,7 +9,9 @@
 
 	## Directory Structure
 
-	<a href="render-files/index.html" target="file-list"><img src="/images/dir-structure.png" style="margin-left: 7rem" title="Click File Browser"></a>
+	<a href="render-files/index.html" target="file-list">
+		<img src="../images/dir-structure.png" style="margin-left: 7rem" title="Click File Browser">
+	</a>
 
 	## What is a .try file
 
@@ -28,7 +30,9 @@
 
 	* The tryit file will generate [this result](basic.html)
 
-	<a href="basic.html"><img src="/images/basic.png" class="screenshot" title="Click to see page"></a>
+	<a href="basic.html">
+		<img src="../images/basic.png" class="screenshot" title="Click to see page">
+	</a>
 
 
 !md
@@ -43,7 +47,9 @@
 
 	* The tryit file will generate [this result](some-more.html)
 
-	<a href="some-more.html"><img src="/images/two_pages.png" class="screenshot" title="Click to see page"></a>
+	<a href="some-more.html">
+		<img src="../images/two_pages.png" class="screenshot" title="Click to see page">
+	</a>
 
 
 !md
@@ -66,7 +72,9 @@
 	```
 	* The tryit file will generate [this result](modularize.html)
 
-	<a href="modularize.html"><img src="/images/modularize.png" class="screenshot" title="Click to see page"></a>
+	<a href="modularize.html">
+		<img src="../images/modularize.png" class="screenshot" title="Click to see page">
+	</a>
 
 !md
 	# [Creating UI](ui.html)

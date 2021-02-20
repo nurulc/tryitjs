@@ -22,7 +22,8 @@
 }
 .hljs-section,
 .hljs-title {
-    color: #6684e1
+    color: #6684e1;
+    font-weight: bold;
 }
 .hljs-keyword,
 .hljs-selector-tag {
@@ -706,19 +707,19 @@ p.html {
 
 
 .tryit-section {
-  background-color: #919199;
-  color: #fafafa;
+  background-color: #ddddf9;
+  color: #7d3030;
 }
 
 pre.language-tryit {
-  background-color: #f0f0f0;
-  margin-left: 2rem;
+  background-color: #fafafa;
+  border: 1px solid #777777;
   height: 15rem;
   width: 60%;
   transform: scale(0.8); 
   transform-origin: top center;
   overflow: hidden;
-  transition-delay: 1s;
+  /*transition-delay: 1s;*/
   transition: width 1s ease-in-out, height 1s ease-in-out, top 2s, left 2s ;
 }
 
@@ -738,7 +739,38 @@ pre.language-tryit:hover {
   transform-origin: top left;
 }
 
+pre.code-md {
+  background-color: #f8f9ff;
+  color: palevioletred;
+}
 
+pre.code-tryit {
+  background-color: #fff8fe;
+}
+
+pre.code-html,
+pre.code-head, 
+pre.code-end {
+   background-color: #f9eaea;
+}
+
+pre.code-md,
+pre.code-tryit,
+pre.code-html,
+pre.code-head {
+  margin-top: 0.25rem;
+  margin-bottom: -2.5rem;
+  /*margin-bottom: 2.5rem;*/
+  border-bottom: 0px;
+  margin-left: 0.5rem;  
+}
+
+pre.code-end {
+  margin-top: 0.25rem;
+  margin-bottom: 2rem;
+  border-bottom: 0px;
+  margin-left: 0.5rem;  
+}
 
 .execution.progress {
     border-radius: 0.7rem;

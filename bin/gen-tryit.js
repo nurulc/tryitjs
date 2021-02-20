@@ -47,7 +47,7 @@ function createFileList(srcDir, targetDir) {
   const tree = dirTree(srcDir, {extensions:/\.(js|try|css|jpg|css|md|json|gif|png|svg|csv|html)$/i});
   let jsonStr = JSON.stringify(tree).replace(/\\\\/g,'/');
   let copyList = flattenFileList(posixPath(srcDir),posixPath(targetDir))(tree);
-  console.log(JSON.stringify(copyList,null, ' '));
+  //console.log(JSON.stringify(copyList,null, ' '));
   return ({dir: jsonStr, copyList});
 }
 
@@ -246,7 +246,7 @@ function ARGS(args) {
           targetDir = fileInfo(outFile).dir || '.';
       }
       
-      console.log({inFiles, srcDir, outFile});
+      //console.log({inFiles, srcDir, outFile});
       return Promise.resolve([fileItem( inFiles[0], outFile, srcDir, targetDir)]);
     }
 

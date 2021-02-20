@@ -1,11 +1,62 @@
 !head
-  <title>Render Try Files</title>
+  <title>Browse Try Files</title>
   @@include ../../asset/file-tree.try
   
 !md
 	# Files Used In This Project
 
-	This section will allow you to explore files In this project
+	This section will allow you to explore files In this project. The file browser below uses a JSON file created by TryITJs.
+    executed in your project root directory:
+
+
+    ## Generating the meta-data for the file browser.
+
+    The command below id it is executed in to generate the file filelist.json
+
+    ```bash
+    tryitjs  --src try_src --dest try_it  --filelist
+    ```
+    1. **--src** is the location of the source directory
+    2. **--dest** is the directory where the generated HTML file are located
+    3. **--filelist** will generate a JSON file listing all the files in the source directory (try_src)
+    
+
+    * filelist.json snippet
+
+
+    ```js
+        {
+            "path": "try_src",
+            "name": "try_src",
+            "children": [{
+                "path": "try_src/array.try",
+                "name": "array.try",
+                "size": 969,
+                "extension": ".try",
+                "type": "file"
+            }, {
+                "path": "try_src/basic.try",
+                "name": "basic.try",
+                "size": 672,
+                "extension": ".try",
+                "type": "file"
+            }, {
+                "path": "try_src/full-tutorial.try",
+                "name": "full-tutorial.try",
+                "size": 3401,
+                "extension": ".try",
+                "type": "file"
+            }
+        }
+    ```
+    <br>
+
+    ## The File Browser
+
+    This file is read and displayed in the file browser interface below. You can use the interface to inspect all the files use on this site.
+    If none of this makes sense to you, don't worry; as you go thorugh this tutorial I hope it will make more sense.
+    ## List of files
+
 
     @@include ../../asset/file-tree-body.try
 

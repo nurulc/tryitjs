@@ -1030,8 +1030,63 @@ var $tryit = function () {
   } //hljs.highlightAuto('<span>Hello World!</span>').value
 
 
-  function blueDiv(content) {
-    return "<div class=\"tryit-section\">".concat(content, "</div>\n");
+  function _indent(s, fn) {
+    var i = 0;
+
+    while (s[i] === ' ' || s[i] === '\t') {
+      i++;
+    }
+
+    return s.substr(0, i) + fn(s.substr(i));
+  }
+  /*		function _zip([a,b]) {
+  		  return a.map((s,i) => s+b[i]);
+  		}
+  
+  		function _deZip(array) {
+  		  let res = array.map(_indent);
+  		  return [res.map(s => s[0]), res.map(s => s[1])];
+  		}
+  
+  */
+
+
+  function codeBackground(type) {
+    switch (type) {
+      case '!md':
+        return 'code-md';
+
+      case '!tryit':
+        return 'code-tryit';
+
+      case '!html':
+        return 'code-html';
+
+      case '!head':
+        return 'code-head';
+
+      case '!end':
+        return 'code-end';
+    }
+
+    return "";
+  }
+
+  function emptyContent(str) {
+    if (str === undefined) return true;
+
+    for (var i = 0; i < str.length; i++) {
+      var c = str[i];
+      if (c !== ' ' && c != '\t' && c !== '\n' && c !== '\r') return false;
+    }
+
+    return true;
+  }
+
+  //function getIndent() { return 0; }
+  function genTryitSection(type) {
+    if (!type) return '';
+    return "<div class=\"tryit-section\">".concat(type, "</div>"); //return `${content}\n`; 
   } // var lines = qs('.language-tryit').innerText.split('\n');
   // $$.HTML('<pre>'+sections(lines)+'</pre>');
 
@@ -1231,7 +1286,10 @@ var $tryit = function () {
 
   var $$ = {
     codeHighlight: function (_lines) {
-      var HL = hljs.highlightAuto;
+      //var HL = escapeHTML;
+      var HL = function (s, type) {
+        return hljs.highlightAuto(s, hljsLang(type)).value;
+      };
 
       var _lines$reduce = _lines.reduce(function (_ref8, line) {
         var _ref9 = _slicedToArray(_ref8, 3),
@@ -1242,29 +1300,33 @@ var $tryit = function () {
         var mat = line.match(/^\s*(![a-z_\-]+|!--)/);
 
         if (mat) {
-          if (content || type.match(/!render-(start|end)/)) list.push([type, content]);
+          if (content || type.match(/!render-(start|end)|!head|!end/)) list.push([type, content]);
           return [list, mat[1], ''];
         }
 
-        line = (content ? '\n' : '') + line;
+        line = (content ? '\n' : '') + _indent(line, function (s) {
+          return HL(s, type);
+        });
         return [list, type, content + line];
-      }, [[], '!html', '']),
+      }, [[], '', '']),
           _lines$reduce2 = _slicedToArray(_lines$reduce, 3),
           list = _lines$reduce2[0],
           type = _lines$reduce2[1],
           content = _lines$reduce2[2];
 
-      if (content) {
+      if (content || type === '!end') {
         list.push([type, content]);
       }
 
-      return list.flatMap(function (_ref10) {
+      if (list.length > 0 && list[0][0] === '!html' && emptyContent(list[0][1])) list = list.slice(1);
+      return list.flatMap( //([type, body]) =>  [genTryitSection(type),HL(body, hljsLang(type)).value]
+      function (_ref10) {
         var _ref11 = _slicedToArray(_ref10, 2),
             type = _ref11[0],
             body = _ref11[1];
 
-        return [blueDiv(type), HL(body, hljsLang(type)).value];
-      }).join('\n');
+        return genTryitSection(type) + "<pre class=\"".concat(codeBackground(type), "\">").concat(body, "</pre>");
+      }).join('<br\>\n') + '<code>&nbsp;<br><br></code>\n';
     },
     D: _show,
     D2: function (string) {
