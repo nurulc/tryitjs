@@ -260,8 +260,8 @@ function ARGS(args) {
 
     if(inFiles.length === 0 && !outFile ) {
       if(!srcDir) srcDir = 'try_src';
-      console.log('Create File List', toCreateFileList );
-      if(toCreateFileList || toCopyfiles) {
+      console.log('Create File List', toCreateFileList, toCopyFiles);
+      if(toCreateFileList || toCopyFiles) {
         targetDir = targetDir || 'tryit';
         let {dir, copyList} = createFileList(srcDir,targetDir);
         
