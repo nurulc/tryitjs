@@ -7,11 +7,43 @@
 !md
    # Create UI
 
+!tryit
+//HTML in display area
+
+// add some style
+$$.HTML(`
+      <style>
+       .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+`)
+
+// Now render some html
+
+$$.HTML(`
+  <div style="height: 30rem">
+    <h1>Hello World ${(new Date()).toLocaleDateString()}</h1>
+    <img class="center" src="https://www.w3schools.com/html/pic_trulli.jpg" />
+  </div>
+`)
+
+      
+
+
 
 !tryit
-	// React exanple
+  // JSX example
+  var aClock= () => (
+    <div style={{height: "30rem"}}>
+      <h1 class="center"><b>Hello World</b> {(new Date()).toLocaleDateString()}</h1>
+      <img class="center" src="https://www.w3schools.com/html/pic_trulli.jpg" />
+    </div>
+  );
 
-	<h1><b>Hello World</b> {(new Date()).toLocaleDateString()}</h1>
+  aClock()
 
 !md
 	## A simple clock
@@ -21,7 +53,7 @@
 !tryit
     // React JSX
     function Clock() {
-        const clock = () => ReactDOM.render(<div style={{fontSize: "2rem"}}><b>Time:</b> {(new Date()).toLocaleTimeString()} </div>, document.getElementById('clock-id'));
+        const clock = () => ReactDOM.render(aClock(), document.getElementById('clock-id'));
         $$.lastly( () => setInterval(clock, 1000)); // execute after all rendering of output
 
         $$.HTML('<div id="clock-id" /><br /><br /><br /><br />---------------'); // render some HTML
@@ -32,16 +64,51 @@
 !md
     ## Semantic-UI example
 
+    ### Creating a target 
+
+    ```tryit
+      \!html
+         \<div id="ui-target1" />
+    ```
+
+!html 
+  <div id="ui-target" />
+  <div style="margin-left: 30rem">
+   <img src="https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/AJ_Digital_Camera.svg" />
+  </div>   
+
 !tryit
-	// JSX
-    <div className="ui stackable padded grid">
-      <div className="ten wide column">
-          <p style={{background: "grey"}}>.ten.wide.column</p>
-          <div className="ui stackable grid">
-            <div className="eight wide column"><p style={{background: "grey"}}>.eight.wide.column</p></div>
-            <div className="eight wide column"><p style={{background: "grey"}}>.eight.wide.column</p></div>
-          </div>
-        </div>
-        <div className="six wide column"><p  style={{background: "grey"}}>.six.wide.column</p></div>
+  var strHtml =   `
+    <div style="width: 70%; margin-left: 10rem">
+      <div class="ui three buttons">
+        <button class="ui active button red">One</button>
+        <button class="ui button green">Two</button>
+        <button class="ui button">Three</button>
+      </div>
     </div>
+  `;
+
+  ducument.getElementById('ui-target').innerHTML = strHtml;
+
+
+!md
+  ###
+
+!tryit
+  // Javascript - $$.HTML = builtin HTML
+  $$.HTML(
+
+  );
+
+!tryit
+  // JSX - 
+  (
+  <div style={{width: "70%", marginLeft: '10rem'}}>
+    <div class="ui three buttons">
+      <button class="ui active button red">One</button>
+      <button class="ui button green">Two</button>
+      <button class="ui button">Three</button>
+    </div>
+  </div>
+  )
 !end
