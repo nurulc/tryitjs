@@ -1,5 +1,7 @@
 @@once
 
+!head
+   @@include file-tree.try
 
 !html
 

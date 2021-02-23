@@ -1,8 +1,9 @@
 @@once
+!head
 @@include div-tools.try
 @@include doPlot.try
-!html
-    <script>
+
+<script>
        function UIcategoryList(source, options) {
             let {caption, onSelect,id, type, placeholder} = options|| {};
             if(caption) caption = `<p class="ui header huge">${caption}</p>`;
