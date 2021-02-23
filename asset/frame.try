@@ -1,7 +1,11 @@
 @@once
+
+!end
+<script type="text/javascript" src="https://cdn.datatables.net/v/se/dt-1.10.22/b-1.6.5/kt-2.5.3/sc-2.0.3/datatables.min.js"></script>
+!head
 <script src="https://unpkg.com/str-data-frame@^0.2/dist/bundle.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/se/dt-1.10.22/b-1.6.5/kt-2.5.3/sc-2.0.3/datatables.min.css"/>
-<script type="text/javascript" src="https://cdn.datatables.net/v/se/dt-1.10.22/b-1.6.5/kt-2.5.3/sc-2.0.3/datatables.min.js"></script>
+
 <style>
     .dataTables_length {
       margin-left: 2rem;
