@@ -1,0 +1,97 @@
+@@once
+<script src="https://unpkg.com/str-data-frame@^0.2/dist/bundle.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/se/dt-1.10.22/b-1.6.5/kt-2.5.3/sc-2.0.3/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/se/dt-1.10.22/b-1.6.5/kt-2.5.3/sc-2.0.3/datatables.min.js"></script>
+<style>
+    .dataTables_length {
+      margin-left: 2rem;
+    }
+   .array-sorting {
+     position: relative;
+     margin-left: 40%;
+     top: 2rem;
+   }
+   .dataTables_filter {
+     margin-right: 2rem;
+   }
+   .sorting_desc::before {
+      content: "\u25BC";
+      color: red;
+   }
+   .sorting_asc::before {
+      content: "\u25B2";
+      color: red;
+   }
+   .sorting_disabled::before {
+       content: "" !important;
+    }
+
+</style>
+<script>
+(function(win){
+let {Frame} = DataFrame;
+win.Frame = Frame;
+// mark the indentation
+Frame.prototype.toOrder = function(bFlag=true) {
+  this._toOrder = bFlag;
+  return this;
+}
+Frame.prototype._toHtml = function() {
+  let id = 'T'+Math.round(Math.random()*100000);      // create a unique id fo the table
+
+  // $$.lastly(funcToExecute) after all HTML rendering (from this script) has completed
+  // Note $$.<methods> is just part of the 'TryitJS' capability and is not part of DataFrame
+  // <method> = D, or HTML, or JSON -- this render to to display 'div' 
+  
+  $$.lastly(() => {
+      const self = this;
+      const HTMLformat = this.constructor.HTMLFormat;  // rendering defaults for values in the frame
+      
+      // Render a cell
+      function cellRender(data,type) {
+        if(type !== 'display') return data;
+          if(isNumber(data))  return HTMLformat.number(data,0,self);
+          else return HTMLformat.other(data,0,self);
+      }
+
+      function  createTable(self, toSort) {
+        return $('#'+id).DataTable( {
+          data: self.data,
+          columns: self.columns.map(c => 
+            ({
+                title: c.replace(/_/g, ' '), 
+                render: cellRender
+              })
+            ),
+          deferRender:    true,
+          ordering: toSort
+          
+        });
+      }
+
+      let table = createTable(self, false);
+      let v = document.querySelector(`#${id}sort input`).onchange = (
+        function () { 
+          console.log('this: ', this.checked);
+          table.destroy();
+          table = createTable(self, this.checked)
+        });
+  })
+  return `
+  <div>
+  
+  <div id="${id+'sort'}" class="ui slider checkbox array-sorting">
+    <input type="checkbox" name="toggle">
+    <label>Click column to sort</label>
+  </div>
+  <table id="${id}" class="display" width="96%"></table>
+  </div>`;
+}
+function isNumber(x) {
+  if(x === 0) return true;
+  if( !x ) return false;
+  let v = +x;
+  return !(isNaN(v));
+}
+})(window)
+</script>
