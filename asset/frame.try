@@ -19,11 +19,11 @@
      margin-right: 2rem;
    }
    .sorting_desc::before {
-      content: "\u25BC";
+      content: "\25BC";
       color: red;
    }
    .sorting_asc::before {
-      content: "\u25B2";
+      content: "\25B2";
       color: red;
    }
    .sorting_disabled::before {
