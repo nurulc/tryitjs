@@ -12,10 +12,13 @@ const {saveData} = require('../lib/fileio');
 // }
 
 
-function genSampleFiles(baseDir, packageName){
+function genSampleFiles(baseDir, packageName,targetDir){
+saveData([`${baseDir}\/default.html`, `<meta http-equiv="refresh" content="0; URL=${targetDir}/index.html" />`])
 saveData([`${baseDir}/index.try`,`!head
     <title>TryIT ${packageName}</title>
+    @@include ASSETS/frame.try
     @@include includes/head.try
+
 !md // Some markdown
     # Introduction
 
@@ -29,7 +32,7 @@ saveData([`${baseDir}/index.try`,`!head
 
     The code below is an example of some sample code and how yo cal edit the code to explore the functionality
 
-    You can view your tryit files here: <a href="fileview.html" >View .try file</a>
+    You can view your tryit files here: <a href="fileview/index.html" >View .try file</a>
 
 !tryit /* some sample code */
     // This is an example of the playpen (tryit)
@@ -56,6 +59,59 @@ saveData([`${baseDir}/index.try`,`!head
 
     This will demonstrate how to create a 'user interface' (UI) for same code (using Semantic-UI - _The default for Tryitjs):
 
+
+!md
+    ## Setup Event handler for UI
+
+    Below is a script to create a function to setup handler of the a form. The wlwmenets of the form:
+
+    
+    |   ID       |  Action     |
+    |------------|-------------|
+    |   val_exec |  button when clicked will splits works |
+    |  val_fill |   button to fill #val_array and #val_search with test values |
+
+
+
+
+
+
+!tryit
+    // Now wire up the form above
+    function setHandlers() {
+        $('#val_exec').on('click', (e) => {
+            e.preventDefault();
+            let content = $('#val_array').val();
+            
+            if(content.trim()) {
+                    let list = content.split(/ *, */);
+              let item = $('#val_search').val();
+              let search = list.indexOf(item);
+              $('#val_result').val('index: '+(search==-1?"Not found":\`"\${item}" found at index: \${search}\`));
+            }
+            else $('#val_result').val('Enter come values')
+        });
+    
+        $('#val_fill').on('click', (e) => {
+            e.preventDefault();
+            $('#val_array').val("To, be, or, not, to, be");
+            $('#val_search').val("be");
+            $('#val_result').val("");
+         });
+    }
+
+
+!md
+    ### Note about UI
+
+    Note the UI below does not do anything, we need to wire this up. We can do the wiring using the code in the given in the script below. As
+    stated earlier, Tryitjs using Semantic-UI and jQuery to provide functionality. We can take advantage of this to wire up the form above. After
+    you have executed that script the form will acquire the necessary functionality.
+
+!tryit
+    // Apply the handler to the form below
+    setHandlers();
+
 !html
     <form class="ui form" id="my_form">
       <div class="field">
@@ -73,31 +129,37 @@ saveData([`${baseDir}/index.try`,`!head
       <button class="ui button" id="val_exec">Execute</button>
       <button class="ui button" id="val_fill">Fill some values</button>
     </form>
-!md
-    ### Note abou UI
 
-    Note the UI above does not do anything, we need to wire this up. We can do the wiring using the code in the given in the script below. As
-    stated earlier, Tryitjs using Semantic-UI and jQuery to provide functionality. We can take advantage of this to wire up the form above. After
-    you have executed that script the form will acquire the necessary functionality.
+!md
+    ### Updating UI
+
+    We cam reset the form using the code given below 
 
 !tryit
-    // Non wire up the form above
-    $('#val_exec').on('click', (e) => {
-        e.preventDefault();
-        let list = $('#val_array').val().split(/ *,/);
-        let search = list.indexOf($('#val_search').val());
-        $('#val_resuly').val(''+search);
-    });
+    var innerData = \`
+      <div class="field">
+        <label>UPDATED: Array of values</label>
+        <input type="text" id="val_array" placeholder="To, be, or, not, to, be">
+      </div>
+      <div class="field">
+        <label>Updated: Value to find</label>
+        <div class="ui icon input">
+            <i class="search icon"></i>
+            <input type="text" id="val_search" placeholder="Search...">
+        </div>
+      </div>
+      <div class="field">
+          <input type="text" id="val_result">
+          <label>Index of Value</label>
+      </div>
+      <button class="ui green button" id="val_exec">Execute&nbsp;&nbsp;<i class="search icon"></i></button>
+      <button class="ui blue button" id="val_fill">Fill some values</button>
+    \`;
 
-    $('#val_exec').on('click', (e) => {
-        e.preventDefault();
-        $('#val_array').val("To, be, or, not, to, be");
-        $('#val_search').val("be");
-     });
-
-!md
-    We cam reset the form as followa
-
+    let form = document.getElementById('my_form')
+    form.innerHTML = innerData;
+    form.style.width = "60%";
+    setHandlers();
 
 
 !md
@@ -110,28 +172,80 @@ saveData([`${baseDir}/index.try`,`!head
 `], false, true);
 
 saveData([`${baseDir}/main/index.try`,`
-@@include page1.try
 @@include page2.try
+@@include page3.try
 
 `], false, true);
     
-saveData([`${baseDir}/main/page1.try`,`
-!md
-    # Page 1
-
-    This is page1
-
-!tryit
-    array.filter(v => v&1);  // print odd values
-`], false, true); 
 saveData([`${baseDir}/main/page2.try`,`
 !md
-    # Page 2
+    # Page 2 - Printing results
 
-    This is page2
+    ## Simplest way to print
+
+    The result of the last expression of a 'script is always ptinted'. For Example:
+!tryit
+    Math.sin(Math.PI/2) // should print '1'
+
+!md
+    ## Handling Promis during printing
+
+    If the last expression is a Promise, it will be resolved before printing the resolved value. So lets get some data from the internet,
+    data about covid worldwide.
+
+!tryit
+
+    var csvData;
+    let WORLD_COVID_DATA ='https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv';
+    var p = fetch(WORLD_COVID_DATA)
+      .then(response => response.text())
+      .then(data => 
+          Promise.resolve(csvData = data)
+      );
+      p // contents of the promise will be printed out
+
+!md
+    __Note: any \`promise\` that is displayed is also resolved before the next 'tryit' script is executed.
+
+!md
+    ## On declaring variables
+
+    1. Use 'let' to declare variables local to the script
+    2. Use 'var' to declare variable that are shared between scripts
+
+    To convert the srring to useful data - using 
+    <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html#page1" target="_blank">Frame</a>
+
+!tryit
+    //
+var {Frame,csvLine} = DataFrame; // tool for dealing with large amounts of data
+   let lines = csvData.split('\\n').map(csvLine);
+   var covidFrame = new Frame(lines.slice(1), lines[0]);
+   covidFrame
+!md
+    ## Printing from anywhere is a script
+
+    1. \`$$.D(exp1,...)\` will print one or more arguments
+    1. \`$$.D2(string)\` will evaluate (execute) \`string\` as a javascript expression and print the string as well as the resulting value
+    1. \`$$.HTML(htmlString)\` will render the HTML in the output area
+    1. \`$$.json(exp)\` convert the \`expr\` to JSON and print the results
+
+!tryit
+
+
+
+
+`], false, true); 
+saveData([`${baseDir}/main/page3.try`,`
+!md
+    # Page 3
+
+    This is page3
 
 !tryit
     array.filter(v => (v&1)===0);  // print even values
+
+
 `], false, true);
 
 saveData([`${baseDir}/includes/head.try`,`
@@ -140,7 +254,7 @@ saveData([`${baseDir}/includes/head.try`,`
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
 `], false, true);
 
-saveData([`${baseDir}/fileview.try`,`
+saveData([`${baseDir}/fileview/index.try`,`
 !head
   <title>Browse Try Files</title>
   @@include ASSETS/file-tree.try
@@ -168,7 +282,7 @@ saveData([`${baseDir}/fileview.try`,`
 
 
     \`\`\`js
-    @@include ESCAPE ../try_it/filelist.json
+    @@include ESCAPE ../../${targetDir}/filelist.json
     \`\`\`
     <br>
 

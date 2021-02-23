@@ -37,7 +37,7 @@ function genProject(initTarget, srcDir, targetDir, packageName) {
 		saveData([`${initTarget}/package.json`,genPackageJson(initTarget,srcDir,targetDir)]);
 		console.log("add packages to dev dependencies");
 		console.log("create sample files");
-		genSampleFiles(initTarget+'/'+srcDir, packageName);
+		genSampleFiles(initTarget+'/'+srcDir, packageName, targetDir);
 	
 	} else {
 		updateExistingProject('.', srcDir, targetDir, packageName)

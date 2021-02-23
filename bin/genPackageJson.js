@@ -1,15 +1,18 @@
 //genPackageJson.js
 //
-const pkg = require('../package.json') 
+const pkg = require('../package.json') ;
+
+//    "tryitjs": "^${pkg.version}",
+
 module.exports = function(packageName,srcDir,targetDir) {
     return `{
   "name": "${packageName}",
   "version": "0.1.0",
   "description": "Generate HTML file with runnable and editable code snippets",
   "scripts": {
-    "start": "reload -d ./${targetDir} -b -p 3001",
+    "start": "reload -d ./ -b -p 3001 -w ./${srcDir} --start-page \\\"./${targetDir}/default.html\\\"",
     "build": "tryitjs --src ${srcDir} --dest ${targetDir} --filelist",
-    "local": "tryitjs --src try_src --dest try_it --local --filelist",
+    "local": "nodemon -w ${srcDir} --ext \\"try js css html\\" --exec \\"tryitjs --src ${srcDir} --dest ${targetDir} --local --filelist\\"",
     "demo" : "npm install && npm run build && npm start",
     "test": "echo \\"Error: no test specified\\" && exit 1"
   },
@@ -26,7 +29,6 @@ module.exports = function(packageName,srcDir,targetDir) {
     "IDE"
   ],
   "devDependencies": {
-    "tryitjs": "^${pkg.version}",
     "nodemon": "^2.0.4",
     "reload": "^3.1.0"
   },

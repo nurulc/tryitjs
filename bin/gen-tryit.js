@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const DEBUG_INIT = true;
+const DEBUG_INIT = false;
 
 const DEFAULT_SRC = DEBUG_INIT?'try_src1':'try_src';
 const DEFAULT_TARGET = DEBUG_INIT?'try_it1':'try_it';
