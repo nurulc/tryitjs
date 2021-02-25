@@ -1,7 +1,7 @@
 import { getPendingEditors } from './globals';
 import { jump, jumpback } from '../dom-ui/jumpToTag';
 import { qs, qsA } from '../utils';
-import _runAll from '../execute/_runAll';
+import { _runAll } from '../execute/_runAll';
 import clearStorage from '../storage/clearStorage';
 import getPageInfo from '../page/getPageInfo';
 import revertChanges from './revertChanges';
@@ -10,16 +10,6 @@ import saveAll from '../storage/saveAll';
 import setDisplay from '../dom-ui/setDisplay';
 
 export default function gMakeEditor() {
-	// var elts = qsA("textarea.tryit");
-	// let list = Array.prototype.slice.call(elts);
-	// const makeAnEditor = (id) => {
-	// 	_makeEditor(id, (id,editor) => {	
-	// 		getPendingEditors().push(id);
-	// 		__editors.push(id);
-	// 		editorFor[id] = editor;
-	// 	});
-	// }
-	// list.map( e => e.id).forEach(makeAnEditor);
 	getPageInfo();
 	// let pageInfo = pi.pageInfo;
 	// let allEditors = pi.allEditors;

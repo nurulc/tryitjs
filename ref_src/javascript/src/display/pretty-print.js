@@ -54,7 +54,7 @@ export default  (function prettyPrint(){
 			
 			/* Add attributes to el */
 			if (attrs && attrs.style) {
-				var styles = attrs.style;
+				//var styles = attrs.style;
 				util.applyCSS( el, attrs.style );
 				delete attrs.style;
 			}
@@ -75,7 +75,9 @@ export default  (function prettyPrint(){
 					try{
 						/* Yes, IE6 SUCKS! */
 						el.style[prop] = styles[prop];
-					}catch(e){}
+					}catch(e){
+						console.log('*');
+					}
 				}
 			}
 		},

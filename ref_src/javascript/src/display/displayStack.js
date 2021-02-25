@@ -6,7 +6,7 @@ export function clearDisplay() {
 }
 
 export function getDisplayStack() { 
-	_displayStack= []; 
+	return _displayStack; 
 }
 
 export function pushDisplay(s, type='h') {

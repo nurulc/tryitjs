@@ -2,8 +2,12 @@ import { CHANGED, setCHANGED } from './globals';
 import { Identity } from '../utils';
 import getSavedContent from '../storage/getSavedContent';
 import setEditorHeight from './setEditorHeight';
-import tryIt from '../execute/tryIt';
+//import { tryIt } from '../execute/_runAll';
 
+let tryIt; // greak circular reference
+export function setupMakeEditor(doTryIt) {
+	tryIt = doTryIt;
+}
 export default function _makeEditor(id, callback=Identity) {
 	try {
 		// let originalContents = textarea.value;

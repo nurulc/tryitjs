@@ -24,14 +24,14 @@ module.exports = {
 		'sourceType': 'module'
 	},
 	'rules': {
-		'indent': [
-			'error',
-			'tab'
-		],
-		'linebreak-style': [
-			'error',
-			'unix'
-		],
+		// 'indent': [
+		// 	'error',
+		// 	'tab'
+		// ],
+		// 'linebreak-style': [
+		// 	'error',
+		// 	'unix'
+		// ],
 		'quotes': [
 			'error',
 			'single'

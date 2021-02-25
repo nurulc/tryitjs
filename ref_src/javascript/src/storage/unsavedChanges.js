@@ -1,4 +1,4 @@
-import { getAllEditors } from '../editor/globals';
+import getAllEditors from '../editor/getAllEditors';
 
 /**
  * Check if any editor has unsaved changes

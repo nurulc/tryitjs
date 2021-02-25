@@ -1,19 +1,19 @@
 import { $e } from '../utils';
 import { asHTML } from '../display/asHTML';
 import { beforeExecute } from './beforeExecute';
-import { canExecute } from './tryIt';
+import canExecute from './canExecute';
 import { clearDisplay } from '../display/displayStack';
 import { clearLastly, runLastly } from '../display/lastly';
 import { editorFor, getPendingEditors } from '../editor/globals';
 import { jump } from '../dom-ui/jumpToTag';
-import { setNoDisplay } from '../display/display';
+import { setNoDisplay } from '../display/getSetNoDisplay';
 import execute from './execute';
 import jsxCompiler from './jsxCompiler';
 import progress from './progress';
 import render from '../display/render';
 import updateUI from '../dom-ui/updateUI';
 
-export default function tryIt(divName,editor, toDelay=200) {
+export function tryIt(divName,editor, toDelay=200) {
 	let __editorsPending = getPendingEditors(); 
 	if(!canExecute(divName)) {
 		setTimeout(() => _runAll(__editorsPending, divName, true), 300);
@@ -30,7 +30,7 @@ export default function tryIt(divName,editor, toDelay=200) {
 	setTimeout( () => execute(divName, editor, true, true, runLastly),toDelay);
 }
 
-function _runAll(list, item, toInit) {
+export function _runAll(list, item, toInit) {
 	let [divName, ...newList] = list;
 	if(toInit) {
 		let ix = list.indexOf(item);
@@ -62,7 +62,7 @@ function _runAll(list, item, toInit) {
 		_code = editor.getValue('\n');
 		var val = (1,eval)(jsxCompiler(_code)); // execute script in global context(_code);
 
-		render(val).then(res => {
+		render(val).then(() => {
 			//replaceCSSClass(divName, false);
 			updateUI(divName,false);
 			progress('step');

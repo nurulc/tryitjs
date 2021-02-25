@@ -60,5 +60,5 @@ const toExport = ({
 	escapeHTML: asHTML
 });
 
-Object.keys($$).forEach(k => window[k] = $$[k]);
+Object.keys(toExport).forEach(k => window[k] = toExport[k]);
 export default toExport ;

@@ -1,4 +1,3 @@
-import getPageInfo from '../page/getPageInfo';
 
 export let CHANGED = false;
 export let __editors = [];
@@ -30,6 +29,3 @@ export function setCHANGED(val) {
 	return val;
 }
 
-export function getAllEditors() {
-	return getPageInfo().allEditors;
-}

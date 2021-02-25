@@ -1,19 +1,24 @@
 import { LAST_TARGET, jumpTag } from '../dom-ui/jumpToTag';
+import { isTag, qs, qsA } from '../utils';
 import { pageNext, pagePrev } from '../dom-ui/pagePrevNext';
-import { qs, qsA } from '../utils';
+import { setupPageInfo } from '../page/getPageInfo';
+import { tryIt } from '../execute/_runAll';
 import gMakeEditor from '../editor/gMakeEditor';
+import {setupMakeEditor}  from '../editor/makeEditor';
 import highlightCodeBlock from '../display/highlightCodeBlock';
 import saveAll from '../storage/saveAll';
 import setDisplay from '../dom-ui/setDisplay';
 import showPopup from '../display/showPopup';
 import unsavedChanges from '../storage/unsavedChanges';
 
+setupPageInfo(tryIt); // break circular reference
+setupMakeEditor(tryIt);
 window.onbeforeunload = function() { 
 	if(unsavedChanges())
 		return 'You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes';
 };
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
 
 	// check if we have highlightings then highlight TryitJS code snippets	
 	if(hljs) { 

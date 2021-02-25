@@ -1,10 +1,16 @@
-
+import { $e } from '../utils';
+import { beforeExecute } from './beforeExecute';
+import { clearDisplay } from '../display/displayStack';
+import { jump } from '../dom-ui/jumpToTag';
+import jsxCompiler from './jsxCompiler';
+import render from '../display/render';
+import updateUI from '../dom-ui/updateUI';
 
 export default function execute(divName, editor, toUpdateUI, toJump, callback) {
 	try { 
 		//CHANGED = true;
 		let t0 = performance.now();
-		beforeExecute(divName);
+		beforeExecute(divName); 
 		let displaySeg = $e(divName + '-display');
 		let output = $e(divName + '-output');
 		let boundingSeg = output.closest('.tryit-inner');

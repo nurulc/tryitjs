@@ -1,4 +1,4 @@
-import {getNoDisplay} from './display';
+import {getNoDisplay} from './getSetNoDisplay';
 
 let _lastlyStack = [];
 

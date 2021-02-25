@@ -1,11 +1,12 @@
 import { _show, clearDisplay, getDisplayStack } from './displayStack';
-import { display, getNoDisplay } from './display';
+import { display } from './display';
+import { getNoDisplay } from './getSetNoDisplay';
 
 export default function render(val, lastExecTime=0) {
 	if(arguments.length > 0 ) _show(val);
 	let _displayStack = getDisplayStack();
 	let promises = _displayStack.map( ([p]) => p);
-	let types = _displayStack.map( ([p,type]) => type);
+	let types = _displayStack.map( ([,type]) => type);
 	let resPromise = Promise.all(promises).then(
 		list => {
 			if(!getNoDisplay()) {

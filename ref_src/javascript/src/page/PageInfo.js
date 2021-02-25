@@ -1,3 +1,5 @@
+import { editorFor } from '../editor/globals';
+import _makeEditor from '../editor/makeEditor';
 import asArray from '../asArray';
 
 export default class PageInfo {
@@ -20,13 +22,14 @@ export default class PageInfo {
 
 	showPage(pageId) {
 		let editorList = this.contents.get(pageId);
+		console.log('_makeEditor', _makeEditor);
 		editorList.forEach(anEditor =>{
 			if(!anEditor.hasEditor()) {
 				_makeEditor(anEditor.name, (id,editor) => {
 					editorFor[id] = editor;
 					anEditor.editor = editor;
 							
-						  });
+				});
 			}
 		});
 	}

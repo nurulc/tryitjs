@@ -2,9 +2,10 @@ import {editorFor, getEditors, getPendingEditors, setPendingEditors } from '../e
 import { qs, qsA } from '../utils';
 import EditorProxy from '../editor/EditorProxy';
 import PageInfo from './PageInfo';
-import tryIt from '../execute/tryIt';
+//import {tryIt} from '../execute/_runAll';
 
 let _pageInfo;
+let tryIt = () => false;
 /**
  * If the number of 'pages' in the HTML gets large and there lots of tryit scripts
  * the loading of the page can get very slow. So instead we Create the code mirror
@@ -47,4 +48,8 @@ export default function getPageInfo() {
 
 	});
 	return (_pageInfo = {pageInfo, allEditors});
+}
+
+export function setupPageInfo(doTryit) {
+	tryIt = doTryit;
 }

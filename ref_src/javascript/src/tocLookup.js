@@ -19,7 +19,7 @@ export default function getTocLookup() {
 			current = v.substr(1);
 			lookup[current] = current;
 		} else {
-			let [tag, id] = v.split(':');
+			let [, id] = v.split(':');
 			lookup[id] = current;
 		}
 	});

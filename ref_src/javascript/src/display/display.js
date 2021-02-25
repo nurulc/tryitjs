@@ -2,9 +2,6 @@ import {asHTML} from './asHTML';
 import {_lastly} from './lastly';
 import prettyPrint from './pretty-print';
 
-let NO_DISPLAY = false;
-export function setNoDisplay(flag) { NO_DISPLAY = !!flag; }
-export function getNoDisplay() { return NO_DISPLAY; }
 
 export function display(d) {
 	if(d && d._toHtml ) {

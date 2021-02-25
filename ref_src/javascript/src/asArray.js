@@ -10,7 +10,7 @@ export default 	function asArray(arrayLike) {
 	if(Array.isArray(arrayLike)) return arrayLike;
 
 	if( arrayLike instanceof NodeList  ) {
-		 return Array.prototype.slice.call(arrayLike,0);
+		return Array.prototype.slice.call(arrayLike,0);
 	}
 	else if( arrayLike instanceof Map) {
 		return Array.from(arrayLike.entries());

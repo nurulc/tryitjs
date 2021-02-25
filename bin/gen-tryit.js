@@ -129,7 +129,7 @@ function processLocal(refDir, targetDir) {
     }
     userConfig = customUserConfig || userConfig;
 
-    createNecessaryFiles(refDir,targetDir, ).forEach(saveData);
+    createNecessaryFiles(refDir,targetDir, ).forEach(v => saveData(v));
     fs.copyFileSync(path.join(refDir,'ref','tryit-small.png'), path.join(targetDir,'tryit-small.png'));
     userConfig = {...baseConfig, isLocal: true}
     isLocal = false;
