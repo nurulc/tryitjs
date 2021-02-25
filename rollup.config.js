@@ -9,7 +9,7 @@ export default {
 	input: 'ref_src/javascript/src/index.js',
 	output: [
 		{
-			file: 'ref/tryit.js',
+			file: 'ref/javascript/tryit-min.js',
 			format: 'umd',
 			name: 'tryit$'
 		},

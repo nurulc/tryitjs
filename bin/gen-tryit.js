@@ -83,8 +83,8 @@ function readTryConfig() {
 
 function createNecessaryFiles(refDir,target='.') {
   const fileList = [
-     'javascript/prettyprint.js',
-     'javascript/tryit.js',
+//     'javascript/prettyprint.js',
+     'javascript/tryit-min.js',
      'stylesheets/tryit.css'
   ];
 
