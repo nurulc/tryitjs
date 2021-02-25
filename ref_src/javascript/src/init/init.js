@@ -12,7 +12,9 @@ import showPopup from '../display/showPopup';
 import unsavedChanges from '../storage/unsavedChanges';
 
 setupPageInfo(tryIt); // break circular reference
-setupMakeEditor(tryIt);
+setupMakeEditor(tryIt); // break circular reference
+
+
 window.onbeforeunload = function() { 
 	if(unsavedChanges())
 		return 'You have made changes on this page that you have not yet confirmed. If you navigate away from this page you will lose your unsaved changes';
