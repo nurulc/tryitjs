@@ -167,7 +167,7 @@ code.V {
  background: #3f495a !important;
 }
 
-table.ftable tr.even, table.ftable tr.alt, table.ftable tbody tr:nth-of-type(even)
+table.ftable tr.even, table.ftable tr.alt, table.ftable tbody tr:nth-of-type(even) {
     background: #5f5d5d;
 }
 

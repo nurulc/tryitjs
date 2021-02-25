@@ -1,4 +1,5 @@
 @@once
+!head
 @@include ui-tools.try
 @@include doPlot.try
 !html

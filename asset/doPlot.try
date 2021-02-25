@@ -1,6 +1,6 @@
 @@once
 @@include div-tools.try
-!html
+!head
 <script>
   function newPlot(dn, data, layout,config) {
    

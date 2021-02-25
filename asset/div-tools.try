@@ -1,5 +1,5 @@
 @@once
-!html
+!head
 	<script>
 	function Identity(x) { return x}
 	function genID(prefix) { return (prefix || 'T')+Math.round(Math.random()*100000); }
