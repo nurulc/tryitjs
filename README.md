@@ -3,18 +3,24 @@
 CLI (command line) application to generate HTML file to write tutorials for Javascript librarries. The HTML tutorial file (a try file) that
 requires no backend server, and totally self contained. This containing editable Javascript code snippets that can be edited and executed in the browser. This is designed to help npm module developers to publish pages to that other developers can try out ther library with the minimum of effort.
 
-<a href="https://unpkg.com/tryitjs/try_it/index.html">TryITjs Tutorial</a><br />
-<a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html">Overview of TryitJS</a><br />
-<a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html">A more extensive example</a><br />
+* <a href="https://unpkg.com/tryitjs/try_it/index.html">TryITjs Tutorial</a><br />
+* <a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html">Overview of TryitJS</a><br />
+* <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html">A more extensive example on how to create a Tutorial</a><br />
 
 ## Development status
 
 The code is in fairly good shape and is ready for developers to use. The documentation is still work in progress, but this site as some good example for you to use.
 
-### Why TryTtJs
+### Why TryTTjs
 
 A with most development it was to meet a need that i had, namely to delevop an interactive tutorial for a DataTable loosly base of Python's Pandas library for Javascript. 
-[DataFrame](https://github.com/nurulc/data-frame)
+[DataFrame](https://github.com/nurulc/data-frame). The tool is powerful but it is hard to know what you can do with it. The tutor in written in and mostly markdown similar to this document. Interspesed with the markdown ther is runnable javascript code. That can be executed and edited to get hands on experiece with the ideas and api.
+
+Any number of utilities and libraries can be included with the tutorial. Besides markdown, sections can how the full power of HTML as well as Javascript. I have found it easier to write a tutorial if ther is a step by step guide working through a real problem. TryITjs creates an standalone HTML page with no backend server required (except to deliver the page).
+
+> Work in progrress
+
+
 
 ## Instalation
 
