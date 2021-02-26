@@ -68,7 +68,7 @@ The command above generates and
 <a href="https://unpkg.com/tryitjs/try_it/basic.html">basic.html (click to see live results)</a>
 <br><br>
 
-![](images/basic.png)
+<img src="images/basic.png" width="400">
 
 ### What is a .try file
 
