@@ -70,6 +70,11 @@ The command above generates and
 
 <img src="images/basic.png" width="400">
 
+
+> <img src="https://image.flaticon.com/icons/png/512/107/107788.png" width="80"> Idea for the future - pure HTML file that lets you edit an preview simple _.try_ files. TryIJjs should be able to do it, the API can run in a browser (by design) but I have not tried that usecase, so I am not sure it will work out of the box.
+
+
+
 ### What is a .try file
 
 Very it is a markdown file with a few simple extensions, .try file have the following few commands:
