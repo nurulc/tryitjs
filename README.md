@@ -7,6 +7,15 @@ requires no backend server, and totally self contained. This containing editable
 <a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html">Overview of TryitJS</a><br />
 <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html">A more extensive example</a><br />
 
+## Development status
+
+The code is in fairly good shape and is ready for developers to use. The documentation is still work in progress, but this site as some good example for you to use.
+
+### Why TryTtJs
+
+A with most development it was to meet a need that i had, namely to delevop an interactive tutorial for a DataTable loosly base of Python's Pandas library for Javascript. 
+[DataFrame](https://github.com/nurulc/data-frame)
+
 ## Instalation
 
 ### Install globally 
