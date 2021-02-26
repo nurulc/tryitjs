@@ -1,5 +1,8 @@
 # TryITjs Configuration files
 
+(work in progress) 
+:construction:
+
 This is advanced usage and completely unnecessary to use in most cases
 
 
