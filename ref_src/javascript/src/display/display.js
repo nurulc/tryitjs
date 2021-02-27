@@ -58,6 +58,7 @@ function isReactNode(d) {
 
 function isPrimitive(v) {
 	switch(typeof v) {
+	case 'symbol':
 	case 'boolean':
 	case 'number': return true;
 	case 'string': return v.length < 20;

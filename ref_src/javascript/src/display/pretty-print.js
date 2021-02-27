@@ -34,8 +34,11 @@ policies, either expressed or implied, of James Padolsey.
  CONTRIBUTORS
 	David Waller
     Benjamin Drucker
+    Nurul Choudhury
 
 */
+
+import { asHTML } from './asHTML';
 
 export default  (function prettyPrint(){
 	
@@ -157,7 +160,7 @@ export default  (function prettyPrint(){
 				},
 				tbl = util.el('table', attrs.table),
 				thead = util.el('thead', attrs.thead),
-				tcolgroup = util.el('colgroup'),
+				//tcolgroup = util.el('colgroup'),
 				tbody = util.el('tbody', attrs.tbody);
 				
 			if (headings.length) {
@@ -198,7 +201,6 @@ export default  (function prettyPrint(){
 		htmlentities: function(str) {
 			return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 		},
-		
 		merge: function(target, source) {
 			
 			/* Merges two (or more) objects,
@@ -426,7 +428,7 @@ export default  (function prettyPrint(){
 	// Main..
 	var prettyPrintThis = function(obj, options) {
 		
-		 /*
+		/*
 		 *	  obj :: Object to be printed					
 		 *  options :: Options (merged with config)
 		 */

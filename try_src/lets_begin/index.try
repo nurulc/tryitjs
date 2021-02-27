@@ -1,5 +1,5 @@
 !head  /* TOP LEVEL .try file*/
-    <title>Introducing TryitJS</title>
+    <title>Introducing TryITjs</title>
     @@include ../tools/head.try
 
 !html
