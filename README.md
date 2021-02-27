@@ -3,9 +3,32 @@
 CLI (command line) application to generate HTML file to write tutorials for Javascript librarries. The HTML tutorial file (a try file) that
 requires no backend server, and totally self contained. This containing editable Javascript code snippets that can be edited and executed in the browser. This is designed to help npm module developers to publish pages to that other developers can try out ther library with the minimum of effort.
 
-<a href="https://unpkg.com/tryitjs/try_it/index.html">TryITjs Tutorial</a><br />
-<a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html">Overview of TryitJS</a><br />
-<a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html">A more extensive example</a><br />
+* <a href="https://unpkg.com/tryitjs/try_it/index.html">TryITjs Tutorial</a><br />
+* <a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html">Overview of TryitJS</a><br />
+* <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html">A more extensive example on how to create a Tutorial</a><br />
+
+## Development status
+
+The code is in fairly good shape and is ready for developers to use. The documentation is still work in progress, but this site as some good example for you to use.
+
+### Why TryTTjs
+
+A with most development it was to meet a need that i had, namely to delevop an interactive tutorial for a DataTable loosly base of Python's Pandas library for Javascript. 
+[DataFrame](https://github.com/nurulc/data-frame). The tool is powerful but it is hard to know what you can do with it. The tutor in written in and mostly markdown similar to this document. Interspesed with the markdown ther is runnable javascript code. That can be executed and edited to get hands on experiece with the ideas and api.
+
+Any number of utilities and libraries can be included with the tutorial. Besides markdown, sections can how the full power of HTML as well as Javascript. I have found it easier to write a tutorial if ther is a step by step guide working through a real problem. TryITjs creates an standalone HTML page with no backend server required (except to deliver the page).
+
+> Documentation - _Work in progrress_  :construction:
+> 
+
+<img src="under-construction-small.png">
+
+<img src="images/basic.png" width="600"/>
+
+* User Interface
+
+<img src="images/tryitjs-overview.png" width="600">
+
 
 ## Instalation
 
@@ -32,56 +55,6 @@ npm start
 
 ### Simplest usage
 
-The processor takes as input a file with the extension _&lt;filename&gt;.try_ and generates _&lt;filename&gt;.html_ 
-
-
-
-further is creates two extra directories (in --local mode):
-
-* stylesheets
-* javascript
-
-
-The init action will do several things:
-1. By default all javascripts and css are pulled from the internat
-1. In --local mode, create, if it does not already exist, the following
-   * _&lt;target dir&gt;_: /javascripts   _directory_
-   * _&lt;target dir&gt;_ : /javascript/tryit.js _core tryit helper script_
-   * _&lt;target dir&gt;_ :  /javascript/prettyprint.js _display utility_
-   * _&lt;target dir&gt;_:/stylesheet/tryit.css _core stylesheet_
-   
-
-
-
-* Optional create .tryit.json 
-	* this is done with the option `tyritjs --init`
-```javascript 
-{
- "headers": {
-    "css": ["https://...", ...],
-    "scripts": ["https://...js",...] 
-  },
-  "local": {
-    "css": [
-        "/stylesheets/tryit.css"
-    ],
-    "scripts": [
-    "/javascript/prettyprint.js", 
-    "/javascript/tryit.js"
-    ]
-  },
-   "onend": ` <!-- HTML to ADD at the bottom of the html file, just before </body> -->
-          <script
-          src="https://code.jquery.com/jquery-3.1.1.min.js"
-          integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-          crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
-        <script>
-          $('.activating.element').popup({inline: true, });
-        </script>
-  `
-}
-``` 
 
 #### Example of HTML generated
 
@@ -95,7 +68,12 @@ The command above generates and
 <a href="https://unpkg.com/tryitjs/try_it/basic.html">basic.html (click to see live results)</a>
 <br><br>
 
-![](images/basic.png)
+<img src="images/basic.png" width="400">
+
+
+> <img src="https://image.flaticon.com/icons/png/512/107/107788.png" width="80"> Idea for the future - pure HTML file that lets you edit an preview simple _.try_ files. TryIJjs should be able to do it, the API can run in a browser (by design) but I have not tried that usecase, so I am not sure it will work out of the box.
+
+
 
 ### What is a .try file
 
