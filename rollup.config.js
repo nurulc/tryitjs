@@ -15,7 +15,7 @@ export default {
 		},
 	],
 	plugins: [
-		terser(),
+//		terser(),
 		babel({ babelHelpers: 'bundled' }),
 		nodeResolve(),
 		// All of following are just for beautification, not required for bundling purpose

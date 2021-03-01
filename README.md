@@ -3,8 +3,9 @@
 CLI (command line) application to generate HTML file to write tutorials for Javascript librarries. The HTML tutorial file (a try file) that
 requires no backend server, and totally self contained. This containing editable Javascript code snippets that can be edited and executed in the browser. This is designed to help npm module developers to publish pages to that other developers can try out ther library with the minimum of effort.
 
-* <a href="https://unpkg.com/tryitjs/try_it/index.html">TryITjs Tutorial</a><br />
-* <a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html">Overview of TryitJS</a><br />
+* <a href="try_it/index.html">TryITjs Tutorial</a><br />
+* <a href="try_it/full-tutorial.html">Overview of TryitJS</a><br />
+* <a href="try_it/lets_begin/index.html">Example of Graphics using two.js</a><br />
 * <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html">A more extensive example on how to create a Tutorial</a><br />
 
 ## Development status
@@ -65,7 +66,7 @@ The following command can be used to generate a __.HTML__ file from a __.try__ f
 <a href="https://github.com/nurulc/tryitjs/blob/master/try_src/basic.try">Sample .try file</a>
 
 The command above generates and 
-<a href="https://unpkg.com/tryitjs/try_it/basic.html">basic.html (click to see live results)</a>
+<a href="try_it/basic.html">basic.html (click to see live results)</a>
 <br><br>
 
 <img src="images/basic.png" width="400">
@@ -121,4 +122,4 @@ Does not end the previously started command section, in these single-line comman
 	
 > tryitjs --src <src dir for .try files> --dest <target dir for generated .html files> { --local }
 	
-
+### cdn for github files https://gitcdn.link

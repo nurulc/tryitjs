@@ -1,18 +1,38 @@
 !head  /* TOP LEVEL .try file*/
     <title>Introducing TryITjs</title>
     @@include ../tools/head.try
-
+    <script src="https://gitcdn.link/repo/jonobr1/two.js/master/build/two.min.js"></script>
+    <script src="https://two.js.org/third-party/physics.js"></script>
 !html
     @@include ../tools/divtools.try
 
 
 !md
-# lets Begin
+# TryITjs 
 
-This is an interactive tutorial on how create TryItJS can be use to document a API. 
+## Introduction
+
+I started TryITjs to help me with a simple problem. I wanted a quick way to create tutorials for open source Javascript libraries.
+Like most open source libraries for NPM, I was using GitHub for my git repository and publishing to NPM. All thers tools work 
+beautifully together. Once I had a library published, it was sitting on GitHub, but I also had to create documentation. Internal
+API documentation is essential and ESDoc or JSDoc create nice HTML documentation. But it is hard to get much from the API doc.
+I guess some people may love to read API documentation, but I do not. Secondly GitHub does no render HTML file for security reasons,
+in particulalar XSS (cross site scripting). This means that the API docs have to be hosted somewhere else. The buttom line,
+it is too hard to find something on GitHub and checkout what it does without taking a great deal of effort.
+
+## What does it do
+
+* This is an interactive tutorial on how create TryItJS can be use to document a API. 
+* Tutorial.try `=>` Tutorial.html 
+* A `try` file is a slightly enhanced markdown file
+* The html generated is fully self contained  
+
+
+## What is a .try file
+      
+ 
 
 ```tryit
-
   \!head --- to be a page this must be at the top of the page
       .... HTML HEAD elements go here ...
   \!md
@@ -28,47 +48,173 @@ This is an interactive tutorial on how create TryItJS can be use to document a A
   \!end --- end of the file
         ... HTML ot add to the bottom of the page goes here...  
   
-  ```
+```
+
 
 !md
-    ## [Back](./index.html)
-  
-!tryit
-  // Your code goes here
+    ## Something fun
 
+    Use a javascript library two.js (using sample on their webpage) to create a physics simulation
+
+!tryit
+    // Your code goes here
+
+    let elem = plotDiv(); //A TryitJS function to create a div after this script
+
+    let plot = elem; //get the div for plotting
+    plot.style.backgroundColor = '#eeeeee';
+
+      // Make an instance of Two (two.js) and place it on the page.
+      var two = new Two({ width: 500, height: 400 }).appendTo(plot);
+
+      let circle = two.makeCircle(-70, 0, 50);
+      let rect = two.makeRectangle(70, 0, 100, 100);
+      circle.fill = '#FF8000';
+      rect.fill = 'rgba(0, 200, 255, 0.75)';
+
+      let group = two.makeGroup(circle, rect);
+      group.translation.set(two.width / 2, two.height / 2);
+      group.scale = 0;
+      group.noStroke();
+
+      // Bind a function to scale and rotate the group
+      // to the animation loop.
+      two.bind('update', function(frameCount) {
+        // This code is called everytime two.update() is called.
+        // Effectively 60 times per second.
+        if (group.scale > 0.9999) {
+          group.scale = group.rotation = 0;
+        }
+        var t = (1 - group.scale) * 0.125;
+        group.scale += t;
+        group.rotation += t * 4 * Math.PI;
+      }).play();  // Finally, start the animation loop
+
+    "done";
+
+      
+!md
+  ## Another Example
+
+  Just copied code from two.js and pasted it into the example. This an example using a physics engine. Please feel to
+  play with the code. You cannot mess up.
+
+  >   Ctrl+z   undo<br>
+  >   Ctrl+s   save changes you have made in the browser for future use
+
+!tryit
   var plot = plotDiv();
 
-    // Make an instance of two and place it on the page.
-    var elem = plot; //get the div for plotting
-    var params = { width: 285, height: 200 };
-    var two = new Two(params).appendTo(elem);
+  // using sample from two.js
+  plot.style.backgroundColor = '#eeeeee';
+  plot.style.scale = 0.5;
 
-    // two has convenience methods to create shapes.
-    var circle = two.makeCircle(72, 100, 50);
-    var rect = two.makeRectangle(213, 100, 100, 100);
+  var two = new Two({width: 800, height: 800 }).appendTo(plot);
 
-    // The object returned has many stylable properties:
-    circle.fill = '#FF8000';
-    circle.stroke = 'orangered'; // Accepts all valid css color
-    circle.linewidth = 5;
+  let mass = 10, radius = two.height / 5;
+  let strength = 0.0625, drag = 0.0;
 
-    rect.fill = 'rgb(0, 200, 255)';
-    rect.opacity = 0.75;
-    rect.noStroke();
+  let background = two.makeGroup();
+  let foreground = two.makeGroup();
 
-    // Don't forget to tell two to render everything
-    // to the screen
-    two.update(); 
+  let physics = new Physics();
+  let points = [];
+  let i = 0;
+
+  for (i = 0; i < Two.Resolution; i++) {
+
+    let pct = i / Two.Resolution;
+    let theta = pct * Math.PI * 2;
+
+    let ax = radius * Math.cos(theta);
+    let ay = radius * Math.sin(theta);
+
+    let variance = Math.random() * 0.5 + 0.5;
+    let bx = variance * ax;
+    let by = variance * ay;
+
+    let origin = physics.makeParticle(mass, ax, ay)
+    let particle = physics.makeParticle(Math.random() * mass * 0.66 + mass * 0.33, bx, by);
+    let spring = physics.makeSpring(particle, origin, strength, drag, 0);
+
+    origin.makeFixed();
+
+    particle.shape = two.makeCircle(particle.position.x, particle.position.y, 5);
+    particle.shape.noStroke().fill = '#fff';
+    particle.position = particle.shape.translation;
+
+    foreground.add(particle.shape)
+    points.push(particle.position);
+
+  }
+
+  let outer = new Two.Path(points, true, true);
+  let color = getRandomColor();
+  outer.stroke = color.toString();
+  outer.fill = color.toString(0.5);
+  outer.scale = 1.75;
+  outer.linewidth = 10;
+
+  background.add(outer);
+
+  let inner = new Two.Path(points, true, true);
+  inner.noStroke();
+  inner.fill = getRandomColor().toString();
+  inner.scale = 1.25;
+
+  background.add(inner);
+
+  two.renderer.domElement.style.background = 'url(' + generateGrid() + ') center center';
+
+  resize();
+
+  two
+    .bind('resize', resize)
+    .bind('update', function() {
+      physics.update();
+    })
+    .play();
+
+  function resize() {
+    background.translation.set(two.width / 2, two.height / 2);
+    foreground.translation.copy(background.translation);
+  }
+
+  function getRandomColor() {
+    let color = {
+      r: Math.floor(Math.random() * 255),
+      g: Math.floor(Math.random() * 255),
+      b: Math.floor(Math.random() * 255),
+      toString: function(a) {
+        if (a) {
+          return `rgba( ${color.r}, ${color.g}, ${color.b}, ${a})`;
+        }
+        return `rgb( ${color.r}, ${color.g}, ${color.b})`;
+      }
+    };
+    return color;
+  }
+
+  function generateGrid() {
+
+    let two = new Two({type: Two.Types.canvas, width: 16, height: 16, ratio: 2 });
+
+    let width = two.width / 2;
+    let height = two.height / 2;
+
+    let background = two.makeRectangle(width, height, two.width, two.height);
+    background.noStroke().fill = '#efefef';
+
+    let c = two.makeCircle(width, height, 0.5);
+    c.noStroke().fill = '#999';
+
+    two.update();
+
+    return two.renderer.domElement.toDataURL('image/png');
+
+  }
 
 
-
-
-
-
-
-
-
-
-
-
+"done"
+ 
 !end

@@ -4,7 +4,8 @@
   "description": "Generate JS Library Tutorial as a standalone HTML file from extended markdown file, with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
-    "start": "reload -d . -e try,html,css,js -w try_src -v -b",
+    "start": "reload -d . -e try,html,css,js -w try_src -v -b -s ",
+    "start:new": "markserv -p 8081 ",
     "tryit": "node bin/gen-tryit.js --src try_src --dest try_it --filelist",
     "local": "rollup -c && node bin/gen-tryit.js --src try_src --dest try_it --local --filelist",
     "local:old": "babel ref_src -d ref && node bin/gen-tryit.js --src try_src --dest try_it --local --filelist",

@@ -23,6 +23,7 @@ export default function scrollToSmoothly(posFn, time,callback){
 		pos = 0;
 	}
 	let start = (window.scrollY||window.screenTop);
+	console.log('scrollToSmoothly', start, pos);
 	let currentPos = start;
 	if(currentPos<pos){
 		let t = 10;

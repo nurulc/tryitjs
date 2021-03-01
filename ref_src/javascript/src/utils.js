@@ -15,7 +15,8 @@ export function isEmpty(obj) {
 	if(obj === undefined) return true;
 	if(Array.isArray(obj) && obj.length === 0) return true;
 	if(typeof obj === 'string') return !!obj;
-	if(typeof obj === 'object') return Object.keys(obj).length === 0;
+	if(typeof obj === 'object' && obj.toString() === '[object Object]') 
+		return  Object.keys(obj).length === 0;
 	return false;  
 }
 

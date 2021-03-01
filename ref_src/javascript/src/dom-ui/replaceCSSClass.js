@@ -1,5 +1,6 @@
 import { addRemoveCSSclass } from './addRemoveCSSclass';
 import { getPendingEditors,setPendingEditors } from '../editor/globals';
+import {isEmpty} from '../utils';
 
 export function replaceCSSClass(tag) {
 	let __editorsPending = getPendingEditors();
@@ -8,6 +9,9 @@ export function replaceCSSClass(tag) {
 	__editorsPending = __editorsPending.slice(1); // 
 	setPendingEditors(__editorsPending);
 	let divName = __editorsPending[0];
-	addRemoveCSSclass(divName, 'yellow', 'green').dataset.tooltip = 'Execute Script (Ctrl+Enter)';
+	if(divName) {
+		let elm = addRemoveCSSclass(divName, 'yellow', 'green');
+		if(!isEmpty(elm)) elm.dataset.tooltip = 'Execute Script (Ctrl+Enter)';
+	}
 	return true;
 }

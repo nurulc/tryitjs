@@ -41,7 +41,7 @@
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/keymap/sublime.min.js",
       /* Addons: https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/ and /addon/edit/ */
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/selection/active-line.js",  /* enlighten active line */
-     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/2/lib/util/formatting.js",        /* allows tidy up */
+  /*   "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/2/lib/util/formatting.js", */       /* allows tidy up */
   /* Folding */
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/foldcode.min.js",     /* adds folding */
      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/foldgutter.min.js",   /* adds icon for folding */
