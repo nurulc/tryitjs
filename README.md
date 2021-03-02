@@ -22,9 +22,9 @@ The code is in good shape and is ready for developers to use. The documentation 
 ### Links to demos
 
 
-* <a href="try_it/index.html">TryITjs Tutorial</a><br />
-* <a href="try_it/full-tutorial.html">Overview of TryitJS</a><br />
-* <a href="try_it/lets_begin/index.html">Example of Graphics using two.js</a><br />
+* <a href="https://unpkg.com/tryitjs/try_it/index.html">TryITjs Tutorial</a><br />
+* <a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html">Overview of TryitJS</a><br />
+* <a href="https://unpkg.com/tryitjs/try_it/lets_begin/index.html">Example of Graphics using two.js</a><br />
 * <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html">A more extensive example on how to create a Tutorial</a><br />
 
 
