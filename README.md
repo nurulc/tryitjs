@@ -1,16 +1,32 @@
 # ![](tryit-small.png)
 
-CLI (command line) application to generate HTML file to write tutorials for Javascript librarries. The HTML tutorial file (a try file) that
-requires no backend server, and totally self contained. This containing editable Javascript code snippets that can be edited and executed in the browser. This is designed to help npm module developers to publish pages to that other developers can try out ther library with the minimum of effort.
+CLI (command line) application to generate HTML file of tutorials for Javascript librarries. It takes an enhance markdown file with some minor extensions and creates an HTML file. The HTML tutorial file (a try file)
+requires no backend server, and totally self contained. 
+
+In the tutorial descriptions in markdown and snippets of editable Javascript code. snippets that can be edited and executed in the browser. This makes it effortless to someone trying to determine if a Javascript library could be useful to play with the code snippets to understand the capability of the library quickly.
+
+The primary goal is to help npm module developers to publish pages for other developers so that can try out ther library with the minimum of effort.
+
+### Screenshot of a smaple HTML
+
+The image below is a example of a generated HTML with some annotations
+
+<img src="images/tryitjs-overview.png" width="600">
+
+__Note__ _You can save your edits (in the browser's local storage) so you can come back to it at a later date._
+
+## Development status
+
+The code is in good shape and is ready for developers to use. The documentation is still work in progress, but this site as some good example for you to use. As always, time allowing, I would like to add more capabilities in the future.
+
+### Links to demos
+
 
 * <a href="try_it/index.html">TryITjs Tutorial</a><br />
 * <a href="try_it/full-tutorial.html">Overview of TryitJS</a><br />
 * <a href="try_it/lets_begin/index.html">Example of Graphics using two.js</a><br />
 * <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html">A more extensive example on how to create a Tutorial</a><br />
 
-## Development status
-
-The code is in fairly good shape and is ready for developers to use. The documentation is still work in progress, but this site as some good example for you to use.
 
 ### Why TryTTjs
 
