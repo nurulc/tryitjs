@@ -61,7 +61,7 @@ function isPrimitive(v) {
 	case 'symbol':
 	case 'boolean':
 	case 'number': return true;
-	case 'string': return v.length < 20;
+	case 'string': return v.length < 8000;
 	}
 	return false;
 }
