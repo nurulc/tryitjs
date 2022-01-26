@@ -142,4 +142,4 @@ Does not end the previously started command section, in these single-line comman
 	
 > tryitjs --src <src dir for .try files> --dest <target dir for generated .html files> { --local }
 	
-### cdn for github files https://gitcdn.link
+
