@@ -1,7 +1,7 @@
 !head  /* TOP LEVEL .try file*/
     <title>Introducing TryITjs</title>
     @@include ../tools/head.try
-    <script src="https://gitcdn.link/repo/jonobr1/two.js/master/build/two.min.js"></script>
+    <script src="https://raw.githubusercontent.com/jonobr1/two.js/dev/build/two.js"></script>
     <script src="https://two.js.org/third-party/physics.js"></script>
 !html
     @@include ../tools/divtools.try

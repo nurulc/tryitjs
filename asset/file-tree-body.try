@@ -1,8 +1,6 @@
 @@once
-
-!head
+!html
    @@include file-tree.try
-
 !html
 
     <style>
@@ -12,21 +10,19 @@
         border-bottom: 0px;
     }
     </style>
-
     <div id="file_viewer" class="ui grid">
         <div class="four wide column bordered" >
             <div class="file-tree" id="tree" >
-             </div>   
+            </div>   
         </div>
         <div class="twelve wide column code-view" style="padding-top: 0.25rem;background-color: white;" >
             <div id="file-path" style="margin-bottom: 0px;">&nbsp;</div>
-               <code id="disp-file-content" style="color: #444444" />
+               <code class="disp-file-content" id="disp-file-content" style="color: #444444" />
             </div>
         </div>
     </div> 
     
-
 !end
-<script>
-setTimeout(() => showTree('../filelist.json', 'tree', showFile), 100);
-</script>
+    <script>
+      setTimeout(() => showTree(FILE_LIST||'../filelist.json', 'tree', showFile), 100);
+    </script>

@@ -39,6 +39,13 @@ export function display(d) {
 		return prettyPrint(d).outerHTML;
 	}
 }
+ 
+export function _console(d) {
+	if(typeof d === 'string' && d.length <2000) {
+		return '<pre>'+asHTML(d)+'</pre>';
+	}
+	return display(d);
+}
 
 function smallArray(a, depth=0, len=40) {
 	if(depth > 1) return false;
@@ -52,7 +59,7 @@ function smallArray(a, depth=0, len=40) {
 
 
 function isReactNode(d) {
-	if(typeof d !== 'object' || typeof window.React === undefined || typeof window.ReactUI === undefined) return false;
+	if(!d || typeof d !== 'object' || typeof window.React === undefined || typeof window.ReactUI === undefined) return false;
 	return d.$$typeof && d.$$typeof.toString() === 'Symbol(react.element)' && !!d.type;
 }
 

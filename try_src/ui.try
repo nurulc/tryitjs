@@ -7,77 +7,55 @@
 !md
    # Create UI
 
-!tryit
-//HTML in display area
+   There are several ways to create a UI using TryITjs. The simplest method is to create a string in Javascript with some HTML markup.
+   The string is rendered in the output screen using the builtin TryITJs function ```$$.HTML(someHtmlString)```.
 
-// add some style
-$$.HTML(`
-      <style>
-       .center {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    </style>
-`)
-
-// Now render some html
-
-$$.HTML(`
-  <div style="height: 30rem">
-    <h1>Hello World ${(new Date()).toLocaleDateString()}</h1>
-    <img class="center" src="https://www.w3schools.com/html/pic_trulli.jpg" />
-  </div>
-`)
-
-      
-
-
-
-!tryit
-  // JSX example
-  var aClock= () => (
-    <div style={{height: "30rem"}}>
-      <h1 class="center"><b>Hello World</b> {(new Date()).toLocaleDateString()}</h1>
-      <img class="center" src="https://www.w3schools.com/html/pic_trulli.jpg" />
-    </div>
-  );
-
-  aClock()
 
 !md
-	## A simple clock
-
-	Using React to render a simple clock
+  ## How to render some HTML
 
 !tryit
-    // React JSX
-    function Clock() {
-        const clock = () => ReactDOM.render(aClock(), document.getElementById('clock-id'));
-        $$.lastly( () => setInterval(clock, 1000)); // execute after all rendering of output
+  // Javascript - $$.HTML = builtin HTML
+  $$.HTML(
+     `<h1>Edit some HTML here</h1><br><br>`
+  );
 
-        $$.HTML('<div id="clock-id" /><br /><br /><br /><br />---------------'); // render some HTML
-    }	
+!md
+  ## More elaborate example
 
-    Clock();
+  In this example we will create a header with today's date and an image below it. The code for it is very simple as shown next.
+
+!tryit
+  // add some style
+  $$.HTML(`
+        <style>
+         .center {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      </style>
+  `)
+
+  // Now render some html
+
+  $$.HTML(`
+    <div style="height: 30rem">
+      <h1>Hello World ${(new Date()).toLocaleDateString()}</h1>
+      <img class="center" src="https://www.w3schools.com/html/pic_trulli.jpg" />
+    </div>
+  `)
+
 
 !md
     ## Semantic-UI example
+ 
+    In this example we will create 3 button group, the first button is red, the second green, and the lat one the default color. After the
+    button group we will plce an SVG image of a camera.
 
-    ### Creating a target 
-
-    ```tryit
-      \!html
-         \<div id="ui-target1" />
-    ```
-
-!html 
-  <div id="ui-target" />
-  <div style="margin-left: 30rem">
-   <img src="https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/AJ_Digital_Camera.svg" />
-  </div>   
 
 !tryit
+  // The button group as a string
   var strHtml =   `
     <div style="width: 70%; margin-left: 10rem">
       <div class="ui three buttons">
@@ -87,21 +65,29 @@ $$.HTML(`
       </div>
     </div>
   `;
+ 
+  // Render the HTML in the output
+  $$.HTML(
+    `<div id="ui-target">${strHtml}<!-- html string to render --></div>
+    <div style="margin-left: 30rem; margin-top: 5rem">
+     <img src="https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/AJ_Digital_Camera.svg" />
+    </div>`
+  )   
 
-  ducument.getElementById('ui-target').innerHTML = strHtml;
+!md
+  _Notes: the way the execution of the script works is, first the entire sceipt block is executed, all output is collected in a staging buffer. Once the execution of the script block has completed all the staged output is rendered in the output window.
+  _
 
 
 !md
-  ###
+  ### Using React JSX
+
+It's easier to use inline JSX to render some UI. The code below will render some buttons 
+in the output area.
 
 !tryit
-  // Javascript - $$.HTML = builtin HTML
-  $$.HTML(
-
-  );
-
-!tryit
-  // JSX - 
+  // JSX - the system knows how to render JSX markup
+  // Since the JSX obj is the last expression, it will be displayed in the output window
   (
   <div style={{width: "70%", marginLeft: '10rem'}}>
     <div class="ui three buttons">
@@ -109,6 +95,74 @@ $$.HTML(`
       <button class="ui button green">Two</button>
       <button class="ui button">Three</button>
     </div>
+    <div style={{marginLeft: "15rem", marginTop: "5rem"}}>
+      <img src="https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/AJ_Digital_Camera.svg" />
+    </div>
   </div>
   )
+!md      
+  # UI using React
+
+  This section will demonstrate we can use React and JSX to create some UI.
+  
+  * Ceate a function to create a div in JSX
+       1. Display the current time
+       2. Show an image
+
+
+  _Notes: In a code block (the code block below) if you declare a variables ```let aVar``` the variable is local to the block, it is not visible 
+  to any other block. On the other hand if the variable is declared as ```var aVar1``` then this variable and its content is available to 
+  subsequent code block. In other words ```var``` declares a global variable, while ```let``` or ```const``` declares a local variable._
+
+!tryit
+// JSX example
+var Clock= ({time}) => (
+  <div style={{height: "30rem"}}>
+    <h1 class="center"><b>Hello World</b> {(time||new Date()).toLocaleTimeString()}</h1>
+    <img class="center" src="https://www.w3schools.com/html/pic_trulli.jpg" />
+  </div>
+);
+
+// Render the JSX by 
+<Clock time={new Date()}/>
+
+!md
+	## A simple running clock
+
+	Using React to render a simple clock that updates the time. As explained earlier the rendering of the HTML is performed after the
+  script has completely executed. This presents a challange since the script the HTML dom before the output has been rendered. To get
+  around the problem we have another builtin function ```$$.lastly(aFunction)```. This delays the execution of the function until the output has been rendered.
+
+!tryit
+    // React JSX
+    function JSXClock() {
+      const clock = () => ReactDOM.render(<Clock time={new Date()} />, document.getElementById('clock-id')); // function to render the React 'aClock'
+
+
+      $$.HTML('<div id="clock-id"></div> <br /><br /><br /><br />---------------'); // render HTML to create a div for the clock
+
+      $$.lastly( () => setInterval(clock, 1000)); // execute after all rendering of output unsing the '$$.lastly( aFuncToExecute )'
+    }	
+
+    JSXClock();
+!md
+  ## Improved React Clock
+
+  This is an example of an improved React implementation, using the new hooks API
+
+!tryit
+  let {useState, useEffect} = React;
+  function BetterClock() {
+      let [time, setTime] = useState(undefined);
+      useEffect(() =>{
+        let timer = setInterval( () => setTime(new Date()), 1000);
+        return ( () => clearInterval(timer));
+      }, [])
+      return <Clock time={time} />
+  } 
+
+  // Render the clock
+  <BetterClock />
+
+
 !end

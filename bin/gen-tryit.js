@@ -35,11 +35,13 @@ function posixPath(aPath) {
 }
 
 function changePath(aPath, src,dest) {
+  dest = dest || '.';
   if(aPath.startsWith(src)) {
-    if(aPath[src.length] !== '/') dest = dest+'/';
-    aPath = dest+aPath.substr(src.length);
+    //if(aPath[src.length] !== '/' && dest[dest.length-1] !== '/') dest = dest+'/';
+    aPath = dest+'/'+aPath.substr(src.length);
   }
   else aPath = dest+'/'+aPath;
+  aPath = aPath.replace(/\/+/g,'/')
   return aPath;
 }
 
@@ -304,6 +306,7 @@ ARGS(process.argv.slice(2)).then( inFiles => {
     if(!debug){
       genHTML( fs.readFileSync(inFile, 'utf8'), userConfig, readLinesFrom, srcDir, inFile, targetDir, outFile)
         .then(htmlText => {
+            htmlText = htmlText.replace(/~~code%%/g, '```');
             writeOut(outFile, htmlText);
             console.log('generated: ', outFile);
           });

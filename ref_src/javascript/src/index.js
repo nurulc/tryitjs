@@ -2,7 +2,7 @@ import { H, asHTML } from './display/asHTML';
 import { _jumpTag, jumpBack } from './dom-ui/jumpToTag';
 import { _lastly } from './display/lastly';
 import { _show, clearDisplay, pushDisplay } from './display/displayStack';
-import { display } from './display/display';
+import { display, _console } from './display/display';
 import { getPendingEditors } from './editor/globals';
 import { json, objInfo, qs, qsA } from './utils';
 import { pageNext, pagePrev } from './dom-ui/pagePrevNext';
@@ -25,6 +25,7 @@ var $$ = {
 	D2:   _displayEval,
 	HTML: pushDisplay,
 	show: _show,
+	console: _console,
 	clear:  clearDisplay,
 	render: render,
 	objInfo:objInfo,

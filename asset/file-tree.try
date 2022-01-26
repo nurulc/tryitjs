@@ -26,6 +26,12 @@
   .treelist {
      margin-left: -2rem;
   }
+
+  .disp-file-content pre {
+      margin-top: 0.25rem;
+      margin-bottom: -2.5rem;
+      border-bottom: 0px;
+  }
 </style>
 <script>
     /**
@@ -231,15 +237,15 @@
     }
 
 
-    function showFile({path, ext}) {
+    function showFile({path, ext}, prefix="") {
       (fetch(`../../${path}`)
         .then(d => d.text()))
         .then(txt => {
-            document.getElementById('disp-file-content').innerHTML = `<pre style="margin-top: 0.25rem;">${$$.codeHighlight( txt.split('\n') )}</pre>`;
+            document.getElementById('disp-file-content'+prefix).innerHTML = `<pre style="margin-top: 0.25rem;">${$$.codeHighlight( txt.split('\n') )}</pre>`;
             //document.getElementById('disp-file-content').innerHTML = `<pre>${escapeHTML(txt)}</pre>`;
             } );
-      document.getElementById('file-path').innerText = path;
+      document.getElementById('file-path'+prefix).innerText = path;
     }
     
 </script>
-
+!md

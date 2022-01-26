@@ -57,7 +57,28 @@
     If none of this makes sense to you, don't worry; as you go thorugh this tutorial I hope it will make more sense.
     ## List of files
 
+!html
+    <style>
+    #disp-file-content1 pre {
+        margin-top: 0.25rem;
+        margin-bottom: -2.5rem;
+        border-bottom: 0px;
+    }
+    </style>
+    <div id="file_viewer1" class="ui grid">
+        <div class="four wide column bordered" >
+            <div class="file-tree" id="tree1" >
+             </div>   
+        </div>
+        <div class="twelve wide column code-view" style="padding-top: 0.25rem;background-color: white;" >
+            <div id="file-path1" style="margin-bottom: 0px;">&nbsp;</div>
+               <code class="disp-file-content" id="disp-file-content1" style="color: #444444" />
+            </div>
+        </div>
+    </div> 
+    
 
-    @@include ../../asset/file-tree-body.try
-
-!end
+<script>
+setTimeout(() => showTree('../filelist.json', 'tree1', p => showFile(p,"1")), 100);
+</script>
+ <!--   @@include ../../asset/file-tree-body.try -->

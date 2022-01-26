@@ -1,5 +1,5 @@
 !head
-	<title>Wht TryITJs</title>
+	<title>Why TryITJs</title>
 	@@include ../tools/head.try
 
 !html
@@ -22,7 +22,7 @@
 
     I wanted HTML file that provides features similar to Jupyter with fewer frills and only the Javascript code snippets can be edited and executed. 
 
-
+    ## Requirements tor Tool
 
     So I had the following requirements for a CLI tool:
     1. Each tutorial should be a single HTML page
@@ -30,15 +30,16 @@
         - Javascript
         - Markdown
         - HTML
-    1. The additions should be minimal
-    1. Should give predictable results
-    1. The system sould be easy for the authors, and simple for the end user
+    1. The additions should be minimal, that is, the markup should be as little new syntax as possible. The real need is to make ir
+    as easy as possible to get started, easy to understand, and not surprise the user in its behavior. 
+    1. Should give predictable results.
+    1. The system sould be easy for the authors, and simple for the end user.
         - Minimal number of markers for TryitJS features
         - Each TryitJS markup tag should be in a line of its own
             - Allow a tutorial to be built up from smaller nodules
     1. Minimal dependency
     1. Support all features using Javascript on the users browser
-    1. Besides the HTML, file no other file should be required
+    1. Besides the HTML, and standard HTML file types used by by HTML, no other files or services should be required
         - Make is very easy to deploy on any site supporting simple web serving
 
 - Minimal number of markers for TryitJS features

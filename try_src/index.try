@@ -5,7 +5,15 @@
 
 !md
 	# TryITJs Tutorials
-	## Introduction To TryITjs Tutorial
+
+    <div class="reply">&copy;Nurul Choudhury - 2020 </div>
+
+	## Introduction 
+
+	This is an introduction to TryITJs, a tool to create tutorials to Javascript libraries. It used a simple markup language to create these tutorials with runable code examples that the user can edit and experiment. The editing is non-destructive and you can go back to the original state by refreshing the browser. To make life easier for someone who wants to keep the edits and experiments and come back to it later, you can save your changes by clicking on the the save button <i class="save icon" style="color:green"></i>. When you save some changes, these are ctored locally in your browser local storage.
+
+	_To learn more tou can go to_ <a href="why_tryit/index.html">Why TryITjs</a>
+
 
 	## Directory Structure
 
@@ -13,11 +21,15 @@
 		<img src="../images/dir-structure.png" style="margin-left: 7rem" title="Click File Browser">
 	</a>
 
+    _Click on the image above to see a more detailed view_
+
+
 	## What is a .try file
 
 	### Top level files
 
-
+    Top level files are simply text file with the extension _.try_. The first line on a top level file must start the ```!head```.
+    The fillowing section is an example of a very simple _try_ file.
 
 
 	## [Basic Example](basic.html)
@@ -78,8 +90,32 @@
 
 !md
 	# [Creating UI](ui.html)
+
+	Now we will create an example to a tutorial that shows you how to create UI. The expmplaw is kept intentionally simple so that we do not introduce too many complications all at once.
+	
 	```tryit
 	@@include ESCAPE ui.try
 	```
 	* [See result](ui.html)
-!end
+    
+# Howto
+
+This section explains how to apply all the facilities available to TryITJs.
+
+## Define a top level page
+
+## Add HTML
+
+## Add some markdown
+
+## Editable code example
+
+## Include the body of another try file
+
+## Include the content of URL
+
+## Display the content of a .try file
+
+## Display some TryITJs text
+
+!end 
