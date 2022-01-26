@@ -1,6 +1,6 @@
 {
   "name": "tryitjs",
-  "version": "'",
+  "version": "0.9.6",
   "description": "Generate JS Library Tutorial as a standalone HTML file from extended markdown file, with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
