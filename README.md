@@ -127,6 +127,8 @@ Does not end the previously started command section, in these single-line comman
 |  command 	|   Description	|
 |---	|---	|
 | @@include &lt;file name&gt; | copy the contents of the file into the current location |
+| @@include ESCAPE &lt;file name&gt; | display the contents of the file |
+| @@once | If this annotaion is present in a file to be included, The file is included once. Any subsequent @@include of the same file will be ignored. Note: _This must be the first file of a file to be included_ |
 | **!--**  |  the rest of the line is a comment 	|
 
 ### Run from command prompt
