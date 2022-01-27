@@ -27,7 +27,7 @@ The code is in good shape and is ready for developers to use. The documentation 
 </a><br />
 * <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html" target="tryitdemo">
 	Tutorial for DataFrame</a> 
-> A more extensive example on how to create a Tutorial, examples of how to use DataFrame library used for data analysis (see: <a href="https://github.com/nurulc/data-frame">GitHub data-frame repo</a>).
+> A more extensive example on how to create a Tutorial, examples of how to use DataFrame library used for data analysis and data visualization (see: <a href="https://github.com/nurulc/data-frame">GitHub data-frame repo</a>). The data used for the examples is the worldwide covid dataset consisting of over 105K rows). THe data-frame package was developed by me for some of my personal use and professional project. 
 <br />
 
 
