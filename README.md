@@ -24,11 +24,9 @@ The code is in good shape and is ready for developers to use. The documentation 
 
 * <a href="https://unpkg.com/tryitjs/try_it/index.html" target="tryitdemo">TryITjs Tutorial</a><br />
 * <a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html" target="tryitdemo">Overview of TryitJS</a><br />
-* <a href="https://unpkg.com/tryitjs/try_it/lets_begin/index.html" target="tryitdemo">
-		Example of Graphics using two.js
 </a><br />
 * <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html" target="tryitdemo">
-	A more extensive example on how to create a Tutorial
+	A more extensive example on how to create a Tutorial, examples of how to use DataFrame library used for data analysis
 </a><br />
 
 
