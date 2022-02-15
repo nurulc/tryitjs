@@ -24,12 +24,11 @@ The code is in good shape and is ready for developers to use. The documentation 
 
 * <a href="https://unpkg.com/tryitjs/try_it/index.html" target="tryitdemo">TryITjs Tutorial</a><br />
 * <a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html" target="tryitdemo">Overview of TryitJS</a><br />
-* <a href="https://unpkg.com/tryitjs/try_it/lets_begin/index.html" target="tryitdemo">
-		Example of Graphics using two.js
 </a><br />
 * <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html" target="tryitdemo">
-	A more extensive example on how to create a Tutorial
-</a><br />
+	Tutorial for DataFrame</a> 
+> A more extensive example on how to create a Tutorial, examples of how to use DataFrame library used for data analysis and data visualization (see: <a href="https://github.com/nurulc/data-frame">GitHub data-frame repo</a>). The data used for the examples is the worldwide covid dataset consisting of over 105K rows). THe data-frame package was developed by me for some of my personal use and professional project. 
+<br />
 
 
 ### Why TryTTjs
@@ -128,6 +127,8 @@ Does not end the previously started command section, in these single-line comman
 |  command 	|   Description	|
 |---	|---	|
 | @@include &lt;file name&gt; | copy the contents of the file into the current location |
+| @@include ESCAPE &lt;file name&gt; | display the contents of the file |
+| @@once | If this annotaion is present in a file to be included, The file is included once. Any subsequent @@include of the same file will be ignored. Note: _This must be the first file of a file to be included_ |
 | **!--**  |  the rest of the line is a comment 	|
 
 ### Run from command prompt
@@ -142,4 +143,4 @@ Does not end the previously started command section, in these single-line comman
 	
 > tryitjs --src <src dir for .try files> --dest <target dir for generated .html files> { --local }
 	
-### cdn for github files https://gitcdn.link
+
