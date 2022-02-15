@@ -1,6 +1,6 @@
 {
   "name": "tryitjs",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "Generate JS Library Tutorial as a standalone HTML file from extended markdown file, with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
@@ -11,10 +11,10 @@
     "local:old": "babel ref_src -d ref && node bin/gen-tryit.js --src try_src --dest try_it --local --filelist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "try": "nodemon -w try_src --ext \"try js css\"   bin/gen-tryit.js --src try_src --dest try_it --local --filelist",
-    "build:old": "babel ref_src -d ref && npm pack && npm install -g .\\tryitjs-0.9.6.tgz && npm run tryit",
-    "build": "rollup -c && npm pack && npm install -g .\\tryitjs-0.9.6.tgz && npm run tryit",
-    "bld": "rollup -c && npm pack && npm install -g .\\tryitjs-0.9.6.tgz && npm run tryit && touch ../nurulc.github.io/try_src/dummy.try",
-    "bld:old": "babel ref_src -d ref && npm pack && npm install -g .\\tryitjs-0.9.6.tgz && npm run tryit && touch ../nurulc.github.io/try_src/dummy.try",
+    "build:old": "babel ref_src -d ref && npm pack && npm install -g .\\tryitjs-0.9.7.tgz && npm run tryit",
+    "build": "rollup -c && npm pack && npm install -g .\\tryitjs-0.9.7.tgz && npm run tryit",
+    "bld": "rollup -c && npm pack && npm install -g .\\tryitjs-0.9.7.tgz && npm run tryit && touch ../nurulc.github.io/try_src/dummy.try",
+    "bld:old": "babel ref_src -d ref && npm pack && npm install -g .\\tryitjs-0.9.7.tgz && npm run tryit && touch ../nurulc.github.io/try_src/dummy.try",
     "watch": "nodemon -w \"lib ref_src\" --ext \"try js css\" --exec \"npm run build\""
   },
   "bin": {
