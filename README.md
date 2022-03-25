@@ -7,7 +7,7 @@ In the tutorial descriptions in markdown and snippets of editable Javascript cod
 
 The primary goal is to help npm module developers to publish pages for other developers so that can try out ther library with the minimum of effort.
 
-### Screenshot of a smaple HTML
+### Screenshot of a sample HTML
 
 The image below is a example of a generated HTML with some annotations
 
@@ -24,17 +24,16 @@ The code is in good shape and is ready for developers to use. The documentation 
 
 * <a href="https://unpkg.com/tryitjs/try_it/index.html" target="tryitdemo">TryITjs Tutorial</a><br />
 * <a href="https://unpkg.com/tryitjs/try_it/full-tutorial.html" target="tryitdemo">Overview of TryitJS</a><br />
-</a><br />
-* <a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html" target="tryitdemo">
-	Tutorial for DataFrame</a> 
+* <b><a href="https://nurulc.github.io/frame/tryit/data-frame-examples.html" target="tryitdemo">
+	Tutorial for DataFrame</a></b>
 > A more extensive example on how to create a Tutorial, examples of how to use DataFrame library used for data analysis and data visualization (see: <a href="https://github.com/nurulc/data-frame">GitHub data-frame repo</a>). The data used for the examples is the worldwide covid dataset consisting of over 105K rows). THe data-frame package was developed by me for some of my personal use and professional project. 
 <br />
 
 
 ### Why TryTTjs
 
-A with most development it was to meet a need that i had, namely to delevop an interactive tutorial for a DataTable loosly base of Python's Pandas library for Javascript. 
-[DataFrame](https://github.com/nurulc/data-frame). The tool is powerful but it is hard to know what you can do with it. The tutor in written in and mostly markdown similar to this document. Interspesed with the markdown ther is runnable javascript code. That can be executed and edited to get hands on experiece with the ideas and api.
+As with most github project, it was to meet a need I had, namely to delevop an interactive tutorial for a JS library I had developed - DataTable loosly base of Python's Pandas library. 
+[DataFrame](https://github.com/nurulc/data-frame). The tool is powerful, but it is not easy for others to know  how to use it and what you can do with it. The tutorial is written as a text file(s) in an exxtended __markdown__ similar to this document. Interspesed with the markdown ther is runnable javascript code. That can be executed and edited to get hands on experiece with the ideas and api.
 
 Any number of utilities and libraries can be included with the tutorial. Besides markdown, sections can how the full power of HTML as well as Javascript. I have found it easier to write a tutorial if ther is a step by step guide working through a real problem. TryITjs creates an standalone HTML page with no backend server required (except to deliver the page).
 
@@ -43,12 +42,13 @@ Any number of utilities and libraries can be included with the tutorial. Besides
 
 <img src="under-construction-small.png">
 
-<img src="images/basic.png" width="600"/>
+<img src="images/basic.png"width="600"/>
 
-* User Interface
+## User Interface
+
 
 <img src="images/tryitjs-overview.png" width="600">
-
+Above is a is an a snippent of HTML file generate by **TryItJs**
 
 ## Instalation
 
