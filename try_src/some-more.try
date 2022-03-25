@@ -1,31 +1,239 @@
 !head
   <title>Sligltly More elaborate example</title>
 !md 
-	# Introduction
-	This is a slightly more elaborate example
+    # Introduction
+    This is a slightly more elaborate example
 
-	## Code example
+    ## Code example
 
-	This is a simple code example to create a javascript array and display it.
+    This is a simple code example to create a javascript array and display it.
 
 !tryit
-	var array = [ 'a String', 1 , { name: 'tryit'} ]; // array with a `string`, `number`, and an `object`
-	array
+    var array = [ 'a String', 1 , { name: 'tryit'} ]; // array with a `string`, `number`, and an `object`
+    array
 
 
 !md
-	**What just happened**, if you execute the code above it will display the array just created. 
+    **What just happened**, if you execute the code above it will display the array just created. 
 
-	_Note: the last expression `array` is displayed._
+    _Note: the last expression `array` is displayed._
 
-	## Some simple notes
+    ## Some simple notes
 
-	* You can edit the example above and runit as may time as you want
-	* The code changes its theme once you edit it to show you
-	A variable created within a **!tryit** snippet  usin a ``let`` only exists in the snipped
+    * You can edit the example above and runit as may time as you want
+    * The code changes its theme once you edit it to show you
+    A variable created within a **!tryit** snippet  usin a ``let`` only exists in the snipped
 
 !md
     # Another Page
 
     This is one more example in a new page. The is it my test.
+
+    This is a example of optimization useful in certain modeling of estimating the cost of service for medical conditions.
+    One simple model for a service, for example heart contition, is as follows:
+
+    1. Average base cost
+    2. Number of additional complications that increase the cost of treatment. Example of thos those may be age, if you are older or very young. A simple model is to assume that each condition increases the cost by a certain percent.
+         a. ```Cost = Base * comp1 * comp2 * comp3```,  where comp1, comp2  percentage increase on the base cost.
+         b. This can also be written in exponential form ```Cost = exp( b + c1 + c2 + c3 )``` where ```b = ln(Base)```, and ```c1 = ln(comp1)``` ...
+    3. The values of **b, c1, c2...** (also refered to as cost factors) are unknown, but we have data for the cost of service fr thousands of patients. We will use the date to extimate the values of the cost factors.
+    4. This becomes a regression problem
+
+    ## Some utility functions
+    1. ```expL``` take the exponent of the elements of an array
+    2. ```rect``` acts like a rectifier in electronic circuit if val is negetive return 0, otherwise return the value, ```clamp``` id similar, returns 0 for negetive values and 1 for positive calues
+    3. ```max``` returns the max value of a list
+    4. ```stdPdiv``` get standard deviation uning only the poisitve values of an array 
+    5. ```range``` Create a array with elemenst [0, 1, 2, ... n-1]
+    6. ```zip``` Takes 2 lists (list1, list2)  and returns a new array with length of list1, where element ```i``` is a 2 element array [ list1[i], list2[i]  ]
+
+!tryit
+    function rect(a) { return a<0?0:a;}
+    function clamp(a) { return a<0?0:1;}
+
+    // Array  processing functions
+    function max(list) {
+      if(!list || list.length === 0) return 0;
+      return list.reduce((m,v) => m<v?v:m, list[0]);
+    }
+    function expL(arr) { return arr.map(v => Math.exp(v)); }
+
+    // Get standard deviation of an
+    function stdDiv(list) {
+      if(!list || list.length <= 1) return 0;
+      let res = list.reduce((m,v) => ([m[0]+1, m[1]+v*v, m[2]+v]), [0,0,0]);
+      let mean = m[2]/m[0];
+      return Math.sqrt(m[1]/m[0] - mean*mean);
+    }
+
+    function stdPdiv(list) {
+      if(!list || list.length === 0) return 0;
+      let res = list.reduce((m,v) => (v<0?m:[m[0]+1, m[1]+v*v]), [0,0]);
+      return Math.sqrt(m[1]/m[0]);
+    }
+
+    // create a array with elemenst [0, 1, 2, ... n-1]
+    function range(n) {
+      let res = []
+      for(let i=0; i<n; i++) res.push(i);
+      return res;
+    }
+
+    // return an array with length of list1, where element ```i``` is a 2 element array [ list1[i], list2[i]  ] 
+    function zip(list1, list2) {
+       return list1.map((v,i) => [v,  list2[i] ])
+    }
+
+    function unzip(list) {
+      return [ list.map(([x,y]) => x),  list.map(([x,y]) => y) ];
+    }
+
+    // Add elements of an array
+    function sum(list,add) { 
+        if(!add) add = (a,b) => a+b;
+        return list.reduce(add,0); 
+    }
+
+    function normalSample(n=12) {
+      let v = 0;
+      if(n===0) return 0;
+      for(let i=0; i<n; i++) v += (Math.random()-0.5);
+      return v/n;
+    }
+
+!md
+    
+    Object to model the cost of treatment, this has the following attributes
+    1. ```real``` the actual cost of treatment
+    2. ```factorFlag``` this is an array of 1 or 0 for each of the cost factors 1 = factor present for the patient, 0 = factor not present
+    3. ```real``` holds the real cost. Since we do not actually have real data we will create some simulated data,
+         a. All patients have the base factor ```b``` codes[0]
+         b. The other factors have arelative probability of occuring, code[1] has (100-70) = 30% chance, codes[2] has (100-90)= 10% chance and so on, this is allocodea using ```fillFactor()``` function. 
+    4. ```current``` best estimate of cost prediction based on the factors estimates
+
+!tryit
+    
+    var TreatmentCost = class { 
+      constructor(factorEstimates, factorIndicators, realFactor) { 
+
+        if(factorEstimates.factorFlag) {
+            this.factorFlag = factorEstimates.factorFlag;
+            this.logReal = factorEstimates.logReal; 
+        } 
+        else {
+          this.factorFlag = Array.isArray(factorIndicators)? factorIndicators.slice() : factorIndicators();
+          this.logReal = this.getRisk(realFactor)+Math.log(1 + normalSample()*1.5);
+        }
+        this.real = Math.exp(this.logReal);
+        this.logCurrent = 0;
+        this.current = 1;
+      }
+
+      getRisk(factors) {
+        let sumOfFactors = (total, v, i) => total+(v?factors[i]:0);
+        return this.factorFlag.reduce(sumOfFactors, 0);
+      }
+
+      getCostIndex(factors) {
+          return sum(this.factorFlag, ((s, v, i) => v?s+factor[i]:s));
+      }
+
+      hasRiskFactor(i) {
+        return !!this.factorFlag[i];
+      }
+
+      setCurrent(factorEstimates) {
+        this.logCurrent = this.getRisk(factorEstimates);
+        this.current = Math.exp(this.logCurrent);
+      }
+
+      // derivitive of the factor with respect to factor[i], this is used to perform a gradient descent
+      // search to the optimal value of the factors so that RMS difference of actual cost to computed cost based
+      // on the factors is minimized.
+      dx(i) {
+        if(!this.hasRiskFactor(i)) return 0;
+        return -(this.current-this.real)*this.current;
+        //return -(this.logCurrent-this.logReal);
+      }
+    }
+!md
+    ## Setup some constants
+
+    1. EPI_COUNT - number of test episodes to create
+    2. ITER - number of itteratins to compute the factors
+    3. EPSILON - increment size for the gradient descent
+
+!tryit
+    var EPI_COUNT = 2000;
+    var ITER = 1000;
+    var EPSILON = 0.002;
+
+
+!tryit
+    //           Base comp1 comp2 ...
+    var actualFactors = [300, 1.3,  1.05,  1.11, 1.80, 1.52, 1.01].map(x => Math.log(x)); // the actual values of the factors
+
+
+    // factorEstimates represents the values we are trying to compute from the data 
+    // (hopefully the values will be close to the values in ```actualFactors```)
+    var factorEstimates =  [ 0,  0,    0,     0,    0, 0, 0];
+
+    function fill() {
+      const prob =  [ 0,  0.70, 0.9,  0.95, 0.97, 0.98, 0.99];
+      return prob.map(x => Math.random() > x ? 1 : 0);
+    }
+
+
+    var epiFlags = range(EPI_COUNT).map( () => fill())
+    
+    var episodes = epiFlags.map((fill) => new TreatmentCost(factorEstimates,fill, actualFactors));;
+    var total=sum(episodes.map(t => t.real));;
+    
+    function getTotal(epi) {
+      return sum(epi.map(t => t.real));
+      //return sum(epi.map(t => t.logReal));
+    }
+
+    // sum the derivitives of factor 'i' 
+    function dx(episodes,i) {
+      return episodes.reduce((sum,t) => sum+t.dx(i), 0);
+    }
+
+    function computeUpdatedFactors(episodes, factorEstimates, ep, scale) {
+      if(scale === undefined) scale = () => 1;
+      let res =  factorEstimates.map( (c,i) => c+(dx(episodes,i)/scale(i)*ep));
+      episodes.forEach(t => t.setCurrent(res));
+      return res;
+    }
+
+!md
+## some space to inspect data
+!tryit
+   $$.D(episodes.slice(0,3))
+
+!tryit
+    
+    //$$.D(dx(3)/total, total );
+    let tcomp = factorEstimates;
+    let scaleFunc = () =>  total;
+    for(let i=0; i< ITER; i++) {
+      tcomp = computeUpdatedFactors(episodes, tcomp, EPSILON, scaleFunc);
+    }
+    let costToMember = sum(episodes.map(t => rect(t.real-t.current)));
+    let costSaved = sum(episodes.map(t => rect(t.current-t.real)));
+    let outOfPocketMembers = sum(episodes.map(t => clamp(t.real-t.current)));
+    $$.D(sum(episodes.map(t => t.real-t.current)), costToMember/outOfPocketMembers, costToMember, total, costSaved, 
+         outOfPocketMembers, max(episodes.map(t => t.real-t.current)));
+    [tcomp.map((v,i) => (Math.exp(v)-Math.exp(actualFactors[i]))/Math.exp(actualFactors[i])*100+'%'), expL(tcomp), expL(actualFactors)]
+    //var t = new C();
+    //t.getRisk(actualFactors);
+    //$$.D(actualFactors, t.getRisk(actualFactors));
+    //t
+!md
+## Display debug
+!tryit
+
+     $$.D(episodes)
+
+@@include fast-epi.try          
 !end
