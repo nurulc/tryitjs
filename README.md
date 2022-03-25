@@ -3,7 +3,13 @@
 CLI (command line) application to generate HTML file of tutorials for Javascript librarries. It takes an enhance markdown file with some minor extensions and creates an HTML file. The HTML tutorial file (a try file)
 requires no backend server, and totally self contained. 
 
-In the tutorial descriptions in markdown and snippets of editable Javascript code. snippets that can be edited and executed in the browser. This makes it effortless to someone trying to determine if a Javascript library could be useful to play with the code snippets to understand the capability of the library quickly.
+```bash
+ > tryitjs basic.try
+```
+
+> Creates a HTML file ```basic.html``` tutorial file.
+
+In the tutorial descriptions contails markdown and snippets of editable Javascript code. Snippets that can be edited and executed in the browser. This makes it effortless to someone try out the capabilities of a Javascript library. Explore its capability to see iif it could be useful, play with the code snippets to understand the capability of the library quickly in the browser. It requires a minimum of effort and no installation or setup.
 
 The primary goal is to help npm module developers to publish pages for other developers so that can try out ther library with the minimum of effort.
 
