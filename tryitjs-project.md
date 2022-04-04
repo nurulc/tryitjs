@@ -1,4 +1,4 @@
-# TryITJs Project
+# TryITJs Project Types
 
 ## Super simple
 
