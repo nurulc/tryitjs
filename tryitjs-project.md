@@ -6,3 +6,5 @@ The simplest tryit project consists of a single file e.g. __demo.try__ this cons
 form the web and other resources from the web (.css, .jpg ...) but no other files from your project directory.
 
 ![](images/tryit-demo.png)
+
+The command will create __demo.html__ on the current directory.
