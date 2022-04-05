@@ -25,4 +25,4 @@ the format of a top level __.try__ file is as follows:
 
 ...
 ```
-  
+ ![](../images/tryit-demo-with-include.png) 
