@@ -10,7 +10,7 @@ The command will create [__demo.html__](demo/demo.html) in the current directory
 
 ## Simple Project
 
-If you are creating a mor elaborate example the corresponding __.try__ file can get big and un unwieldy. So lets see how to break up the project into modular components. Use the ```@@include file-name.try``` to paste the contents of __file-name.try__ into the the location. The ```@@include ...``` is recursive, namely the ```file-name.try``` itself can contain __@@include__ commands. This mechanism is used to modularize __.try__ files.
+If you are creating a mor elaborate example the corresponding __.try__ file can get big and un unwieldy. So lets see how to break up the project into modular components. Use the ```@@include some-file.try``` to paste the contents of __some-file.try__ into the the location. The ```@@include ...``` is recursive, namely the ```some-file.try``` itself can contain __@@include__ commands. This mechanism is used to modularize __.try__ files.
 
 the format of a top level __.try__ file is as follows:
 
@@ -21,8 +21,11 @@ the format of a top level __.try__ file is as follows:
 !md
   <some markdown content>
   
-@@include file-name.try
+@@include some-file.try
 
 ...
+@@include other-inc.try
+...
+
 ```
  <img src="../images/tryit-demo-with-include.png" style="width: 60%"> 
