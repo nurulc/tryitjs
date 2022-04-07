@@ -1,6 +1,8 @@
 # Notes on include
 
 
+<img src="../images/tryit-demo-with-include.png" style="width: 60%"> 
+
 ### Include files from other directories
  
  A project is often better organized if the _@@include_ files are in ther own organized directory. The include processing uses the same model as Javascript ```import``` mechanism. So importing from another directory is to give the _path_ to the file as you would do in an ```import``` statement.
