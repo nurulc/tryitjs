@@ -3,21 +3,21 @@
 
 ## Basic sections
 
-### !head
+#### !head
 
-### !tail
+#### !tail
 
-### !md
+#### !md
 
-### !html
+#### !html
 
-### !js
+#### !js
 
 ### !tryit
 
 ## Other section
 
-## !render-start
+#### !render-start
 
-## !render-end
+#### !render-end
 
