@@ -1,5 +1,25 @@
 # Notes on include
 
+## Include
+
+If you are creating a more elaborate example the corresponding __.try__ file can get big and un unwieldy. So lets see how to break up the project into modular components. Use the ```@@include some-file.try``` to paste the contents of __some-file.try__ into the the location. The ```@@include ...``` is recursive, namely the ```some-file.try``` itself can contain _@@include_ commands. This mechanism is used to modularize __.try__ files. You can have as many _@@include_ in your _.try_ file 
+as needed.
+
+The format of a top level __.try__ file is as follows:
+
+```
+!head
+  <title>My Demo</title>
+  <sone html header content scripts, .css, fonts>
+  ...
+!md
+  <some markdown content>
+  
+@@include some-file.try
+
+...
+@@include other-inc.try
+...
 
 <img src="../images/tryit-demo-with-include.png" style="width: 60%"> 
 
