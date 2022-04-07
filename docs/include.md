@@ -20,7 +20,7 @@ The format of a top level __.try__ file is as follows:
 ...
 @@include other-inc.try
 ...
-
+```
 <img src="../images/tryit-demo-with-include.png" style="width: 60%"> 
 
 ### Include files from other directories
