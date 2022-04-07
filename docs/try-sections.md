@@ -15,6 +15,8 @@
 
 ### !tryit
 
+## Beautifying
+
 ## Other section
 
 #### !render-start
