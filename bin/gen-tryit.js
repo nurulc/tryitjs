@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-const DEBUG_INIT = false;
-
-const DEFAULT_SRC = DEBUG_INIT?'try_src1':'try_src';
-const DEFAULT_TARGET = DEBUG_INIT?'try_it1':'try_it';
-
 const fs = require('fs'); 
 const path = require('path');
 const {genHTML} = require('../index');
 const {genProject} = require('./gen-template');
+const DEBUG_INIT = false;
+
+const DEFAULT_SRC = '.'; //getDirOrDefalt(DEBUG_INIT?'try_src1':'try_src');
+const DEFAULT_TARGET = DEBUG_INIT?'try_it1':'try_it';
+console.log("SRC", DEFAULT_SRC)
 const SCRIPT_DIR = __dirname;
 const {
   readLines,
@@ -29,8 +29,9 @@ const dirTree = require('directory-tree');
 let baseConfig = readTryConfig();
 let userConfig = {...baseConfig}, outFile,inFile, srcDir, targetDir, debug, userConfigFile, isLocal = false;
 
-function posixPath(aPath) {
+function posixPath(aPath, info) {
   if(!aPath) return undefined;
+//console.log(JSON.stringify(aPath), info);
   return aPath.replace(/\\/g,'/').replace(/\/$/,'');
 }
 
@@ -45,22 +46,33 @@ function changePath(aPath, src,dest) {
   return aPath;
 }
 
+function getDirOrDefalt(dir, dflt='.') {
+  if (dir === undefined || fs.existsSync(dir)) {
+       dir = dflt;
+  } 
+  return dir;
+}
+
 function createFileList(srcDir, targetDir) {
+  // if (srcDir === undefined || fs.existsSync(srcDir)) {
+  //     srcDir = '.';
+  // } 
   const tree = dirTree(srcDir, {extensions:/\.(js|try|css|jpg|css|md|json|gif|png|svg|csv|html)$/i});
   let jsonStr = JSON.stringify(tree).replace(/\\\\/g,'/');
-  let copyList = flattenFileList(posixPath(srcDir),posixPath(targetDir))(tree);
-  //console.log(JSON.stringify(copyList,null, ' '));
+//console.log(JSON.stringify([targetDir, "TARGETDIR"]))
+  let copyList = flattenFileList(posixPath(srcDir, "SRC"),posixPath(targetDir, "TARGET"))(tree);
+//console.log(JSON.stringify(copyList,null, ' '));
   return ({dir: jsonStr, copyList});
 }
 
 
 function flattenFileList(src,dest) {
   return function fileList(obj) {
-    if(obj === undefined) return [];
+    if(!obj) return [];
     
-    let pth = posixPath(obj.path);
+    let pth = posixPath(obj.path, "OBJ");
     let ret = ({name: obj.name, path: pth,  target: changePath(pth,src,dest), type: obj.type, ext: obj.extension});
-//    console.log("***",src, dest, JSON.stringify(ret));
+// console.log("***",src, dest, JSON.stringify(ret));
     let children = [];
     if( obj.children && obj.children.length > 0) children = obj.children.flatMap(fileList);
     if( ret.ext === '.try' || ret.type !== 'file' || ret.ext === '.md' ) return children;
@@ -70,9 +82,9 @@ function flattenFileList(src,dest) {
 
 function readTryConfig() {
   let configName = path.join(SCRIPT_DIR,'..', '.tryitjs.json');
-  //console.log("try reading", configName);
+//console.log("try reading", configName);
   if(fileExists(configName)) {
-    //console.log("reading", configName);
+//console.log("reading", configName);
     let bc = readJson(configName);
     if(!bc) {
       console.log(".tryitjs.json not found");
@@ -180,7 +192,7 @@ function fileItem(inFile, outFile, srcDir, targetDir) {
           let outName = inFile.substr(srcDir.length);
           
           let endPos = outName.length-4;
-          //console.log(endPos, {inFile, outName, rest: outName.substr(endPos) })
+//console.log(endPos, {inFile, outName, rest: outName.substr(endPos) })
           if(outName.substr(endPos) === '.try') outName = outName.substr(0,endPos);
           outFile = path.join(targetDir, outName+'.html' );
       }
@@ -200,9 +212,10 @@ function fileItem(inFile, outFile, srcDir, targetDir) {
 function ARGS(args) {
     let argSkip = 2; 
     let inFiles = [];
-    let outFile, srcDir, targetDir, isInit, initTarget, toCreateFileList, toCopyFiles=true;
+    let outFile, srcDir, targetDir, isInit, initTarget, toCreateFileList, toCopyFiles;
     //let userConfig, isLocal; // get rid of this line only for testing
     
+    toCopyFiles=true;
     while( args.length) {
         argSkip = 2;
         switch(args[0]) {
@@ -234,6 +247,8 @@ function ARGS(args) {
         args = args.slice(argSkip);
     }
 
+//console.log('1 TARGET', JSON.stringify({targetDir}))
+
     const DO_NOTHING = Promise.resolve(undefined);
 
     if(isInit) {
@@ -241,14 +256,22 @@ function ARGS(args) {
       return DO_NOTHING;
     }
 
+//console.log('1', JSON.stringify({targetDir}))
 
     if(inFiles.length === 1 ) {
       srcDir = fileInfo(inFiles[0]).dir || '.';
       if(outFile) {
           targetDir = fileInfo(outFile).dir || '.';
       }
+
       
-      //console.log({inFiles, srcDir, outFile});
+//console.log({inFiles, srcDir, outFile});
+      if(toCreateFileList) {
+        let td = targetDir || '.';
+//console.log(JSON.stringify([targetDir,td], null, 2), 'targetDir');
+        let {dir, copyList} = createFileList(srcDir,td);
+        writeOut(path.join(td, "filelist.json"), dir);
+      }
       return Promise.resolve([fileItem( inFiles[0], outFile, srcDir, targetDir)]);
     }
 
@@ -257,14 +280,19 @@ function ARGS(args) {
     }
 
     if(inFiles.length > 1) {
-       return Promise.resolve(inFiles.map(inFile => fileItem(inFile, outFile, srcDir, targetDir)))
+//console.log('2 TARGETDIR', JSON.stringify({targetDir}))
+       let td = targetDir!==undefined ?targetDir : '';
+       srcDir = srcDir || fileInfo(inFiles[0]).dir || '';
+       let {dir, copyList} = createFileList(srcDir,td);
+       if(toCreateFileList) writeOut(path.join(td, "filelist.json"), dir);
+       return Promise.resolve(inFiles.map(inFile => fileItem(inFile, outFile, srcDir, td)))
     }
 
     if(inFiles.length === 0 && !outFile ) {
-      if(!srcDir) srcDir = 'try_src';
-      console.log('Create File List', toCreateFileList, toCopyFiles);
+      if(!srcDir) srcDir = DEFAULT_SRC;
+//console.log('Create File List', toCreateFileList, toCopyFiles);
       if(toCreateFileList || toCopyFiles) {
-        targetDir = targetDir || 'tryit';
+        targetDir = targetDir || DEFAULT_TARGET;
         let {dir, copyList} = createFileList(srcDir,targetDir);
         
         if(toCreateFileList) writeOut(path.join(targetDir, "filelist.json"), dir);
