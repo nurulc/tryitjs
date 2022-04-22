@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html><head>
+	<meta charset="UTF-8">
+<link rel="stylesheet" href="https://unpkg.com/tryitjs@0.9.7/ref/stylesheets/tryit.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/theme/lesser-dark.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/foldgutter.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/lint/lint.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/dialog/dialog.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/jsx/jsx.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/continuecomment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/comment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/keymap/sublime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/selection/active-line.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/foldcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/foldgutter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/brace-fold.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/comment-fold.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/indent-fold.min.js"></script>
+<script src="https://unpkg.com/jshint@2.12.0/dist/jshint.js"></script>
+<script src="https://unpkg.com/csslint@1.0.5/dist/csslint.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/lint/lint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/lint/javascript-lint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/search/search.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/search/searchcursor.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/dialog/dialog.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/hint/show-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/hint/javascript-hint.min.js"></script>
+<script src="https://unpkg.com/js-sha1/src/sha1.js"></script>
+<script src="https://unpkg.com/lz-string@1.4.4/libs/lz-string.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dataformsjs/js/react/jsxLoader.min.js"></script>
+<script src="https://unpkg.com/tryitjs@0.9.7/ref/javascript/tryit-min.js"></script>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script></head>
+<body>
+<div class="ui sidebar inverted vertical menu toc-area">
+<div class="item"> <a href="https://github.com/nurulc/tryitjs" target="_blank"><img src="https://unpkg.com/tryitjs/tryit-small.png" title="Built using TryItJs"></a></div> 
+<div class="item">
+<div class="ui right dropdown item">
+    Options
+    <i class="dropdown icon"></i>
+    <div class="menu tryit_main">
+      <div class="item save_all">Save All Changes</div>
+      <div class="item revert_changes">Revert changes</div>
+      <div class="item clear_storage">Delete All Changes</div>
+    </div> 
+  </div>
+</div>
+<div class="item toc_title">Contents</div>
+<div id="toc_demoshowingd3"class="toc0 toc"> &nbsp;&nbsp;<a onclick="jumpTag('demoshowingd3')">Demo showing D3</a></div>
+      </div>
+      <div class="pusher">
+      <div class="ui grid">
+    <div class="two wide column" > <!--onclick="toggle()*/''}" title="Click to show sidebar"> -->
+      <p class="click_me" onclick="toggle()">Click to show TOC</p>
+    </div>
+    <div class="thirteen wide column" id="tryit_body">
+
+<div   id="page-1" class="try-page" data-pagevisible="false">
+<h1 id="demoshowingd3">Demo showing D3</h1>
+<p><i class="icon tiny sitemap grey icon-right" title="Include path: "></i></p>
+<p>This is how to draw a simple chart using D#</p>
+
+<a id="_tryit1">&nbsp</a>
+<div class="html ui top attached segment tryit-container " >
+	<div class="tryit-inner ui sizer vertical segment" style="padding-top: 1.9rem; margin-bottom: -3.5rem">
+		<div class="ui sizer vertical segment bottom" style="border-bottom: none;">
+			<textarea class="tryit ui " id="tryit1">
+// set the dimensions and margins of the grap
+  var margin = {top: 10, right: 30, bottom: 30, left: 40},
+  width = 400 - margin.left - margin.right,   
+  height = 400 - margin.top - margin.bottom;  // append the svg object to the body of the page
+  var svg = d3.select("#my_dataviz")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom) .append("g")
+    .attr("transform",         "translate(" + margin.left + "," + margin.top + ")");  
+// create dummy data 
+ var data = [12,19,11,13,12,22,13,4,15,16,18,19,20,12,11,9];
+
+// Compute summary statistics used for the box: 
+ var data_sorted = data.sort(d3.ascending);
+ var q1 = d3.quantile(data_sorted, .25);
+ var median = d3.quantile(data_sorted, .5);
+ var q3 = d3.quantile(data_sorted, .75);
+ var interQuantileRange = q3 - q1;
+ var min = q1 - 1.5 * interQuantileRange;
+ var max = q1 + 1.5 * interQuantileRange;
+// Show the Y scale
+ var y = d3.scaleLinear()
+ .domain([0,24])
+ .range([height, 0]); 
+ 
+ svg.call(d3.axisLeft(y))
+// a few features for the box 
+ var center = 200;
+ var width = 100;
+// Show the main vertical line
+svg  .append("line")
+     .attr("x1", center)
+ .attr("x2", center)
+ .attr("y1", y(min) )
+ .attr("y2", y(max) )
+ .attr("stroke", "black");
+// Show the box 
+svg  .append("rect")
+ .attr("x", center - width/2)
+ .attr("y", y(q3) )
+ .attr("height", (y(q1)-y(q3)) )
+ .attr("width", width )
+ .attr("stroke", "black")
+ .style("fill", "#69b3a2");
+// show median, min and max horizontal lines
+svg  .selectAll("toto")
+ .data([min, median, max])
+ .enter()
+ .append("line")
+ .attr("x1", center-width/2)
+ .attr("x2", center+width/2)
+ .attr("y1", function(d){ return(y(d))} )
+ .attr("y2", function(d){ return(y(d))} )
+ .attr("stroke", "black");
+
+
+			</textarea>
+		</div>
+		<a class="tryit-anchor" id="_end_tryit1">
+&nbsp;</a>
+		<div id="tryit1-output" style="display: none">
+			<div id="tryit1-error" class="tryit-error"></div>
+			<div id="tryit1-display" class="tryit-display rendered_html"></div>
+		</div>	</div>	<div class="ui top attached label">
+		<button id="tryit1-run" data-tooltip="Execute script (Ctrl+Enter)" class="ui  green right labeled icon button exec">     <i class="caret square right icon"></i>Run</button> &nbsp; <button id="jump_tryit2" class="circular ui icon yellow button jump_next"><i class="icon angle double down"></i></button>
+ &nbsp; <button class="circular ui icon button green jump_back"><i class="icon angle double up"></i></button>
+ &nbsp; <button id="save_1" data-tooltip="Save all user modifications" class="ui right floated button circular icon green save_data"> <i class="save icon"></i> </button>
+	</div>
+</div>
+
+<br/><hr /><hr /><div class="verybottom" ><div class="pagenum">Page - 1</div>
+</div>
+<br><br><div class="verybottom" >
+                        <div class="page-footer">
+                          <a href="https://github.com/nurulc/tryitjs" target="_blank">
+                            <i class="tiny black">Built with TryITjs (v0.9.7)</i> <i class="small red external alternate icon"></i>
+                          </a>
+                        </div></div><br><br></div> <!--- Demo showing D3  @@END_PAGE@@ -->
+<script>const tryit$colors = {"original":"cobalt-original","saved":"lesser-dark","edited":"cobalt-light"}; </script>  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+  <script>
+    $('.activating.element').popup({inline: true, });
+    $('.ui.accordion').accordion();
+    $('.ui.dropdown.item').dropdown({on: 'hover'});
+    function toggle() {
+      $('.ui.sidebar').sidebar('toggle');
+    }
+  </script> 
+       </div>
+     </div>
+  </div>
+
+<div class="execution progress" 
+     style="display: none;">
+<div class="title">Executing previous dependent scripts</div> 
+<div class="ui indicating progress" id="execution_progress">
+
+  <div class="bar" >
+    <div class="progress"></div>
+  </div>
+  <div class="label">Waiting to execute</div>
+</div>
+</div>
+<div class="page-change" style="display: none">
+<p class="tag-name" id="tag_name"></p>
+</div>
+
+</body></html>
