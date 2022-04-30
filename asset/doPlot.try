@@ -1,6 +1,7 @@
 @@once
 @@include div-tools.try
 !head
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script>
   function newPlot(dn, data, layout,config) {
    
@@ -13,5 +14,15 @@
       $$.lastly(true,() => Plotly.newPlot(div, _data, _layout, _config));
       return HTML(`<div><div id="${div}" /></div>`)
    }
+  }
+
+  function simleHistogram(x, layout={}, dn=undefined ) {
+  var trace = {
+    x: x,
+    type: 'histogram',
+  };
+   var data = [trace];
+   newPlot(dn || 'myDiv', data);
+
   }
  </script>

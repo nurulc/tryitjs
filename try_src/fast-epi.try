@@ -125,8 +125,7 @@ This is a more optimized risk factor calculator usin the log(e(x)) = log(Total) 
         # Factor based optimization
         This section we will show how the multiplicative concept of optimization can be used compute the gradient descent
         algorithm
-!head
-    <script src="https://d3js.org/d3.v4.js"></script>
+
 !tryit
      
     var id = document.getElementById('my_dataviz');

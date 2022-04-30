@@ -1,3 +1,2 @@
 @@once
-<!--script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.5.0/d3.min.js"></script -->
-<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.0/d3.min.js" integrity="sha512-wKo55+1oH5DGJ19ScVUHTtcZiqJuSnknSs8CgzzEm1lNftJRDXN/kWpF9Kx+vPam8HBeg53OxS0MYd0+Iz9cjQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

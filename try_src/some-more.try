@@ -1,8 +1,31 @@
 !head
-  <title>Sligltly More elaborate example</title>
+  <title>Sligltly More elaborate example - Machine Learning</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+@@include tools/d3.try
+@@include tools/head.try
+
+  <script>
+  window.MathJax = {
+    loader: {
+      load: ['input/asciimath', 'output/chtml', 'ui/menu'],
+      
+    },
+    asciimath: { delimiters: [['`','`'], ['%','%']], inlineMath: [['%', '%']] } 
+  };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js">
+  </script>
+@@include ASSETS/doPlot.try          
+       
 !md 
     # Introduction
-    This is a slightly more elaborate example
+    This is a slightly more elaborate example, in the following pages we will show you how to create
+    a model for estimating the cost of medical treatment. How to display the data in charts using D3.
+    Finally it is to show how powerful machine learning algrothims can be inplemented in the browser.
+
+    There is some math in the example and are explained, but you can skip over those if you are not
+    ready to read through it. Hopefully I have kept the explanation simple enough to understand.
 
     ## Code example
 
@@ -25,19 +48,13 @@
     A variable created within a **!tryit** snippet  usin a ``let`` only exists in the snipped
 
 !md
-    # Another Page
+    # Introduction to medical cost modeling
 
-    This is one more example in a new page. The is it my test.
+    This is a example of optimization useful in certain modeling for estimating the cost of service.
+    The cost we are trying to estimate is the treatment of a medical conditions. This is not using a
+    real medical condition or real data as will be explained later.
+    
 
-    This is a example of optimization useful in certain modeling of estimating the cost of service for medical conditions.
-    One simple model for a service, for example heart contition, is as follows:
-
-    1. Average base cost
-    2. Number of additional complications that increase the cost of treatment. Example of thos those may be age, if you are older or very young. A simple model is to assume that each condition increases the cost by a certain percent.
-         a. ```Cost = Base * comp1 * comp2 * comp3```,  where comp1, comp2  percentage increase on the base cost.
-         b. This can also be written in exponential form ```Cost = exp( b + c1 + c2 + c3 )``` where ```b = ln(Base)```, and ```c1 = ln(comp1)``` ...
-    3. The values of **b, c1, c2...** (also refered to as cost factors) are unknown, but we have data for the cost of service fr thousands of patients. We will use the date to extimate the values of the cost factors.
-    4. This becomes a regression problem
 
     ## Some utility functions
     1. ```expL``` take the exponent of the elements of an array
@@ -94,6 +111,7 @@
         return list.reduce(add,0); 
     }
 
+    // function to create a normally distributed random number (see. mean value theorem)
     function normalSample(n=12) {
       let v = 0;
       if(n===0) return 0;
@@ -102,13 +120,38 @@
     }
 
 !md
-    
+    # Modeling Medical treatment
+
+    This more elaborate example will investigate a data science problem; the modeling of metical treatment for a
+    particular medical condition. For this example we will be creating some synthetic data rauther than 
+    using actual medical claims data. The model assumes that all patients are not the same, some have other underlying
+    medical issues that make the treatment more expensive. We will call these risk factors. Examples of risk factors
+    might be age, older than 65, or younger than 5. Other factors might be pregnency, or high blood pressure. These risk
+    factors increase the cost of treating the condition. The problem is that we only have the raw cost of treatment
+    data and knowledge of the underlying condition. What we do not have is how they affect the cost of treatment.
+
+    The purpose of the remaining section is model the cost of treatment and discover how these factors change the cost 
+    of treatment model.
+
+    1. Average base cost, the cost incured by most patients
+    2. Number of additional complications that increase the cost of treatment. Example of thos those may be age, if you are older or very young. A simple model is to assume that each condition increases the cost by a certain percent.
+        - ```Cost = Base * factor1 * factor2 * factor3...```,  where factor1, factor2  percentage 
+        increase on the cost of treating a patient with thouse aditional factors.
+        - This can also be written in exponential form   
+        - __Cost = exp( b + f1 + f2 + f3 )__   where __b = log(Base)__ , and __f1 = log(factor1)__ ...
+    3. The values of **b, f1, f2...** (also refered to as cost factors) are unknown, but we have data for 
+    the cost of service for thousands of patients. We will use the data to estimate the values of the cost factors.
+    4. This similar to a regression problem
+
+
+
+
     Object to model the cost of treatment, this has the following attributes
     1. ```real``` the actual cost of treatment
     2. ```factorFlag``` this is an array of 1 or 0 for each of the cost factors 1 = factor present for the patient, 0 = factor not present
     3. ```real``` holds the real cost. Since we do not actually have real data we will create some simulated data,
-         a. All patients have the base factor ```b``` codes[0]
-         b. The other factors have arelative probability of occuring, code[1] has (100-70) = 30% chance, codes[2] has (100-90)= 10% chance and so on, this is allocodea using ```fillFactor()``` function. 
+        * All patients have the base factor ```b``` in other words `factor0` (100% probablity)
+        * The other factors have a relative probability of occuring, `factor1` has  30% chance, `factor2` has 10% chance and so on, this is allocodea using ```fillFactor()``` function. 
     4. ```current``` best estimate of cost prediction based on the factors estimates
 
 !tryit
@@ -121,12 +164,24 @@
             this.logReal = factorEstimates.logReal; 
         } 
         else {
+          // aray of flags 0 = patient has the risk factor, 0 = the patient does not have the risk factor
           this.factorFlag = Array.isArray(factorIndicators)? factorIndicators.slice() : factorIndicators();
+          
+          // create cost of treatment +/- 75% random fluctuations in the cost of treatment
           this.logReal = this.getRisk(realFactor)+Math.log(1 + normalSample()*1.5);
         }
         this.real = Math.exp(this.logReal);
         this.logCurrent = 0;
         this.current = 1;
+      }
+
+
+      get code() {
+        // convert the factor flag bits to an integer
+        // since each factor flag is 1 or 0, this can be used
+        // to create an binary integer (each factor is a bit in the integer)
+        // code = flag0*1 + flag1*2 + flag3*4 ...
+        return this.factorFlag.reduceRight((s,v) => s*2+v, 0);
       }
 
       getRisk(factors) {
@@ -147,6 +202,11 @@
         this.current = Math.exp(this.logCurrent);
       }
 
+      _setCurrent(cv) {
+        this.current = cv;
+        this.currentLog = Math.log(cv);
+      }
+
       // derivitive of the factor with respect to factor[i], this is used to perform a gradient descent
       // search to the optimal value of the factors so that RMS difference of actual cost to computed cost based
       // on the factors is minimized.
@@ -157,36 +217,139 @@
       }
     }
 !md
+    # Create synthetic treatment data
+
+    This section we will create some synthetic data for our analysis. For this we will need to have an underlying
+    model. A common model is to use what we call the multiplicative model, namely the fisk factor increases the cost
+    of treatment by some percent. So we have a base cost of threatment, let us call this `factor0` and the other
+    factors are `factor1`, `factor2` ...
+
+    Every patient will have `factor0` and the total cost of treatment. Some patients will have `factor1` or not, and similarly
+    for all the other factors. We choose which factors a patient has by rolling a dice, i.e. each factor has a probablity
+    associated that it. 
+
+    Finally we randomly increase or decrese the cost of treatment to reflect real treatment cost data.
+
     ## Setup some constants
 
-    1. EPI_COUNT - number of test episodes to create
+    1. EPI_COUNT - number of test treatment data to create (we call each of those an episode)
     2. ITER - number of itteratins to compute the factors
     3. EPSILON - increment size for the gradient descent
 
 !tryit
-    var EPI_COUNT = 2000;
+    var EPI_COUNT = 10000;
     var ITER = 1000;
     var EPSILON = 0.002;
 
 
 !tryit
-    //           Base comp1 comp2 ...
-    var actualFactors = [300, 1.3,  1.05,  1.11, 1.80, 1.52, 1.01].map(x => Math.log(x)); // the actual values of the factors
+    // To create the data we will use(secret) underlying factor values,
+    //                  Base factor1 factor2 ...
+    var actualFactors = [300, 1.3,    1.05,  1.11, 1.80, 1.52, 1.01].map(x => Math.log(x)); // the actual values of the factors
 
 
     // factorEstimates represents the values we are trying to compute from the data 
     // (hopefully the values will be close to the values in ```actualFactors```)
     var factorEstimates =  [ 0,  0,    0,     0,    0, 0, 0];
 
-    function fill() {
-      const prob =  [ 0,  0.70, 0.9,  0.95, 0.97, 0.98, 0.99];
-      return prob.map(x => Math.random() > x ? 1 : 0);
+    function createFactorFlags() {
+      const prob =  [ 100,  30, 10,  5, 3, 2, 1]; // present chance of having the factor
+      let factorFlag =  prob.map(x => Math.random()*100 <= x ? 1 : 0);
+      return factorFlag;
     }
 
 
-    var epiFlags = range(EPI_COUNT).map( () => fill())
+    var epiFlags = range(EPI_COUNT).map( () => createFactorFlags()); // an arry of risk factors, one for each patient
     
-    var episodes = epiFlags.map((fill) => new TreatmentCost(factorEstimates,fill, actualFactors));;
+    var episodes = epiFlags.map((factorFlags) => new TreatmentCost(factorEstimates,factorFlags, actualFactors));;
+
+
+!md
+## Some space to inspect data
+!tryit
+   $$.D(episodes.slice(0,3))
+
+!md
+## Display Histogram
+
+!tryit
+    let x = episodes.map(v => v.real);
+
+    let trace1 = {
+      x: x,
+      type: "histogram",
+      opacity: 0.5,
+      marker: {
+         color: 'green',
+      },
+    };
+
+    let data = [trace1];
+    let layout = {
+               barmode: "overlay", 
+               yaxis: {type: 'log' }, // type: 'linear' or 'log' var layout = { yaxis: {type: 'log', title: 'Count' }, // type: 'linear' or 'log'
+               xaxis: {title: 'Treatment Cost in $'}
+             }; 
+    newPlot( data, layout);     
+!md
+    # Predict factors (using gradient descent)
+
+    
+    We predict the factors iteratively using gradient desent. But before we do that, let a restate the problem 
+    to make the math a bit more elegant and actually simpler. 
+
+    ## Exponential function
+
+    If we have the following expression (rule of exponentials)    
+    <p> %y = e^a * e^b% can be rewritten as %y = e^{a+b}% </p>
+
+    <p>Secondly, any value `x` can be rewritten as an exponential `x = e^{log x}` </p>    
+
+    __Therefore:__
+
+    <p>%f1 = log("factor1")% and %f2 = log("factor2")% To learn more here is q quick video:  
+    <a href="https://www.youtube.com/watch?v=m2MIpDrF7Es" target="_blank">Properties of Exponents</a></p> 
+
+    The technique is to minimize what is refered to a 
+    loss function. The loss function we will use is called the __mean squared error__ **(MSE)**. ">Video in exponents
+
+    <p>%MSE = 1/{2n} \sum _{i=1}^{n}(Real_{i} - P_{i})^2% where %n = "number of patients"%</p>
+
+    <p>%P_{i}` is the predicted value for `"patient"_{i}`, `P_{i} = e^(F0_{i}+F1_{i}+F2_{i}...)%</p>
+
+    <p>So we want to find the values of `{f0 ... fn}` to minimise `MSE`<p>
+    
+    <p>%{del P_{i}}/{del f0} = P_{i}% is another beautiful property of exponentials, the same is true for %f1, f2 ...% </p>
+
+
+    <p> %F1_{i} = {(0,if text{factorFlag1} = 0),(f1,if text{factorFlag1} = 1):}% &nbsp; &nbsp;  for &\ \ "patient"_i% </p>
+
+    Similarly for %F2_{i}, F3_{i} ...% __Note:__ Since all patients have %f0%, &nbsp;&nbsp;&nbsp; %:. F0_{i} = f0%
+  
+    The `MSE` is also known as the loss function. The purpose of a loss function is to give a way to quantify 
+    how far the prediction is from the desired outcome. So out target is to adjust the values of the factors. 
+
+    <p>  % {del (MSE)}/{del f0} = 1/n \sum _{i=1}^{n}(Real_{i} - P_{i})*P_{i} % &nbsp;&nbsp;&nbsp; is the derivative of `MSE` </p>
+
+    Gradient descent is an iterative algrothims for updating the factors %f0, f1, f2 ...%
+
+    > %f0_{"new"} = f0 - {del (MSE)}/{del f0} * epsilon %, &nbsp;&nbsp;&nbsp; where %epsilon% is known as the learning rate and is usuall a
+    small fraction <br>
+    > Similarly for,  %f1, f2 ...% we do the same as above. 
+    > %f1_{"new"} = f1 - {del (MSE)}/{del f1} * epsilon %
+
+
+    Checkout this youtube video 
+    
+    <iframe width="560" height="315" style="position: relative; top: 5px; left: 50px; padding: 5px;"
+            src="https://www.youtube.com/embed/jc2IthslyzM" 
+            title="Gradient Descent" frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+    </iframe>
+
+
+!tryit
     var total=sum(episodes.map(t => t.real));;
     
     function getTotal(epi) {
@@ -205,35 +368,222 @@
       episodes.forEach(t => t.setCurrent(res));
       return res;
     }
+!md 
+    
+    ## Gradient Descent
 
-!md
-## some space to inspect data
-!tryit
-   $$.D(episodes.slice(0,3))
 
 !tryit
     
     //$$.D(dx(3)/total, total );
     let tcomp = factorEstimates;
     let scaleFunc = () =>  total;
+
+    // perform gradient descent on factors
     for(let i=0; i< ITER; i++) {
       tcomp = computeUpdatedFactors(episodes, tcomp, EPSILON, scaleFunc);
     }
     let costToMember = sum(episodes.map(t => rect(t.real-t.current)));
     let costSaved = sum(episodes.map(t => rect(t.current-t.real)));
     let outOfPocketMembers = sum(episodes.map(t => clamp(t.real-t.current)));
-    $$.D(sum(episodes.map(t => t.real-t.current)), costToMember/outOfPocketMembers, costToMember, total, costSaved, 
-         outOfPocketMembers, max(episodes.map(t => t.real-t.current)));
-    [tcomp.map((v,i) => (Math.exp(v)-Math.exp(actualFactors[i]))/Math.exp(actualFactors[i])*100+'%'), expL(tcomp), expL(actualFactors)]
-    //var t = new C();
-    //t.getRisk(actualFactors);
-    //$$.D(actualFactors, t.getRisk(actualFactors));
-    //t
+    // $$.D(sum(episodes.map(t => t.real-t.current)), costToMember/outOfPocketMembers, costToMember, total, costSaved, 
+    //      outOfPocketMembers, max(episodes.map(t => t.real-t.current)));
+    // [tcomp.map((v,i) => (Math.exp(v)-Math.exp(actualFactors[i]))/Math.exp(actualFactors[i])*100+'%'), expL(tcomp), expL(actualFactors)]
+    $$.D( {
+         "Real Cost - Projected Cost": sum(episodes.map(t => t.real-t.current)), 
+         "Average Patient Out of Pocket": costToMember/outOfPocketMembers, 
+         "Total cost to all Patients": costToMember, 
+         "Total cost of treatment (All patients)": total, 
+         "Savings for insurance company": costSaved, 
+         "Total out of pocket": outOfPocketMembers, 
+         "Highest out odf pocket": max(episodes.map(t => t.real-t.current))
+        });
+    ({ 
+       "Computed Values": expL(tcomp), 
+       "Actual Values": expL(actualFactors),
+       "Difference Between Computed and Actual" : tcomp.map((v,i) => (Math.exp(v)-Math.exp(actualFactors[i]))/Math.exp(actualFactors[i])*100+'%'), 
+    })
+
+
+
 !md
-## Display debug
+    On the next page we will plot the treatment data to to show the predicted values and the coresponding
+    real cost. 
+
+
+!md
+    
+    # Visualize Factor Based Optimization Results
+
+    We will use D3 to visualize the factors that have been computed. Where the x-axis represents the predicted cost
+    and the y-axis shows the actual cost. The dashed line is the predicted cost line. Firstly remember this is using
+    come synthetic data with random spred of cost from a prior risk factor values. The entire demo is that give this data
+    the actual risk factors can be computed from the data itself.
+
+!tryit
+    function scatter(episodes, plotArea) {
+    
+    if(arguments.length <= 1) plotArea = genID($$.executeDiv);
+    $$.lastly( () => {
+        var id = document.getElementById(plotArea);
+        id.innerHTML = '';
+        var margin = {top: 10, right: 30, bottom: 30, left: 60},
+           width = 1024 - margin.left - margin.right,
+           height = 512 - margin.top - margin.bottom;
+           // append the svg object to the body of the page
+           var svg = d3.select(`#${plotArea}`)
+             .append("svg")
+               .attr("width", width + margin.left + margin.right)
+               .attr("height", height + margin.top + margin.bottom)
+             .append("g")
+               .attr("transform",
+                     "translate(" + margin.left + "," + margin.top + ")");
+
+        //Read the data
+        (function(epi) {
+         // 
+         // Add X axis
+         var x = d3.scaleLog()
+           .domain([1, 1])
+           .range([ 0, 0 ]);
+         svg.append("g")
+           .attr("class", "myXaxis")   // Note that here we give a class to the X axis, to be able to call it later and modify it
+           .attr("transform", "translate(0," + height + ")")
+           .call(d3.axisBottom(x))
+           .attr("opacity", "0")
+         var [yLow, yHigh] = d3.extent(epi.map(d => d.real));
+         // Add Y axis
+         var y = d3.scaleLog()
+           //.domain([1, 500000])
+           .domain([yLow*0.8, yHigh*1.1])
+           .range([ height, 0]);
+         svg.append("g")
+           .call(d3.axisLeft(y));
+
+// Add Axis Labels
+          svg.append("text")
+              .attr("text-anchor", "end")
+              .attr("x", width)
+              .attr("y", height + margin.top + 20)
+              .text("Predicted Cost in $");
+
+          // Y axis label:
+          svg.append("text")
+              .attr("text-anchor", "end")
+              .attr("transform", "rotate(-90)")
+              .attr("y", -margin.left+20)
+              .attr("x", -margin.top)
+              .text("Real Cost in $")
+
+
+         // Add dots
+         svg.append('g')
+           .selectAll("dot")
+           //.data(data)
+           .data(epi)
+           .enter()
+           .append("circle")
+             // .attr("cx", function (d) { return x(d.GrLivArea); } )
+             // .attr("cy", function (d) { return y(d.SalePrice); } )
+             .attr("cx", function (d) { return x(d.current); } )
+             .attr("cy", function (d) { return y(d.real); } )
+             .attr("r", 5)
+             .style("fill", "#69b3a2")
+
+         var [xLow, xHigh] = d3.extent(epi.map(d => d.current));
+               var xStart = xLow*0.9;
+              // new X axis
+              //x.domain([0, 4000])
+              x.domain([xStart, xHigh *= 1.1])
+               .range([ 0, width ]);
+
+              svg
+                .append("line")           // attach prediction line
+                .style("stroke", "blue")  // colour the line
+                .attr("x1", x(xStart))     // x position of the first end of the line
+                .attr("y1", y(xStart))      // y position of the first end of the line
+                .attr("x2", x(xHigh))     // x position of the second end of the line
+                .attr("y2", y(xHigh))    // y position of the second end of the line
+                .attr("opacity", "0.25")
+                .attr("stroke-dasharray","5, 5");
+          
+         svg.select(".myXaxis")
+           .transition()
+           .duration(2000)
+           .attr("opacity", "0.75")
+           .call(d3.axisBottom(x));
+
+         svg.selectAll("circle")
+           .transition()
+           .delay(function(d,i){return(i*1)})
+           .duration(1000)
+           .attr("cx", function (d) { return x(d.current); } )
+           .attr("cy", function (d) { return y(d.real); } )
+           .attr("opacity", "0.1")
+        })(episodes);
+      });
+
+      $$.D($$.HTML(`<div id="${plotArea}" />`));
+      return plotArea;
+  }
+  scatter(episodes)        
+!md
+
+## A much faster Adjustment algorithm
+
+
 !tryit
 
-     $$.D(episodes)
+    //$$.D(episodes)
+    function _reduce(i, max, fn,initial) {
+      let b = 1
+      let mask = 1 << i;
+      for(j=0; j<max; j++ ) {
+        if(j&mask) initial = fn(initial,j)
+      }
+      return initial;
+    }
 
-@@include fast-epi.try          
+
+      let s = [];
+       _reduce(1, 64,(s, i)=> (s.push(i),s),s);
+       $$.D(s.length);
+       
+       let bitsNeeded = actualFactors.length;
+       let codeMax = 1 << bitsNeeded;
+       let counts = episodes.reduce((res,e) => (res[e.code]++, res), range(codeMax).fill(0));
+       let sums = episodes.reduce((res,e) => (res[e.code]+=e.real, res), range(codeMax).fill(0));
+       let codeFactors = range(1 << bitsNeeded).fill(1);
+       let computedFactors = actualFactors.slice().fill(0);
+       let total = sum(sums);
+      $$.D(counts.slice(20,64),sums.slice(20,64))
+
+      function iterate(codeFactors, computedFactors, epsilon) {
+
+        for(let i=0; i< bitsNeeded; i++){
+          let dx = adjustFactor(i)*epsilon;
+          let expDx = Math.exp(dx);
+          _reduce(i,codeMax, (s,ix)=>(s[ix] *= expDx, s), codeFactors);
+          computedFactors[i] += dx;
+        }
+        function adjustFactor(i) {
+           let _dx = _reduce(i,codeMax, 
+                             (delta, ix) => delta+(sums[ix]-counts[ix]*codeFactors[ix])*codeFactors[ix],
+                     0 );
+           return (_dx/total);
+        }
+      }
+
+    for(let i=0; i< ITER; i++) {
+      iterate(codeFactors, computedFactors, EPSILON);
+    }
+    episodes.forEach(e => e._setCurrent(codeFactors[e.code]));
+
+
+!md
+## Render results using D3
+
+!tryit
+   scatter(episodes);    
+            
 !end
