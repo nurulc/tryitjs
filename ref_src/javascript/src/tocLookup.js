@@ -24,7 +24,7 @@ export default function getTocLookup() {
 		}
 	});
 
-	pageList.forEach(([p,h1]) => lookup[p] = h1.substr(1));
+	pageList.forEach(([p,h1]) => h1?(lookup[p] = h1.substr(1)):undefined);
 	return lookup;
 
 	// =============================

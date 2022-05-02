@@ -37,7 +37,7 @@
 	The code below is the **basic.try** file for the example
 
 	```tryit
-	@@include ESCAPE basic.try
+	@@include SHOW basic.try
 	```
 
 	* The tryit file will generate [this result](basic.html)
