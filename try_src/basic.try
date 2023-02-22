@@ -1,5 +1,6 @@
 !head
   <title>First Tryit</title>
+  <link rel="stylesheet" href="/ref/stylesheets/tryit.css" />
   @@include tools/head.try
 
 !md 
@@ -13,7 +14,7 @@
   Press the RUN button to execute the code (you can eddit the code and run again if you like)
 
 
-!tryit
+!tryit Simple array of strings
   var array = [ 'a String', 1 , { name: 'tryit'} ]; // array with a `string`, `number`, and an `object`
   array // the last expression is always displayed (except if the value is undefined) 
 

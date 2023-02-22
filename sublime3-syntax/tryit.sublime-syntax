@@ -1,0 +1,57 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+name: tryit
+file_extensions:
+  - try
+
+scope: source.tryit
+
+contexts:
+  # The prototype context is prepended to all contexts but those setting
+  # meta_include_prototype: false.
+
+  main:
+    # The main context is the initial starting point of our syntax.
+    # Include other contexts from here (or specify them directly).
+    - include: tryhead
+    - include: trymd
+    - include: trytryit
+    - include: tryhtml
+    - include: tryjs
+    - include: trytail
+
+  tryhead:
+    - match: ^!head
+      scope: keyword.other
+      embed: scope:text.html.basic
+      escape: (?=^!)
+
+  tryhtml:
+    - match: ^!html
+      scope: keyword.other
+      embed: scope:text.html.basic
+      escape: (?=^!)
+
+  trytail:
+    - match: ^!tail
+      scope: keyword.other
+      embed: scope:text.html.basic
+      escape: (?=^!)
+
+
+  trymd:
+    - match: ^!md
+      scope: entity.name.constant
+      embed: scope:text.html.markdown
+      escape: (?=^!)
+
+  trytryit:
+    - match: ^(!tryit)(.*)
+      captures:
+        1: constant.numeric
+        2: comment
+      embed: scope:source.js
+      escape: (?=^!)
+
+

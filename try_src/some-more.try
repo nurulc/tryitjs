@@ -20,18 +20,21 @@
        
 !md 
     # Introduction
-    This is a slightly more elaborate example, in the following pages we will show you how to create
-    a model for estimating the cost of medical treatment. How to display the data in charts using D3.
-    Finally it is to show how powerful machine learning algrothims can be inplemented in the browser.
+    This is a slightly more elaborate example showing a multi page example and showing how to
+    give example using several different libraries. The main concept this artilece will demonstrate is 4 major  as how to construct a page.
 
-    There is some math in the example and are explained, but you can skip over those if you are not
-    ready to read through it. Hopefully I have kept the explanation simple enough to understand.
+    1. Create a .try file with the page name, in this case __some-more.try__
+    2. This is a text file and first line must start with `!head`
+    3. There are several section types:
+        - `!head` the lines after the this section is placed in the in the &lt;head&gt; part of the HTML generate from the .try file
+        - `!md` Starts a <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">markdown</a> section 
+
 
     ## Code example
 
     This is a simple code example to create a javascript array and display it.
 
-!tryit
+!tryit Hello world
     var array = [ 'a String', 1 , { name: 'tryit'} ]; // array with a `string`, `number`, and an `object`
     array
 

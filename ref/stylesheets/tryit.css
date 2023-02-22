@@ -277,8 +277,17 @@ table.dataTable thead tr th, table thead tr td {
 .tryit-code {
   border-style: solid;
   width: 100%;
-  background-color: lightgrey;
+  background-color: grey;
   height: 7rem;
+  
+}
+
+.try-title {
+    display: inline-block;
+    width: 60%;
+    font-size: 1.5rem;
+    color: blue;
+    text-align: center;
 }
 
 .tryit-display {
@@ -289,6 +298,17 @@ table.dataTable thead tr th, table thead tr td {
   min-height: 1rem;
   overflow-x: scroll ;
   overflow-y: scroll;
+}
+
+.tryit-fold {
+  font-size: 1.5rem;
+  border-style: solid;
+  border-color: grey;
+  border-width: 1px; 
+  padding-left: 0.5rem;
+  padding-right: 0.5rem; 
+  margin-right: 1rem; 
+  /*margin-top: 1rem;*/
 }
 
 .left-row {
