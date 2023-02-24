@@ -59,10 +59,10 @@ qsA('button').forEach(el => el.addEventListener('keydown', keydown));
 function keydown(event) {
 	const LeftArrow = 37, RightArrow = 39;
 	const activeElement = document.activeElement;
-	if (navigator.platform === 'MacIntel' ? event.metaKey : event.ctrlKey && event.key === 's') {
+	//if (navigator.platform === 'MacIntel' ? event.metaKey : event.ctrlKey && event.key === 's') {
+	if (event.key === 's' && (navigator.platform.indexOf('Mac') !== -1 ? event.metaKey : event.ctrlKey) ) {
 		event.preventDefault();
 		saveAll();
-		// ... your code here ...
 	}
    
 	else if( (activeElement === document.body || isTag(activeElement, 'button')  ) && 
