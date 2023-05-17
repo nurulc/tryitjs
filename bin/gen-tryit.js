@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const {genHTML} = require('../index');
 const {genProject} = require('./gen-template');
+const showHelp = require('./helptext');
 const DEBUG_INIT = false;
 
 const DEFAULT_SRC = '.'; //getDirOrDefalt(DEBUG_INIT?'try_src1':'try_src');
@@ -24,6 +25,23 @@ const {flatten} = require('../lib/func-utils');
 const dirTree = require('directory-tree');
   
  const {normalize} = require('../lib/path-utils');
+
+// function showHelp() {
+//   let helpString = '';
+//   helpString += chalk.bold('Script Help:') + '\n';
+//   helpString += 'Usage: node script.js [options]\n\n';
+//   helpString += chalk.bold('Options:\n');
+//   helpString += chalk.yellow('--option1') + ' - Description of option 1.\n';
+//   helpString += chalk.yellow('--option2') + ' - Description of option 2.\n\n';
+//   helpString += chalk.bold('Examples:\n');
+//   helpString += chalk.cyan('node script.js --option1') + ' - Run the script with option 1.\n';
+//   helpString += chalk.cyan('node script.js --option2') + ' - Run the script with option 2.\n';
+//   helpString += path.join(SCRIPT_DIR,'..', 'help.txt')+'\n';
+//   //return fs.readFileSync(path.join(SCRIPT_DIR,'..', 'help.txt')).text();
+//   return helpString;
+// }
+
+
 
 //let baseConfig = require('../.tryit').default;
 let baseConfig = readTryConfig();
@@ -228,7 +246,12 @@ function ARGS(args) {
                 srcDir = srcDir || DEFAULT_SRC;
               break;  
             }
-
+            case '-h':
+            case '--help': {
+              let helpTextFile = path.join(SCRIPT_DIR,'..', 'help.txt');
+              console.log(showHelp(helpTextFile));
+              process.exit(1);
+            } 
             case '-c': 
             case '--config': userConfigFile = args[1]; break;
             case '--outfile': 
