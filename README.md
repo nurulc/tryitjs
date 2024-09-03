@@ -127,21 +127,30 @@ Very it is a markdown file with a few simple extensions, .try file have the foll
   let arr = [1, 2, 3]; 
   x
 ```
+
+_Note:_ **!head** and **!end** can be paced anywhere or in any included files, but make sure that **!head** apperas on the first line of the top level files. The tryjs process used **!head** on the fist line to determine the top level files.
+
+## What is a top level file
+
+The first line must have **!head** at the begining of the line. This indicates that we what to generate an *HTML* file form this _.try_ file. There can be several _.try_ files with **!head** of the first line. Each of these files will generate acorresponding **html** file in the destination directory.
+
 ### Single line markup
 
 Does not end the previously started command section, in these single-line command can be a part oone of the previous command
 
 |  command 	|   Description	|
 |---	|---	|
-| @@include &lt;file name&gt; | copy the contents of the file into the current location |
+| @@include &lt;file name&gt; | copy the contents of the file (or url) into the current location |
 | @@include ESCAPE &lt;file name&gt; | display the contents of the file |
 | @@once | If this annotaion is present in a file to be included, The file is included once. Any subsequent @@include of the same file will be ignored. Note: _This must be the first file of a file to be included_ |
 | **!--**  |  the rest of the line is a comment 	|
 
+
+
 ### Run from command prompt
 
 * locally installed
-> node_modules/.bin/tryitjs <input-file> {-d target-directory} {-src source-dir}
+> node_modules/.bin/tryitjs <input-file> {-d target-directory} {--src source-dir}
 
 * Globally installed
 
