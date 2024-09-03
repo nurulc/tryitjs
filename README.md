@@ -109,6 +109,7 @@ Very it is a markdown file with a few simple extensions, .try file have the foll
 |  command 	|   Sescription	|
 |---	|---	|
 |**!head**  	|   Items to be added to the _&lt;head&gt;_ add all subsequent lines become part of html/head	until the next command|
+|**!end**  	|   Subsequent lines are placed at the end of the generated file (html)	|
 |**!md**  	|   Subsequent lines are treated as markdown	|
 |**!tryit** |  the subsequent lines are editable and executable javascript	|
 |**!html**  |  the subsequent lines are plain html fragments	|
