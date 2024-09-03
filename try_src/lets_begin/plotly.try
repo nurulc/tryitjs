@@ -1,0 +1,109 @@
+!head
+@@include ASSETS/doPlot.try
+!md
+# Using doPlot.try
+
+Using a bar chart to display the populations of European capitals, 
+with each bar representing a city. 
+You can label each bar with the city name, and display the country name 
+when hovering over each bar.
+
+1.  Create a div to hold the chart:
+
+```html
+    <div id="populationBarChart" style="width: 100%; max-width: 800px; height: 500px;"></div>
+```
+!html
+    <div id="populationBarChart" style="width: 100%; max-width: 800px; height: 500px;"></div>
+
+!tyrit  Creta the data
+    function chartData() {
+        // Data: Populations, City Names, and Country Names
+        const cityData = [
+            { city: 'London', population: 8974000, country: 'United Kingdom' },
+            { city: 'Berlin', population: 3520000, country: 'Germany' },
+            { city: 'Madrid', population: 2829000, country: 'Spain' },
+            { city: 'Paris', population: 2148000, country: 'France' },
+            { city: 'Vienna', population: 1711000, country: 'Austria' },
+            { city: 'Sofia', population: 1665000, country: 'Bulgaria' },
+            { city: 'Budapest', population: 1344000, country: 'Hungary' },
+            { city: 'Warsaw', population: 1313000, country: 'Poland' },
+            { city: 'Bucharest', population: 1186000, country: 'Romania' },
+            { city: 'Prague', population: 1068000, country: 'Czech Republic' },
+            { city: 'Minsk', population: 975000, country: 'Belarus' },
+            { city: 'Brussels', population: 890000, country: 'Belgium' },
+            { city: 'Helsinki', population: 690000, country: 'Finland' },
+            { city: 'Oslo', population: 620000, country: 'Norway' },
+            { city: 'Dublin', population: 610000, country: 'Ireland' },
+            { city: 'Copenhagen', population: 590000, country: 'Denmark' },
+            { city: 'Stockholm', population: 560000, country: 'Sweden' }
+        ];
+
+        // Extract city names, populations, and countries into separate arrays
+        const cities = cityData.map(item => item.city);
+        const populations = cityData.map(item => item.population);
+        const countries = cityData.map(item => item.country);
+
+        // Define the trace for the bar chart
+        const trace = {
+            x: cities,
+            y: populations,
+            type: 'bar',
+            text: countries,  // Hover text showing the country name
+            hoverinfo: 'text',  // Only show the hover text
+            marker: {
+                color: 'rgba(100, 149, 237, 0.7)',  // CornflowerBlue with transparency
+                line: {
+                    color: 'rgba(100, 149, 237, 1)',
+                    width: 1
+                }
+            }
+        };
+
+        const data = [trace];
+
+        // Define the layout for the plot
+        const layout = {
+            title: 'Population of European Capitals',
+            xaxis: {
+                title: 'City'
+            },
+            yaxis: {
+                title: 'Population',
+                tickformat: ',d'  // Format the ticks as numbers with commas
+            }
+        };
+        return {data, layout};
+   }
+ 
+   doPlot('populationBarChart', data, layout);
+
+!md
+
+### Explanation
+
+1. **City Data Array:**
+   - The `cityData` array contains objects for each city, including the city name, population, and country name.
+
+2. **Extracting Data for Plotting:**
+   - Arrays for `cities`, `populations`, and `countries` are created by mapping over the `cityData` array.
+
+3. **Bar Chart Definition:**
+   - The `trace` object defines a bar chart with city names on the x-axis and populations on the y-axis.
+   - The `text` property is used to define the hover text (country names) for each bar.
+   - The `hoverinfo` property is set to `'text'` to display only the country name when hovering.
+
+4. **Layout:**
+   - The `layout` object includes titles for both axes and formats the y-axis ticks with commas.
+
+5. **Creating the Plot:**
+   - The `Plotly.newPlot` function creates the bar chart in the `div` with the ID `populationBarChart`.
+
+## Result
+
+You will see a bar chart where each bar represents a European capital. 
+Each bar is labeled with the city name, and when you hover over a bar, 
+the name of the country will be displayed.
+
+This bar chart effectively visualizes the population distribution across 
+European capitals, with added interactivity through the hover functionality.
