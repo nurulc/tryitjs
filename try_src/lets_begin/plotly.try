@@ -10,7 +10,7 @@ when hovering over each bar.
 
 
 
-!tyrit  Creta the data
+!tyrit
     function chartData() {
         // Data: Populations, City Names, and Country Names
         const cityData = [
@@ -97,7 +97,7 @@ when hovering over each bar.
     <div id="populationBarChart" style="width: 100%; max-width: 800px; height: 500px;"></div>
 ```
 
-!tryit Draw the chart
+!tryit
    var {data,layout) = chartData();
    newPlot('populationBarChart', data, layout);
 
