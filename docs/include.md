@@ -42,5 +42,13 @@ The format of a top level __.try__ file is as follows:
  You can organize ```.try``` fragments into their own gist file and import them as follows:
  
  ```@@include https://gist.githubusercontent.com/nurulc/6591fe566b42b893bbadcbe46fa370e2/raw/a000752cb25debed3d620e05970b686bc159dcf9/bsesrch_test.js```
- 
+
+#### Shortcut to assets directory 
+In the directory **assets** there are various helpful _.try_ files you can incluse these with the following **@@include** command:
+
+```@@import ASSETS/tools.try```
+
+This is the same as the following:
+
+```@@import https://raw.githubusercontent.com/nurulc/tryitjs/master/asset/ui-tools.try```
  
