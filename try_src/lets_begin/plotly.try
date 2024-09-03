@@ -8,13 +8,7 @@ with each bar representing a city.
 You can label each bar with the city name, and display the country name 
 when hovering over each bar.
 
-1.  Create a div to hold the chart:
 
-```html
-    <div id="populationBarChart" style="width: 100%; max-width: 800px; height: 500px;"></div>
-```
-!html
-    <div id="populationBarChart" style="width: 100%; max-width: 800px; height: 500px;"></div>
 
 !tyrit  Creta the data
     function chartData() {
@@ -75,12 +69,10 @@ when hovering over each bar.
         };
         return {data, layout};
    }
- 
-   doPlot('populationBarChart', data, layout);
 
 !md
 
-### Explanation
+## Explanation
 
 1. **City Data Array:**
    - The `cityData` array contains objects for each city, including the city name, population, and country name.
@@ -99,6 +91,19 @@ when hovering over each bar.
 5. **Creating the Plot:**
    - The `Plotly.newPlot` function creates the bar chart in the `div` with the ID `populationBarChart`.
 
+## Create a div to hold the chart
+
+```html
+    <div id="populationBarChart" style="width: 100%; max-width: 800px; height: 500px;"></div>
+```
+
+!tryit Draw the chart
+   var {data,layout) = chartData();
+   newPlot('populationBarChart', data, layout);
+
+!html
+    <div id="populationBarChart" style="width: 100%; max-width: 800px; height: 500px;"></div>
+!md
 ## Result
 
 You will see a bar chart where each bar represents a European capital. 
