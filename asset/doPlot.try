@@ -3,6 +3,27 @@
 !head
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script>
+/**
+ * Creates a new Plotly plot in the specified DOM element or generates a new DOM element for the plot.
+ *
+ * @param {(string|Array)} dn - The ID of the DOM element where the plot will be rendered.
+ *                              If `dn` is a string, the plot is rendered in the existing element with this ID.
+ *                              If `dn` is not a string (e.g., an array), a new DOM element is generated for the plot,
+ *                              and the function expects the parameters to be passed in the following order:
+ *                              `dn` as the data array, `data` as the layout object, and `layout` as the config object.
+ * @param {Array} data - An array of trace objects that defines the data to be plotted.
+ * @param {Object} layout - The layout object that defines the layout of the plot (optional).
+ * @param {Object} config - The configuration options for the plot (optional).
+ * @returns {(string|Object)} - If `dn` is a string, returns the `dn` string.
+ *                              If `dn` is not a string, returns an HTML object containing a div element where the plot is rendered.
+ *
+ * @example
+ * // Example usage with an existing DOM element ID
+ * newPlot('myDiv', [{x: [1, 2, 3], y: [4, 5, 6], type: 'scatter'}]);
+ *
+ * // Example usage without a specified DOM element ID
+ * newPlot([{x: [1, 2, 3], y: [4, 5, 6], type: 'scatter'}], {}, {});
+ */
   function newPlot(dn, data, layout,config) {
    
    if(typeof dn === 'string') {
