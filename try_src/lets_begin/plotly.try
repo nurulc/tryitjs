@@ -9,34 +9,34 @@ You can label each bar with the city name, and display the country name
 when hovering over each bar.
 
 
-
-!tyrit
+!tryit
     function chartData() {
         // Data: Populations, City Names, and Country Names
-        const cityData = [
-            { city: 'London', population: 8974000, country: 'United Kingdom' },
-            { city: 'Berlin', population: 3520000, country: 'Germany' },
-            { city: 'Madrid', population: 2829000, country: 'Spain' },
-            { city: 'Paris', population: 2148000, country: 'France' },
-            { city: 'Vienna', population: 1711000, country: 'Austria' },
-            { city: 'Sofia', population: 1665000, country: 'Bulgaria' },
-            { city: 'Budapest', population: 1344000, country: 'Hungary' },
-            { city: 'Warsaw', population: 1313000, country: 'Poland' },
-            { city: 'Bucharest', population: 1186000, country: 'Romania' },
-            { city: 'Prague', population: 1068000, country: 'Czech Republic' },
-            { city: 'Minsk', population: 975000, country: 'Belarus' },
-            { city: 'Brussels', population: 890000, country: 'Belgium' },
-            { city: 'Helsinki', population: 690000, country: 'Finland' },
-            { city: 'Oslo', population: 620000, country: 'Norway' },
-            { city: 'Dublin', population: 610000, country: 'Ireland' },
-            { city: 'Copenhagen', population: 590000, country: 'Denmark' },
-            { city: 'Stockholm', population: 560000, country: 'Sweden' }
+                const cityData = [
+            { city: 'London', population: 8974000, country: 'United Kingdom', color: 'rgba(93, 164, 214, 0.7)' },
+            { city: 'Berlin', population: 3520000, country: 'Germany', color: 'rgba(255, 144, 14, 0.7)' },
+            { city: 'Madrid', population: 2829000, country: 'Spain', color: 'rgba(44, 160, 101, 0.7)' },
+            { city: 'Paris', population: 2148000, country: 'France', color: 'rgba(255, 65, 54, 0.7)' },
+            { city: 'Vienna', population: 1711000, country: 'Austria', color: 'rgba(207, 114, 255, 0.7)' },
+            { city: 'Sofia', population: 1665000, country: 'Bulgaria', color: 'rgba(127, 96, 0, 0.7)' },
+            { city: 'Budapest', population: 1344000, country: 'Hungary', color: 'rgba(214, 39, 40, 0.7)' },
+            { city: 'Warsaw', population: 1313000, country: 'Poland', color: 'rgba(148, 103, 189, 0.7)' },
+            { city: 'Bucharest', population: 1186000, country: 'Romania', color: 'rgba(140, 86, 75, 0.7)' },
+            { city: 'Prague', population: 1068000, country: 'Czech Republic', color: 'rgba(227, 119, 194, 0.7)' },
+            { city: 'Minsk', population: 975000, country: 'Belarus', color: 'rgba(127, 127, 127, 0.7)' },
+            { city: 'Brussels', population: 890000, country: 'Belgium', color: 'rgba(188, 189, 34, 0.7)' },
+            { city: 'Helsinki', population: 690000, country: 'Finland', color: 'rgba(23, 190, 207, 0.7)' },
+            { city: 'Oslo', population: 620000, country: 'Norway', color: 'rgba(31, 119, 180, 0.7)' },
+            { city: 'Dublin', population: 610000, country: 'Ireland', color: 'rgba(255, 127, 14, 0.7)' },
+            { city: 'Copenhagen', population: 590000, country: 'Denmark', color: 'rgba(44, 160, 44, 0.7)' },
+            { city: 'Stockholm', population: 560000, country: 'Sweden', color: 'rgba(214, 39, 40, 0.7)' }
         ];
 
-        // Extract city names, populations, and countries into separate arrays
+        // Extract city names, populations, countries, and colors into separate arrays
         const cities = cityData.map(item => item.city);
         const populations = cityData.map(item => item.population);
         const countries = cityData.map(item => item.country);
+        const colors = cityData.map(item => item.color);
 
         // Define the trace for the bar chart
         const trace = {
@@ -46,7 +46,7 @@ when hovering over each bar.
             text: countries,  // Hover text showing the country name
             hoverinfo: 'text',  // Only show the hover text
             marker: {
-                color: 'rgba(100, 149, 237, 0.7)',  // CornflowerBlue with transparency
+                color: colors,  // fetch the colors from the cityData
                 line: {
                     color: 'rgba(100, 149, 237, 1)',
                     width: 1
@@ -89,16 +89,15 @@ when hovering over each bar.
    - The `layout` object includes titles for both axes and formats the y-axis ticks with commas.
 
 5. **Creating the Plot:**
-   - The `Plotly.newPlot` function creates the bar chart in the `div` with the ID `populationBarChart`.
+   - The `newPlot` function creates the bar chart in the `div` with the ID `populationBarChart`.
 
 ## Create a div to hold the chart
-
-```html
-    <div id="populationBarChart" style="width: 100%; max-width: 800px; height: 500px;"></div>
-```
-
+    The html element to draw the chart looks like the element below:
+    
+>  **<pre>&lt;div id="populationBarChart" style="width: 100%; max-width: 800px; height: 500px;"&gt;&lt;/div&gt;</pre>**
+    
 !tryit
-   var {data,layout) = chartData();
+   var {data,layout} = chartData();
    newPlot('populationBarChart', data, layout);
 
 !html
