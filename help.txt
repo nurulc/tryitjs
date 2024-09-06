@@ -1,0 +1,20 @@
+#title Build html from files.js
+
+This command takes a a set of *.try and builds HTML files. read README.md
+
+         > tryitjs [options]
+
+#opt -h
+#opt --help Print help information
+#opt --src  directory of try files
+#opt --dest  destination directory where the HTML file will be generated
+
+OPTIONAL
+#opt --config  optional config file
+#opt --local  optional config file
+
+-- Build the tryit package
+npm run tryit:build
+
+-- Run the tryit package, launches a local server on port
+npm run tyrit

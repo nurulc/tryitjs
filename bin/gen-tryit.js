@@ -323,7 +323,8 @@ function ARGS(args) {
           copyList.forEach( desc => {
             let targetDir = path.dirname(desc.target);
             fs.mkdirSync(targetDir, { recursive: true });
-            fs.copyFileSync(desc.path, desc.target, (err) => console.error(`Copying ${desc.path} to ${desc.target} ${err}`));
+//            fs.copyFileSync(desc.path, desc.target, (err) => console.error(`Copying ${desc.path} to ${desc.target} ${err}`));
+            fs.copyFileSync(desc.path, desc.target);
           })
         }
       }
