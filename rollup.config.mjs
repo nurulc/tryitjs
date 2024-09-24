@@ -1,10 +1,10 @@
 import babel from '@rollup/plugin-babel';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+//import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import { terser } from 'rollup-plugin-terser';
+import terser  from '@rollup/plugin-terser';
 import filesize from 'rollup-plugin-filesize';
 import progress from 'rollup-plugin-progress';
-import visualizer from 'rollup-plugin-visualizer';
+import {visualizer} from 'rollup-plugin-visualizer';
 
 export default {
 	input: 'ref_src/javascript/src/index.js',
@@ -19,7 +19,7 @@ export default {
 		terser(),
         commonjs(),
 		babel({ babelHelpers: 'bundled' }),
-		nodeResolve(),
+		//nodeResolve(),
 		// All of following are just for beautification, not required for bundling purpose
 		progress(),
 		visualizer(),

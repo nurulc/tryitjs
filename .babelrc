@@ -9,6 +9,7 @@
   	]
   ],
   "plugins": [
-  			  "minify-dead-code-elimination"
+			  "babel-plugin-loop-optimizer",
+  			  "babel-plugin-minify-dead-code-elimination"
   			],
 }
