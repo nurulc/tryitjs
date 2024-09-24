@@ -26,41 +26,44 @@
     ],
 
     "scripts": [
-      "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js", // updated Highlight.js
-      "https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js", // already the latest version
-      /* Codemirror JS */
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/javascript/javascript.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/jsx/jsx.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/edit/matchbrackets.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/edit/closebrackets.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/continuecomment.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/comment/comment.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/keymap/sublime.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/selection/active-line.js",
+      
+      "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/12.7.0/highlight.min.js",
+      "https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js",
+      /* Modes */      
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/jsx/jsx.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/matchbrackets.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closebrackets.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/comment/continuecomment.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/comment/comment.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/keymap/sublime.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/selection/active-line.min.js",
       /* Folding */
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/foldcode.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/foldgutter.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/brace-fold.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/comment-fold.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/fold/indent-fold.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/foldcode.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/foldgutter.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/brace-fold.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/comment-fold.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/fold/indent-fold.min.js",
       /* Codemirror linter */
-      "https://unpkg.com/jshint@2.12.0/dist/jshint.js",
+      "https://unpkg.com/jshint@2.13.4/dist/jshint.js",
       "https://unpkg.com/csslint@1.0.5/dist/csslint.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/lint/lint.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/lint/javascript-lint.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/lint/lint.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/lint/javascript-lint.min.js",
       /* Search options */
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/search/search.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/search/searchcursor.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/dialog/dialog.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/hint/show-hint.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/addon/hint/javascript-hint.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/search.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/searchcursor.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/dialog/dialog.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/show-hint.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/javascript-hint.min.js",
       /* sha1 support */
-      "https://unpkg.com/js-sha1/src/sha1.js",
+      "https://unpkg.com/js-sha1@0.6.0/src/sha1.js",
       "https://unpkg.com/lz-string@1.4.4/libs/lz-string.min.js",
+      /* React support */
       "https://cdn.jsdelivr.net/npm/dataformsjs/js/react/jsxLoader.min.js",
+      /* Tryit JS */
       "https://unpkg.com/tryitjs@VERSION/ref/javascript/tryit-min.js"
-    ],
+  ],
     "colors": {
       "original": "cobalt-original", // original code
       "saved": "lesser-dark", // code that has been edited but not saved

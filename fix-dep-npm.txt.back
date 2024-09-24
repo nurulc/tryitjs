@@ -1,0 +1,21 @@
+npm error While resolving: tryitjs@0.10.1
+npm error Found: @rollup/plugin-commonjs@17.1.0
+npm error node_modules/@rollup/plugin-commonjs
+npm error   dev @rollup/plugin-commonjs@"^26.0.1" from the root project
+npm error
+npm error Could not resolve dependency:
+npm error dev @rollup/plugin-commonjs@"^26.0.1" from the root project
+npm error
+npm error Conflicting peer dependency: rollup@4.21.2
+npm error node_modules/rollup
+npm error   peerOptional rollup@"^2.68.0||^3.0.0||^4.0.0" from @rollup/plugin-commonjs@26.0.1
+npm error   node_modules/@rollup/plugin-commonjs
+npm error     dev @rollup/plugin-commonjs@"^26.0.1" from the root project
+npm error
+npm error Fix the upstream dependency conflict, or retry
+npm error this command with --force or --legacy-peer-deps
+npm error to accept an incorrect (and potentially broken) dependency resolution.
+npm error
+npm error
+npm error For a full report see:
+npm error /Users/nurul/.npm/_logs/2024-09-06T10_13_56_027Z-eresolve-report.txt
