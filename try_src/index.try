@@ -54,7 +54,7 @@
 
 	The following is the **.try** file used for this example
 	```tryit
-	@@include ESCAPE some-more.try
+	@@include SHOW some-more.try
 	```
 
 	* The tryit file will generate [this result](some-more.html)
@@ -72,7 +72,7 @@
 	
 	This the file we are using to implement the page
 	```tryit
-	@@include ESCAPE modularize.try
+	@@include SHOW modularize.try
 	```
 !md 
 	## Internal file 1

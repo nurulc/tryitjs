@@ -55,8 +55,25 @@ function addBackButton(link) {
   n.parentNode.insertBefore(b,n);
 }
 
+function __TOGGLE_EDITOR() {
+    // Add click event listener to all toggle icons
+    $('.caret.square.down.icon.large').click(function() {
+      // Find the closest grandparent div that contains both the icon and the tryit-inner section
+      var grandparent = $(this).closest('.html.ui.top.attached.segment.tryit-container');
+      
+      // Find the .tryit-inner inside this grandparent
+      var tryitSection = grandparent.find('.tryit-inner');
 
+      // Toggle visibility
+      tryitSection.slideToggle();  // Use slideToggle for smooth animation
 
+      // Toggle the icon between down and up
+      $(this).toggleClass('down').toggleClass('up');
+    });
+  }
+
+// Allow the editor to be toggled (show/hide) by clicking on the caret icon
+  document.addEventListener("DOMContentLoaded",__TOGGLE_EDITOR);
 
 window.$$ = $$;
 const toExport = ({
@@ -78,7 +95,8 @@ const toExport = ({
 	H,
 	escapeHTML: asHTML,
 	setNext,
-	addBackButton
+	addBackButton,
+	__TOGGLE_EDITOR
 });
 
 Object.keys(toExport).forEach(k => window[k] = toExport[k]);
