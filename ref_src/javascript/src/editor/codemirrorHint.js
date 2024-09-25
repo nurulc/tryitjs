@@ -60,7 +60,3 @@
       CodeMirror.showHint(cm, customHint);
     }
   });
-</script>
-
-</body>
-</html>
