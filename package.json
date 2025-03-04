@@ -1,6 +1,6 @@
 {
   "name": "tryitjs",
-  "version": "1.0.2",
+  "version": "1.0.3"
   "description": "Generate JS Library Tutorial as a standalone HTML file from extended markdown file, with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "tryit:local": "rollup -c && node bin/gen-tryit.js --src try_src --dest try_it --local --filelist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tryit:dev": "nodemon -w try_src --ext \"try js css\"   bin/gen-tryit.js --src try_src --dest try_it --local --filelist",
-    "build": "rollup -c && npm pack && npm install -g tryitjs-1.0.0.tgz && npm run tryit",
+    "build": "rollup -c && npm pack && npm install -g tryitjs-1.0.3.tgz && npm run tryit",
     "watch": "nodemon -w \"lib ref_src\" --ext \"try js css\" --exec \"npm run build\""
   },
   "bin": {
