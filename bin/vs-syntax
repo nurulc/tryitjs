@@ -1,0 +1,85 @@
+#!/bin/bash
+
+# Check if the syntax file location is provided
+if [ -z "$1" ]; then
+  echo "Usage: $0 <path_to_syntax_file>"
+  exit 1
+fi
+
+SYNTAX_FILE="$1"
+EXTENSION_NAME="custom-syntax-tryit"
+EXTENSION_DIR="$HOME/.vscode/extensions/$EXTENSION_NAME"
+
+# Validate the syntax file location
+if [ ! -f "$SYNTAX_FILE" ]; then
+  echo "Error: Syntax file not found at $SYNTAX_FILE"
+  exit 1
+fi
+
+# Check if VSCode extensions directory exists
+if [ ! -d "$HOME/.vscode/extensions" ]; then
+  echo "Error: VSCode extensions directory not found. Ensure VSCode is installed and try again."
+  exit 1
+fi
+
+# Create the extension directory structure
+mkdir -p "$EXTENSION_DIR/syntaxes"
+
+# Copy the syntax file to the syntaxes folder
+cp "$SYNTAX_FILE" "$EXTENSION_DIR/syntaxes/tryit.tmLanguage.json"
+
+# Create the package.json file
+cat <<EOL > "$EXTENSION_DIR/package.json"
+{
+    "name": "$EXTENSION_NAME",
+    "displayName": "Tryit Syntax",
+    "description": "Custom syntax for Tryit language",
+    "version": "1.0.0",
+    "publisher": "custom",
+    "engines": {
+        "vscode": "^1.0.0"
+    },
+    "contributes": {
+        "grammars": [
+            {
+                "language": "tryit",
+                "scopeName": "source.tryit",
+                "path": "./syntaxes/tryit.tmLanguage.json"
+            }
+        ],
+        "languages": [
+            {
+                "id": "tryit",
+                "aliases": ["Tryit"],
+                "extensions": [".try"],
+                "configuration": "./language-configuration.json"
+            }
+        ]
+    }
+}
+EOL
+
+# Create the language-configuration.json file
+cat <<EOL > "$EXTENSION_DIR/language-configuration.json"
+{
+    "comments": {
+        "lineComment": "!--"
+    },
+    "brackets": [
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"]
+    ],
+    "autoClosingPairs": [
+        { "open": "{", "close": "}" },
+        { "open": "[", "close": "]" },
+        { "open": "(", "close": ")" },
+        { "open": "\"", "close": "\"" },
+        { "open": "'", "close": "'" }
+    ]
+}
+EOL
+
+# Print completion message
+echo "Custom syntax installed at $EXTENSION_DIR"
+echo "Restart VSCode to use the new syntax."

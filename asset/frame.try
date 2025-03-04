@@ -33,8 +33,21 @@
 </style>
 <script>
 (function(win){
-let {Frame} = DataFrame;
+let {Frame, isFunction} = DataFrame;
+
+win.globalFunctions = () => 
+       new Frame(Object
+                  .keys(window)
+                  .filter(sName => isFunction(typeof window[sName])
+                    .map(x=>[x]),
+                ["Function"]
+        );
+
 win.Frame = Frame;
+
+
+
+
 // mark the indentation
 Frame.prototype.toOrder = function(bFlag=true) {
   this._toOrder = bFlag;

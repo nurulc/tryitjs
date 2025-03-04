@@ -12,7 +12,7 @@
 
 	This is an introduction to TryITJs, a tool to create tutorials to Javascript libraries. It used a simple markup language to create these tutorials with runable code examples that the user can edit and experiment. The editing is non-destructive and you can go back to the original state by refreshing the browser. To make life easier for someone who wants to keep the edits and experiments and come back to it later, you can save your changes by clicking on the the save button <i class="save icon" style="color:green"></i>. When you save some changes, these are ctored locally in your browser local storage.
 
-	_To learn more tou can go to_ <a href="why_tryit/index.html">Why TryITjs</a>
+	_To learn more you can go to_ <a href="why_tryit/index.html">Why TryITjs</a>
 
 
 	## Directory Structure

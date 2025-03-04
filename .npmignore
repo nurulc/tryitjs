@@ -6,7 +6,6 @@ tryit1.png
 ttryitjs-demo.PNG
 node_modules
 notebook
-nodebook
 ref_src
 ref/javascript/src
 debug.log
@@ -22,3 +21,6 @@ tryitjs.sublime-workspace
 deldir.bat
 xxx
 stats.html
+tryitjs-*.tgz
+*.code-workspace
+.tryitjs-new.json

@@ -1,0 +1,86 @@
+@@once
+!head
+@@include frame.try
+@@include doPlot.try
+-- Bar chart, requires 
+!html 
+<script>
+var BaseChart = class  {
+	constructor(frame, xColumn, groupCols, config={}) {
+		super();
+		this.frame = frame;
+		this._xColumn = xColumn;
+		this._groupCols = groupCols;
+		this.config = config;
+	}
+
+	/**
+	 * 
+	 * @param toUpdate	- boolean - if true, the values are updated 
+	 * @returns string | undefined  - returns undefined if the config is valid, else a string with the error message
+	 */
+	checkConfig(toUpdate) {
+		const {hasFrame} = DataFrame;
+		hasFrame(this.frame);
+		let xColumn = this.xColumn;
+		let groupCols = this.groupCols;
+		let columns = this.frame.columns;
+		if(isEmpty(this.groupCols)) {
+			let cols = this.frame.numericColumns();
+			if(cols.length < 1) return ('Need at least 1 numeric columns to create a bar chart');
+			if(cols.length === columns.length) {
+				if(isEmpty(xColumn)) {
+					xColumn = columns[0];
+					groupCols = cols.slice(1);
+				}
+				else if(cols.indexOf(this.xColumn) === -1) {
+					return (`Column ${xColumn} not found in the frame`);
+				} else {
+					groupCols = cols.filter(c => c !== xColumn);
+				}
+			} else {
+				groupCols = cols;
+			}
+		}
+		if(xColumn === undefined) {
+			let remainingCols = arrRemove(columns, groupCols);
+			xColumn = remainingCols[0];
+		}
+		if(columns.indexOf(xColumn) === -1) return (`Column ${xColumn} not found in the frame`);
+		if(!Array.isArray(groupCols)) return ('Expecting an array of group columns');
+		for(let col of groupCols) {
+			if(columns.indexOf(col) === -1) return (`Column ${col} not found in the frame`);
+		}
+		// update the values
+		if(toUpdate) {
+			this.xColumn = xColumn;
+			this.groupCols = groupCols;
+		}
+		return undefined;
+	}
+	createTrace() {
+		const {arrProd} = DataFrame;
+		const 
+		const x1 = this.frame.rawColumn(this.xColumn);
+		let x = this.groupCols;
+		const trace = groupCols.map(y => ({title: c, x, y:this.frame.rawColumn(c).map(toNumber)}));
+		
+		return ;
+	}
+	_toHtmlX() {
+		this.checkConfig(true);
+		const trace = this.createTrace();
+		const data = [trace];
+		const layout = {
+			title: this.config.title || 'Bar Chart',
+			xaxis: {title: this.config.xTitle || this.xColumn},
+			yaxis: {title: this.config.yTitle || 'Count'},
+			...(this.config.layout||{})
+		};
+		return doPlot(this.config.id, data, layout);
+	}
+	
+}
+</script>
+
+

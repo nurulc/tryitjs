@@ -1,0 +1,77 @@
+{
+  "fileTypes": [
+      "try"
+  ],
+  "name": "tryit",
+  "patterns": [
+      {
+          "include": "$self"
+      }
+  ],
+  "repository": {
+      "main": {
+          "patterns": [
+              { "include": "tryhead" },
+              { "include": "trymd" },
+              { "include": "trytryit" },
+              { "include": "tryhtml" },
+              { "include": "tryjs" },
+              { "include": "trytail" }
+          ]
+      },
+      "tryhead": {
+          "patterns": [
+              {
+                  "embed": "scope:text.html.basic",
+                  "escape": "(?=^!)",
+                  "match": "^!head",
+                  "scope": "keyword.other"
+              }
+          ]
+      },
+      "tryhtml": {
+          "patterns": [
+              {
+                  "embed": "scope:text.html.basic",
+                  "escape": "(?=^!)",
+                  "match": "^!html",
+                  "scope": "keyword.other"
+              }
+          ]
+      },
+      "trymd": {
+          "patterns": [
+              {
+                  "embed": "scope:text.html.markdown",
+                  "escape": "(?=^!)",
+                  "match": "^!md",
+                  "scope": "entity.name.constant"
+              }
+          ]
+      },
+      "trytail": {
+          "patterns": [
+              {
+                  "embed": "scope:text.html.basic",
+                  "escape": "(?=^!)",
+                  "match": "^!tail",
+                  "scope": "keyword.other"
+              }
+          ]
+      },
+      "trytryit": {
+          "patterns": [
+              {
+                  "captures": {
+                      "1": "constant.numeric",
+                      "2": "comment"
+                  },
+                  "embed": "scope:source.js",
+                  "escape": "(?=^!)",
+                  "match": "^(!tryit)(.*)"
+              }
+          ]
+      }
+  },
+  "scopeName": "source.tryit"
+}

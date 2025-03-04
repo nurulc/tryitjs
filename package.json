@@ -1,6 +1,6 @@
 {
   "name": "tryitjs",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Generate JS Library Tutorial as a standalone HTML file from extended markdown file, with runnable and editable code snippets",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,8 @@
     "watch": "nodemon -w \"lib ref_src\" --ext \"try js css\" --exec \"npm run build\""
   },
   "bin": {
-    "tryitjs": "bin/gen-tryit.js"
+    "tryitjs": "bin/gen-tryit.js",
+    "vs-syntax": "bin/vs-syntax.js editor-syntax/tryit.sublime-syntax.json"
   },
   "eslintConfig": {
     "globals": {
@@ -49,7 +50,6 @@
     "@rollup/plugin-terser": "^0.4.4",
     "babel-plugin-loop-optimizer": "^1.4.1",
     "babel-plugin-minify-dead-code-elimination": "^0.5.2",
-    "glob": "^10.3.0",
     "json-to-ast": "^2.1",
     "nodemon": "^3.1",
     "reload": "^3.3.0",
@@ -62,6 +62,7 @@
     "directory-tree": "^3.5",
     "highlight.js": "^11.10",
     "json5": "^2.2.3",
+     "glob": "^10.3.0",
     "showdown": "^2.1.0"
   }
 }
